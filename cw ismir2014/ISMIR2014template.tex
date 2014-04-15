@@ -1,0 +1,175 @@
+% -----------------------------------------------
+% Template for ISMIR 2014
+% (based on earlier ISMIR templates)
+% -----------------------------------------------
+
+\documentclass{article}
+\usepackage{ismir2014,amsmath,cite}
+\usepackage{graphicx}
+
+% Title.
+% ------
+\title{DRUM TRANSCRIPTION IN POLYPHONIC MUSIC USING SEMI-SUPERVISED NON-NEGATIVE MATRIX FACTORIZATION}
+
+% Single address
+% To use with only one author or several with the same address
+% ---------------
+%\oneauthor
+% {Names should be omitted for double-blind reviewing}
+% {Affiliations should be omitted for double-blind reviewing}
+
+% Two addresses
+% --------------
+%\twoauthors
+%  {First author} {School \\ Department}
+%  {Second author} {Company \\ Address}
+
+% Three addresses
+% --------------
+\threeauthors
+  {First author} {Affiliation1 \\ {\tt author1@ismir.edu}}
+  {Second author} {\bf Retain these fake authors in\\\bf submission to preserve the formatting}
+  {Third author} {Affiliation3 \\ {\tt author3@ismir.edu}}
+
+% Four addresses
+% --------------
+%\fourauthors
+%  {First author} {Affiliation1 \\ {\tt author1@ismir.edu}}
+%  {Second author}{Affiliation2 \\ {\tt author2@ismir.edu}}
+%  {Third author} {Affiliation3 \\ {\tt author3@ismir.edu}}
+%  {Fourth author} {Affiliation4 \\ {\tt author4@ismir.edu}}
+
+\begin{document}
+%
+\maketitle
+%
+\begin{abstract}
+In this paper, a drum transcription algorithm using semi-supervised non-negative matrix factorization has been presented. This method allows user to separate percussive activities from harmonic activities, and transcribe drum events from the extracted percussive activity matrix. The system has been evaluated using different rank settings and templates. The results show that the system can achieve 61 to 77\% recognition rate on multiple drums in polyphonic music. In the future, more efforts will be put on recognizing more playing styles and drum parts, leading toward a complete drum transcription system.
+
+
+\end{abstract}
+%
+\section{Introduction}\label{sec:introduction}
+about 0.5 page
+
+- motivation
+Firstly I will address the importance of automatic music transcription. Here I want to mention the review paper (2013, Automatic music transcription), bring some of the motivations up front. Next I will narrow down my scope to drum transcription, bringing up some importance of this specific task.  
+
+- application
+I will also mention some of the potential applications in this paragraph:
+1)source separation 
+2)music education 
+3)machine listening
+
+\section{Related Works}\label{sec:related works}
+about 1 page
+
+Here I want to mention and introduction the major three categories of drum transcription approaches:
+1)segment and classify
+2)separate and detect
+3)adapt and match
+I will cite some papers that fall into these categorizes
+
+Next, I will narrow down the scope to 2.separate and detect, mentioning more works related to ISA, PSA, NMF...
+
+\section{Method}\label{sec:method}
+about 1 page
+
+\subsection{Algorithm Description}\label{subsec:algorithm description}
+
+This part I will first mention the co-factorization paper, and then introduce my modification of the algorithm, the cost function and the updating methods...
+
+\subsection{Processing Steps}\label{subsec:processing steps}
+
+Here I will put my system flowchart, and explain my processing procedure step by step. 
+1)extract templates
+2)thresholding on activity matrix
+
+
+\section{Evaluation}
+about 2 pages
+
+1)dataset description
+2)basic results + improved results (filtering)
+3)system properties (rank change, iteration and convergence, cross traing and testing)
+\section{Conclusion}
+
+about 0.5 page
+
+
+\section{Reference}
+
+
+\subsection{Figures, Tables and Captions}
+
+All artwork must be centered, neat, clean, and legible.
+All lines should be very dark for purposes of reproduction and art work should not be hand-drawn.
+The proceedings are not in color, and therefore all figures must make sense in black-and-white form.
+Figure and table numbers and captions always appear below the figure.
+Leave 1 line space between the figure or table and the caption.
+Each figure or table is numbered consecutively. Captions should be Times 10pt.
+Place tables/figures in text as close to the reference as possible.
+References to tables and figures should be capitalized, for example:
+see \figref{fig:example} and \tabref{tab:example}.
+Figures and tables may extend across both columns to a maximum width of 17.2cm.
+
+\begin{table}
+ \begin{center}
+ \begin{tabular}{|l|l|}
+  \hline
+  String value & Numeric value \\
+  \hline
+  Hello ISMIR  & 2014 \\
+  \hline
+ \end{tabular}
+\end{center}
+ \caption{Table captions should be placed below the table.}
+ \label{tab:example}
+\end{table}
+
+\begin{figure}
+ \centerline{\framebox{
+ \includegraphics[width=\columnwidth]{figure.png}}}
+ \caption{Figure captions should be placed below the figure.}
+ \label{fig:example}
+\end{figure}
+
+\section{Equations}
+
+Equations should be placed on separated lines and numbered.
+The number should be on the right side, in parentheses.
+
+\begin{equation}
+E=mc^{2}
+\end{equation}
+
+\section{Citations}
+
+All bibliographical references should be listed at the end,
+inside a section named ``REFERENCES,'' numbered and in alphabetical order.
+Also, all references listed should be cited in the text.
+When referring to a document, type the numbering square brackets
+\cite{Author:00} or \cite{Author:00,Someone:10,Someone:04}.
+
+\begin{thebibliography}{citations}
+
+\bibitem {Author:00}
+E. Author:
+``The Title of the Conference Paper,''
+{\it Proceedings of the International Symposium
+on Music Information Retrieval}, pp.~000--111, 2000.
+
+\bibitem{Someone:10}
+A. Someone, B. Someone, and C. Someone:
+``The Title of the Journal Paper,''
+{\it Journal of New Music Research},
+Vol.~A, No.~B, pp.~111--222, 2010.
+
+\bibitem{Someone:04} X. Someone and Y. Someone: {\it Title of the Book},
+    Editorial Acme, Porto, 2012.
+
+\end{thebibliography}
+
+%\bibliography{ismir2014template}
+
+\end{document}
