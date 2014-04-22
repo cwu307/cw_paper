@@ -44,33 +44,24 @@
 \maketitle
 %
 \begin{abstract}
-In this paper, a drum transcription algorithm using semi-supervised non-negative matrix factorization has been presented. This method allows user to separate percussive activities from harmonic activities, and transcribe drum events from the extracted percussive activity matrix. The system has been evaluated using different rank settings and templates. The results show that the system can achieve 61 to 77\% recognition rate on multiple drums in polyphonic music. In the future, more efforts will be put on recognizing more playing styles and drum parts, leading toward a complete drum transcription system.
-
+In this paper, a drum transcription algorithm using semi-supervised non-negative matrix factorization has been presented. This method allows users to separate percussive activities from harmonic activities with pre-trained drum templates, and transcribe drum events from the extracted percussive activity matrix. A polyphonic subset from ENST drum dataset has been used for training and testing of the algorithm. The system has been tested using different rank settings, and a cross-performer validation process has been performed to evaluate the reliability of the system.  The results show that the system can achieve 61 to 77\% recognition rate on multiple drums in polyphonic music. In the future, more efforts will be put on recognizing more playing styles and drum parts, leading toward a complete drum transcription system.
 
 \end{abstract}
 %
+
 \section{Introduction}\label{sec:introduction}
-about 0.5 page
+Transcribing music content into sheet music or any form of score is an essential skill to musicians for analysis and composition purposes. However, It is often considered a time-consuming and non-trivial task, for it requires repetitive listening and integral knowledge of music and instruments. With the advance of computing power and various machine learning techniques, a system that has the abilities to automatically recognize music content has become a plausible idea and interests many researchers in the field of Music Information Retrieval (MIR) [1]. In general, Automatic Music Transcription (AMT) systems could not only serve as a tool to record the music content, identify notes from improvisations, but also lead to the realization of a music intelligence system [2]. To build a complete AMT system, many subtasks and challenges, such as multi-pitch detection, onset detection, instrument recognition, and rhythm extraction, have been attempted [1]. Comparing with pitched instruments, transcribing un-pitched music events such as percussive sounds seem to be less addressed, and a robust algorithm to detect drum sounds in polyphonic music is still an open question in this field.
 
-- motivation
-Firstly I will address the importance of automatic music transcription. Here I want to mention the review paper (2013, Automatic music transcription), bring some of the motivations up front. Next I will narrow down my scope to drum transcription, bringing up some importance of this specific task.  
+Drum track, especially in pop music, often plays an important role in determining music structure, style, rhythm and tempo. In many cases, it shares the same importance as the harmonic part in the music. That said, a good drum transcription system could provide essential information of the music content, and could potentially facilitate the realization of many interesting applications. For example, a drum transcription and drum source separation task could mutually benefit from each other and provide the possibility to manipulate drum sounds within an existing drum track [3], [4].  Also, music education could be an application of a drum transcription system, for it could help students identify drum event within a polyphonic music, and provide instructions by analyzing and comparing the differences between the input and reference performances. Furthermore, such system could also be integrated as a part of machine listening, improving the existing systems of robotic musicians[5].
 
-- application
-I will also mention some of the potential applications in this paragraph:
-1)source separation 
-2)music education 
-3)machine listening
+Therefore, this study aims to explore alternative solutions to drum transcription in polyphonic music. The final goal of this paper is to find a potential direction to push the limit of this task, leading toward further musical applications.
 
 \section{Related Works}\label{sec:related works}
-about 1 page
+The early attempts to transcribe percussive sounds main focused on classifying monophonic signals [6][7]. With standard approaches such as feature extraction and classification, fairly high accuracy were reported in the previous studies. However, in the real use case, a drum transcription system is expected to work in polyphonic signal instead of monophonic. Therefore, solving this problem in the context of polyphonic music had become another criterion, and different methods could be found in previous research [8]–[15].  According to [15], recent studies on the drum transcription in polyphonic music could be categorized into three types: segment and classify, separate and detect, match and adapt.  For the first type of approaches, the common procedure starts by applying onset detection to the audio signal in order to segment the music event. Once the event has been detected, various features from time or spectral domain of the signal will be extracted, and a classifier will be trained to classify the event based on the extracted features. This type of approaches seem to perform well when the data and features are well chosen [13], [15]. However, to get good results, sufficient amount of data, careful preprocessing and training steps are required in this type of systems. Additionally, to handle the situation of simultaneous sounds, more classes need to be trained.
 
-Here I want to mention and introduction the major three categories of drum transcription approaches:
-1)segment and classify
-2)separate and detect
-3)adapt and match
-I will cite some papers that fall into these categorizes
+The second type of approaches is based on the assumption that music signal is a superposition of different sound sources. By decomposing the signal and into different source templates and corresponding activities, the music content could be transcribed by detecting onsets of these activities. Different methods such as Independent Subspace Analysis (ISA) [16], Prior Subspace Analysis (PSA) [8], and Non-negative Matrix Factorization (NMF) [14], [17], [18] are the examples in this category. This type of approaches is usually easier to interpret, since most of the decompositions have been done on the spectrogram of the signal. Also, the separate nature allows simultaneous events to be handled easily in this case. However, to be able to transcribe different kinds of music, a large template might be required prior to the decomposition. Moreover, the number of rank during the decomposition process could be difficult to determine in some cases. 
 
-Next, I will narrow down the scope to 2.separate and detect, mentioning more works related to ISA, PSA, NMF...
+The third type of approaches uses pre-trained templates to detect drum events [19][20]. An iterative process has been taken to search for the closest matches to these templates and adapt them. The proposed system has been evaluated and performed well in MIREX 2005 drum detection competition. However, to coverage a wider range of sounds, multiple seed templates need to be prepared prior to the process.
 
 \section{Method}\label{sec:method}
 about 1 page
@@ -105,11 +96,15 @@ about 2 pages
 \subsection{Evaluation Results}\label{subsec:evaluation results}
 
 3)basic results + improved results (filtering)
-4)system properties (rank change, iteration and convergence, cross traing and testing)
+4)system properties (rank change, iteration and convergence, cross training and testing)
 
 \subsection{Discussions}\label{subsec:discussions}
 
 5)discussion
+
+although the results seem to be comparable, NMF based method still has some advantages over instance based methods: 1. simultaneous sounds will be detected separately  2. require less labeled data during the training process 3. 
+
+
 
 
 \section{Conclusion}\label{sec:Conclusion}
