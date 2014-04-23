@@ -76,6 +76,21 @@ This part I will first mention the co-factorization paper, and then introduce my
 
 Here I will put my system flowchart, and explain my processing procedure step by step. 
 
+
+
+
+%============= System + high pass figure here
+\begin{figure}
+ \centerline{\framebox{
+ \includegraphics[width=\columnwidth]{flowchart.png}}}
+ \caption{Flowchart of the drum transcription system.}
+ \label{fig:flowchart}
+\end{figure}
+
+
+
+
+
 \subsubsection{Template Extraction}\label{subsubsec:template extraction}
 1)extract templates
 
@@ -97,8 +112,21 @@ In this project, all of the experiments have been conducted on the “minus one�
 
 The onset counts of each class within different drummer’s recordings are shown in Table 1. More details on the creation process of this dataset could be found in their corresponding paper. 
 
-
-
+%============= Onset event counts in the used tracks
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Drummer\# & 1    & 2    & 3    & Total \\ \hline
+HH        & 1942 & 2145 & 1813 & 5900  \\ \hline
+BD        & 2140 & 1488 & 1378 & 5006  \\ \hline
+SD        & 2165 & 2079 & 1994 & 6238  \\ \hline
+Total     & 6247 & 5712 & 5185 & 17144 \\ \hline
+\end{tabular}
+ \caption{Onset counts in selected dataset.}
+ \label{tab:onsetCount}
+\end{center}
+\end{table}
 
 \subsection{Evaluation Procedure}\label{subsec:evaluation procedure}
 To keep classifiers from seeing the data during the training phase, a cross-performer validation process has been performed. As shown in Fig 2, when a drummer’s recordings is selected as the training data, the classifier will be tested using the other drummer’s recordings. The process applies to every drummer’s recordings, and the performance of the training data is the average of the test results from the other two drummers.
@@ -107,7 +135,13 @@ The accuracy of the classification has been evaluated by calculating the precisi
 
 
 one figure here showing the procedure
-
+%============= Cross-performer validation figure
+\begin{figure}
+ \centerline{\framebox{
+ \includegraphics[width=\columnwidth]{cross.png}}}
+ \caption{Cross-performer validation process.}
+ \label{fig:cross}
+\end{figure}
 
 
 
@@ -144,6 +178,7 @@ one figure here showing the procedure
 
 %============= Train on Drummer 1 templates
 \begin{table}[h]
+\begin{center}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \multicolumn{2}{|c}{Training} & \multicolumn{3}{|c|}{Drummer 1}   \\ \hline
@@ -160,10 +195,12 @@ one figure here showing the procedure
 \end{tabular}
  \caption{Transcription results using drummer 1 training templates.}
  \label{tab:trainDr1}
+\end{center}
 \end{table}
 
 %============= Train on Drummer 2 templates
 \begin{table}[h]
+\begin{center}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \multicolumn{2}{|c}{Training} & \multicolumn{3}{|c|}{Drummer 2}   \\ \hline
@@ -180,11 +217,13 @@ one figure here showing the procedure
 \end{tabular}
  \caption{Transcription results using drummer 2 training templates.}
  \label{tab:trainDr2}
+\end{center}
 \end{table}
 
 
 %============= Train on Drummer 3 templates
 \begin{table}[h]
+\begin{center}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \multicolumn{2}{|c}{Training} & \multicolumn{3}{|c|}{Drummer 3}   \\ \hline
@@ -201,8 +240,8 @@ one figure here showing the procedure
 \end{tabular}
  \caption{Transcription results using drummer 3 training templates.}
  \label{tab:trainDr3}
+\end{center}
 \end{table}
-
 
 %============= Rank Test Figure
 \begin{figure}
@@ -232,40 +271,8 @@ about 0.5 page
 \section{Reference}
 
 
-\subsection{Figures, Tables and Captions}
 
-All artwork must be centered, neat, clean, and legible.
-All lines should be very dark for purposes of reproduction and art work should not be hand-drawn.
-The proceedings are not in color, and therefore all figures must make sense in black-and-white form.
-Figure and table numbers and captions always appear below the figure.
-Leave 1 line space between the figure or table and the caption.
-Each figure or table is numbered consecutively. Captions should be Times 10pt.
-Place tables/figures in text as close to the reference as possible.
-References to tables and figures should be capitalized, for example:
-see \figref{fig:example} and \tabref{tab:example}.
-Figures and tables may extend across both columns to a maximum width of 17.2cm.
-
-\begin{table}
- \begin{center}
- \begin{tabular}{|l|l|}
-  \hline
-  String value & Numeric value \\
-  \hline
-  Hello ISMIR  & 2014 \\
-  \hline
- \end{tabular}
-\end{center}
- \caption{Table captions should be placed below the table.}
- \label{tab:example}
-\end{table}
-
-\begin{figure}
- \centerline{\framebox{
- \includegraphics[width=\columnwidth]{figure.png}}}
- \caption{Figure captions should be placed below the figure.}
- \label{fig:example}
-\end{figure}
-
+%============= This part is for reference only, will be removed once my parts are finished =============
 \section{Equations}
 
 Equations should be placed on separated lines and numbered.
