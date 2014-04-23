@@ -44,7 +44,7 @@
 \maketitle
 %
 \begin{abstract}
-In this paper, a drum transcription algorithm using semi-supervised non-negative matrix factorization has been presented. This method allows users to separate percussive activities from harmonic activities with pre-trained drum templates, and transcribe drum events from the extracted percussive activity matrix. A polyphonic subset from ENST drum dataset has been used for training and testing of the algorithm. The system has been tested using different rank settings, and a cross-performer validation process has been performed to evaluate the reliability of the system.  The results show that the system can achieve 61 to 77\% recognition rate on multiple drums in polyphonic music. In the future, more efforts will be put on recognizing more playing styles and drum parts, leading toward a complete drum transcription system.
+In this paper, a drum transcription algorithm using semi-supervised non-negative matrix factorization has been presented. This method allows users to separate percussive activities from harmonic activities with pre-trained drum templates, and detect drum events from the extracted percussive activity matrix. A polyphonic subset from ENST drum dataset has been used for training and testing of the algorithm. The system has been tested using different rank settings, and a cross-performer validation process has been performed to evaluate the reliability of the system.  The results show that the system can achieve 61 to 77\% recognition rate on multiple drums in polyphonic music. In the future, more efforts will be put on differentiating different playing styles and more drum parts, leading toward a complete drum transcription system.
 
 \end{abstract}
 %
@@ -63,6 +63,7 @@ The second type of approaches is based on the assumption that music signal is a 
 
 The third type of approaches uses pre-trained templates to detect drum events [19][20]. An iterative process has been taken to search for the closest matches to these templates and adapt them. The proposed system has been evaluated and performed well in MIREX 2005 drum detection competition. However, to coverage a wider range of sounds, multiple seed templates need to be prepared prior to the process.
 
+In this paper, an approach that falls into the second category has been presented. Based on the popular NMF based  
 \section{Method}\label{sec:method}
 about 1 page
 
@@ -77,6 +78,8 @@ Here I will put my system flowchart, and explain my processing procedure step by
 \subsubsection{Template Extraction}\label{subsubsec:template extraction}
 1)extract templates
 
+
+
 \subsubsection{Activity Detection}\label{subsubsec:activity detection}
 2)thresholding on activity matrix
 
@@ -89,14 +92,82 @@ about 2 pages
 
 1)dataset description
 
-\subsection{Evaluation Procedure}\label{subsec:evaluation procedure}
+In this project, all of the experiments have been conducted on the “minus one” subset from the ENST public drum dataset [22].  This dataset consist of recordings from three different drummers performing on their own drum kits. The recording contains single hits on different drums, short phrases of drum beats, drum solos, and short play through with the accompaniments. The minus one public subset has 64 tracks of polyphonic music; each track has a length of approximately 70 seconds. The music style varies from each other. Particularly, this subset contains many drum playing techniques such as ghost notes, flam, and drag…etc, which could be considered difficult for many of the existing drum transcription algorithms. The accompaniments are mixed with the “wet mix” in the dataset without any modification of the magnitudes.   
 
-2)evaluatoin procedure and metrics
+The onset counts of each class within different drummer’s recordings are shown in Table 1. More details on the creation process of this dataset could be found in their corresponding paper. 
+
+
+
+
+\subsection{Evaluation Procedure}\label{subsec:evaluation procedure}
+To keep classifiers from seeing the data during the training phase, a cross-performer validation process has been performed. As shown in Fig 2, when a drummer’s recordings is selected as the training data, the classifier will be tested using the other drummer’s recordings. The process applies to every drummer’s recordings, and the performance of the training data is the average of the test results from the other two drummers.
+
+The accuracy of the classification has been evaluated by calculating the precision, recall and F-scores. 
+
+
+one figure here showing the procedure
+
+
+
+
+
+
 
 \subsection{Evaluation Results}\label{subsec:evaluation results}
 
 3)basic results + improved results (filtering)
+
+
+\begin{table}
+ \begin{center}
+ \begin{tabular}{|l|l|l|l|l|}
+  \hline 
+    & Original &  HPF & HPF+LPF & HPF+BPF+LPF \\
+  \hline
+  HH & P.  & 0.654 & 0.704 & 0.704 & 0.702\\
+  \hline
+  BD & R. & 0.776 & 0.786 & 0.780 & 0.746\\
+  \hline
+  SD & F. & 0.617 & 0.618 & 0.569 & 0.587\\
+  \hline
+ \end{tabular}
+\end{center}
+ \caption{Results from templates of all drummers.}
+ \label{tab:example}
+\end{table}
+
+
 4)system properties (rank change, iteration and convergence, cross training and testing)
+
+\begin{table}
+ \begin{center}
+ \begin{tabular}{|l|l|l|l|l|}
+  \hline
+  Drummer#  & Original &  HPF & HPF+LPF & HPF+BPF+LPF \\
+  \hline
+  P.  & 0.654 & 0.704 & 0.704 & 0.702\\
+  \hline
+  R. & 0.776 & 0.786 & 0.780 & 0.746\\
+  \hline
+  F. & 0.617 & 0.618 & 0.569 & 0.587\\
+  \hline
+ \end{tabular}
+\end{center}
+ \caption{Results of cross-performer validation.}
+ \label{tab:example}
+\end{table}
+
+
+
+\begin{figure}
+ \centerline{\framebox{
+ \includegraphics[width=\columnwidth]{figure.png}}}
+ \caption{Figure captions should be placed below the figure.}
+ \label{fig:example}
+\end{figure}
+
+
+
 
 \subsection{Discussions}\label{subsec:discussions}
 
