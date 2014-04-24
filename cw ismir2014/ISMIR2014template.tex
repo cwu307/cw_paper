@@ -243,8 +243,7 @@ The results from the first evaluation process is shown in \tabref{tab:basicResul
  \label{tab:basicResults}
 \end{table}
 
-The results from the second evaluation are shown in \tabref{tab:trainDr1}, \tabref{tab:trainDr2} and \tabref{tab:trainDr3}. 
-
+Another evaluation as described in \figref{fig:cross} has been conducted. Although this process focuses on the exclusiveness between the players, the results of training and testing on the same drummer are still reported in \tabref{tab:trainDr1}, \tabref{tab:trainDr2} and \tabref{tab:trainDr3}. No filters have been applied during the process. In \tabref{tab:trainDr1}, the drum basis matrix is trained on recordings of drummer 1 only. The matrix is then used to decompose polyphonic recordings of different drummers and transcribe drum events. As shown in the table, the testing data from drummer 2 has the best average F-measures of 0.679, 0.842, and 0.691 for HH, BD, and SD.   
 
 %============= Train on Drummer 1 templates
 \begin{table}[h]
@@ -268,6 +267,8 @@ The results from the second evaluation are shown in \tabref{tab:trainDr1}, \tabr
 \end{center}
 \end{table}
 
+In \tabref{tab:trainDr2}, the drum basis matrix is trained on recordings of drummer 2 only. As shown in the table, the testing data from drummer 2 has the best average F-measures of 0.846, 0.910, and 0.719 for HH, BD, and SD. However, since the basis matrix is trained on the recordings of drummer 2, an improvement of the performance on the same drummer's recording is expected. As for the other drummers, the performance is within the same range.     
+
 %============= Train on Drummer 2 templates
 \begin{table}[h]
 \begin{center}
@@ -290,6 +291,7 @@ The results from the second evaluation are shown in \tabref{tab:trainDr1}, \tabr
 \end{center}
 \end{table}
 
+Finally, in \tabref{tab:trainDr3}, the drum basis matrix is trained on recordings of drummer 3 only. As shown in the table, the testing data from drummer 2 has the best average F-measures of 0.862, 0.910, and 0.607 for HH, BD, and SD. In general, the testing data from drummer 2 has the best overall performance with different training data from all the drummers. Besides, all the results have a similar trend no matter which training data is used. This result might imply that this algorithm is less template dependent, allowing a general use case where a drum template could be constructed from different sound sources and be applied to different polyphonic recordings. However, the performance of this setup still needs to be confirmed with a cross-dataset validation.      
 
 %============= Train on Drummer 3 templates
 \begin{table}[h]
@@ -313,17 +315,16 @@ The results from the second evaluation are shown in \tabref{tab:trainDr1}, \tabr
 \end{center}
 \end{table}
 
-Although the results seem to be comparable, NMF based method still has some advantages over instance based methods: 1. simultaneous sounds will be detected separately  2. require less labeled data during the training process 3. 
-
-
-
-
 \section{Conclusion}\label{sec:Conclusion}
 
-In this paper, a drum transcription system in polyphonic music using semi-supervised NMF has been presented. This method uses a pre-trained drum basis matrix to decompose the target signal, extract the drum activity matrix, and adapt the harmonic parts. This evaluation results show that this method is able to achieve 61~77\% accuracy in polyphonic music. Furthermore, the results from the cross-performer validation indicate that this method still apply to the situations when minimum prior knowledge about the drum sounds in the target signal is given.  
+In this paper, a drum transcription system in polyphonic music using semi-supervised NMF has been presented. This method uses a pre-trained drum basis matrix to decompose the target signal, extract the drum activity matrix, and adapt the harmonic parts. This NMF based method for drum transcription task has some advantages over instance-based methods: firstly, the simultaneous sounds could be detected separately. Normally, when more classes of drums are being considered in a instance-based transcription task, more combination of classes need to be considered, and the situation could be more complicated. With a NMF approach, there is no need to train more classes to handle such situations. Secondly, the parameter {\itshape k} allows the algorithm to adapt to different content of polyphonic music and could potentially improve the performance of the basic NMF approach in the context of polyphonic music. This evaluation results show that this method is able to achieve 61~77\% accuracy in polyphonic music. Furthermore, the results from the cross-performer validation indicate that this method still apply to the situations when minimum prior knowledge about the drum sounds in the target signal is given.
 
+To achieve a complete drum transcription system in polyphonic music, however, more factors such as playing techniques and different drum setups still need to be addressed in the future. 
 
 \section{Reference}
+
+
+% I haven't done this part yet...
 
 
 
