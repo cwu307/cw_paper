@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  24 APR 2014 02:46
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  24 APR 2014 15:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -298,6 +298,11 @@ File: flowchart.png Graphic file (type png)
  <use flowchart.png>
 Package pdftex.def Info: flowchart.png used on input line 136.
 (pdftex.def)             Requested size: 233.31259pt x 204.68582pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 150--151
+
+ []
+
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no œ in font ptmr7t!
@@ -317,17 +322,17 @@ Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
 
-Overfull \hbox (2.33472pt too wide) in paragraph at lines 150--151
+Overfull \hbox (2.33472pt too wide) in paragraph at lines 155--156
 \OT1/ptm/m/n/10 on the mi-nus one sub-set from the ENST pub-lic drum dataset
  []
 
-
-Overfull \hbox (1.03516pt too wide) in paragraph at lines 152--153
+[3 <./flowchart.png>]
+Overfull \hbox (1.03516pt too wide) in paragraph at lines 157--158
 []\OT1/ptm/m/n/10 As for the train-ing pro-cess, the drum sam-ples were taken
  []
 
-[3 <./flowchart.png>]
-Overfull \hbox (1.64513pt too wide) in paragraph at lines 172--173
+
+Overfull \hbox (1.64513pt too wide) in paragraph at lines 177--178
 \OT1/ptm/m/n/10 are per-formed with ride cym-bal, open hi-hat, cross stick..etc
 ,
  []
@@ -335,73 +340,66 @@ Overfull \hbox (1.64513pt too wide) in paragraph at lines 172--173
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
+<cross.png, id=27, 367.6134pt x 176.3388pt>
+File: cross.png Graphic file (type png)
+ <use cross.png>
+Package pdftex.def Info: cross.png used on input line 185.
+(pdftex.def)             Requested size: 233.31259pt x 111.91737pt.
 
-Overfull \hbox (5.9954pt too wide) in paragraph at lines 176--177
+Overfull \hbox (5.9954pt too wide) in paragraph at lines 181--189
 []\OT1/ptm/m/n/10 The sec-ond eval-u-a-tion pro-cess in-volves a cross-performe
 r
  []
 
-<cross.png, id=27, 367.6134pt x 176.3388pt>
-File: cross.png Graphic file (type png)
- <use cross.png>
-Package pdftex.def Info: cross.png used on input line 183.
-(pdftex.def)             Requested size: 233.31259pt x 111.91737pt.
-
 <rankTest.png, id=28, 562.1pt x 421.575pt>
 File: rankTest.png Graphic file (type png)
  <use rankTest.png>
-Package pdftex.def Info: rankTest.png used on input line 195.
+Package pdftex.def Info: rankTest.png used on input line 218.
 (pdftex.def)             Requested size: 233.31259pt x 174.98251pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
+ [4 <./cross.png> <./rankTest.png (PNG copy)>]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Overfull \hbox (1.47464pt too wide) in paragraph at lines 302--303
+Overfull \hbox (1.47464pt too wide) in paragraph at lines 316--317
 []\OT1/ptm/m/n/10 Although the re-sults seem to be com-pa-ra-ble, NMF based
  []
 
 
-Overfull \hbox (1.85495pt too wide) in paragraph at lines 302--303
+Overfull \hbox (1.85495pt too wide) in paragraph at lines 316--317
 \OT1/ptm/m/n/10 method still has some ad-van-tages over in-stance based meth-
  []
 
 
-Overfull \hbox (4.0143pt too wide) in paragraph at lines 309--310
+Overfull \hbox (4.0143pt too wide) in paragraph at lines 323--324
 \OT1/ptm/m/n/10 mu-sic us-ing semi-supervised NMF has been pre-sented. This
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 4060) has occurred while \output is active []
 
- [4 <./cross.png> <./rankTest.png (PNG copy)>] [5] (./ISMIR2014template.aux) ) 
+ [5]
+(./ISMIR2014template.aux) ) 
 Here is how much of TeX's memory you used:
- 2355 strings out of 493315
- 31975 string characters out of 6137904
- 114801 words of memory out of 5000000
- 5765 multiletter control sequences out of 15000+600000
+ 2358 strings out of 493315
+ 32009 string characters out of 6137904
+ 110823 words of memory out of 5000000
+ 5768 multiletter control sequences out of 15000+600000
  23112 words of font info for 49 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  37i,13n,23p,1595b,357s stack positions out of 5000i,500n,10000p,200000b,80000s
-{
-/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texl
-ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texli
-ve/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive
-/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2
-013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2013
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2013/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2013/te
-xmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2013/texmf-dist
-/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/typ
-e1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/tim
-es/utmri8a.pfb>
-Output written on ISMIR2014template.pdf (5 pages, 218983 bytes).
+{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/
+base/8r.enc}</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmmi10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi7.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.
+pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
+fb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
+></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/l
+ocal/texlive/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texli
+ve/2013/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/te
+xmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on ISMIR2014template.pdf (5 pages, 225873 bytes).
 PDF statistics:
  69 PDF objects out of 1000 (max. 8388607)
  44 compressed objects within 1 object stream
