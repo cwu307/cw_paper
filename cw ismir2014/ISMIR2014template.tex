@@ -64,20 +64,71 @@ The second type of approaches is based on the assumption that music signal is a 
 
 The third type of approaches uses pre-trained templates to detect drum events [19][20]. An iterative process has been taken to search for the closest matches to these templates and adapt them. The proposed system has been evaluated and performed well in MIREX 2005 drum detection competition. However, to coverage a wider range of sounds, multiple seed templates need to be prepared prior to the process.
 
-In this paper, an approach that falls into the second category has been presented. Based on the popular NMF based  
+In this paper, a method based on the NMF approach has been presented. Although NMF has been proven to be effective in music transcription (cite 2003 Smaragdis, NMF), it is still difficult to determine the number of sources in the target signal for a correct rank parameter setting. Therefore, the goal of this paper is to develop an algorithm that provides a more general use case, which only requires users to input a few drum samples prior to the decomposition process. This method aims to serve as an alternative way to transcribe drum tracks in polyphonic music, leading toward an end user application for general drum transcription tasks.  
+ 
 \section{Method}\label{sec:method}
-about 1 page
-
 \subsection{Algorithm Description}\label{subsec:algorithm description}
+% introduce NMF here
+The basic concept of NMF is to approximate a non-negative matrix {\itshape V} with two non-negative matrix {\itshape W} and {\itshape H} as shown in equation \eqref{eq:approx}.
 
-This part I will first mention the co-factorization paper, and then introduce my modification of the algorithm, the cost function and the updating methods...
+% equation here
+\begin{equation}
+V \approx WH
+\label{eq:approx}
+\end{equation}
 
+That is, given a {\itshape m} x {\itshape n} matrix {\itshape V}, the NMF will decompose the matrix into the product of a {\itshape m} x {\itshape r} matrix {\itshape W} and a {\itshape r} × {\itshape n} matrix {\itshape H}. The {\itshape r} is the rank of the NMF decomposition, {\itshape W} is the basis matrix, and {\itshape H} is the activity matrix. In the case of spectrogram, {\itshape V} is the spectrogram to be decomposed, {\itshape W} would be the spectra of the salient components, and {\itshape H} would be the activity of these components respect to time. These matrices could be obtained through an iterative process to minimize the distance measure between the approximate and target spectrograms using the algorithm described in (cite algorithm NMF 2001). 
+
+To apply this method directly to the transcription tasks, however, some situations need to be taken into consideration. First of all, in the real situation, the number of sound sources within a recording is unknown. That said, it is very difficult to set a correct rank number and obtain a clear representation of the decomposed  components. Secondly, when the rank number is high, it is hard to identify the corresponding instrument of every component in the basis matrix {\itshape W}. To address these issues, different methods have been proposed in the previous studies. In (cite Virtanen 2005), a SVM was trained to separate drum components from the harmonic components with a empirically set rank number during the factorization process. The identified drum components and their corresponding activities could later be used to reconstruct the drum signal, achieving the goal of drum source separation. However, this method requires separated data to train the classifier, and the results could be data-dependent. In (cite co-factorization 2010), a co-factorization algorithm was proposed to simultaneously factorize a target signal a the drum track, and use the basis matrix from the drum track to identify the drum components in the target signal. This method ensures the drum components in both basis matrices to be the same over the iterations, thus, the harmonic parts could be isolated by removing the drum components. The need to obtain a drum track prior to the factorization process, however, could be difficult in many application scenarios.
+
+%============= Factorization figure
+\begin{figure}
+ \centerline{\framebox{
+ \includegraphics[width=\columnwidth]{factorization.png}}}
+ \caption{Illustration on the factorization process. The {\itshape W}{\tiny D} is a pre-trained drum basis matrix, and it will not be updated over the iterations }
+ \label{fig:factorization}
+\end{figure}
+
+% introduce my modification here 
+In this paper, a method based on (cite co-factorization 2010) has been proposed to remove the requirement the prior drum track. As shown in \figref{fig:factorization}, assuming a signal contains drum and harmonic parts, its spectrogram could be decomposed into basis matrix {\itshape W} and activity matrix {\itshape H}. In this case, the {\itshape W} consists of {\itshape W\tiny D} and {\itshape W\tiny H}, and the {\itshape H} consists of {\itshape H\tiny D} and {\itshape H\tiny H} respectively. Here, we first initialize {\itshape W\tiny D} with drum templates to be detected. Next, given an arbitrary rank number, the {\itshape W\tiny H}, {\itshape H\tiny H}, and {\itshape H\tiny D} could be initialized with random numbers. An iterative process is taken to minimize the cost function as shown in equation \eqref{eq:costFunc}. By applying gradient decent and multiplicative update rules, the matrices could be updated by the equation \eqref{eq:updateHD} \eqref{eq:updateWH} \eqref{eq:updateHH}, and the corresponding drum events could be detected from {\itshape H\tiny D}.  
+% equation here
+\begin{equation}
+C = \frac{1}{2} || X - W_{D}H_{D} - W_{H}H_{H}||^{2}
+\label{eq:costFunc}
+\end{equation}
+
+% equation here
+\begin{equation}
+H_{D} \leftarrow H_{D}\frac{W_{D} ^T X}{W_{D}^T W_{D} H_{D} + W_{D} W_{H} H_{H}}
+\label{eq:updateHD}
+\end{equation}
+
+% equation here
+\begin{equation}
+W_{H} \leftarrow W_{H}\frac{X H_{H}^T}{W_{H} H_{H} H_{H}^T + W_{D} H_{D} H_{H}^T}
+\label{eq:updateWH}
+\end{equation}
+
+% equation here
+\begin{equation}
+H_{H} \leftarrow H_{H}\frac{W_{H}^T X}{W_{H}^T W_{H} H_{H} + W_{H} W_{D} H_{D}}
+\label{eq:updateHH}
+\end{equation}\\
+
+
+Finally, the method described above can be summarized as the following steps:\\\\
+Step 1. Construct a {\itshape m} x {\itshape r} drum basis matrix {\itshape W\tiny D}, {\itshape H\tiny r} is the number of drum components to be detected.\\\\
+Step 2. Given a fixed rank {\itshape k}, initialize a {\itshape m} x {\itshape k} matrix {\itshape W\tiny H}, a {\itshape r} x {\itshape n} matrix {\itshape H\tiny D} and a {\itshape k} x {\itshape n} matrix {\itshape H\tiny H}.\\\\
+Step 3. Normalize {\itshape W\tiny D} and {\itshape W\tiny H}.\\\\
+Step 4. Update {\itshape H\tiny D}, {\itshape W\tiny H}, and {\itshape H\tiny H} using equation \eqref{eq:updateHD}, \eqref{eq:updateWH} and \eqref{eq:updateHH}.\\\\
+Step 5. Calculate the cost of current iteration using equation \eqref{eq:costFunc}.\\\\
+Step 6. Repeat step 2 to step 5 until it converges.\\ 
+%
 \subsection{Processing Steps}\label{subsec:processing steps}
 
-Here I will put my system flowchart, and explain my processing procedure step by step. 
+The system flowchart is shown in \figref{fig:flowchart}. The basic setup is shown on the right hand side. The STFT of the signals will be first calculated using a window size = 2048 and a hop size = 512. A pre-trained drum basis matrix will be constructed from the training data of single drum sounds. Next, the semi-supervised NMF will be performed with a given rank {\itshape k}. Finally, in the onset detection stage, the drum activity matrix will be used as novelty functions to determine the onset positions and their corresponding classes.  
 
-
-
+The grey area in \figref{fig:flowchart} is another optional setup of the drum transcription system. To enhance the performance on hihat detection, the testing music signal and the training drum samples will be passed into a 2nd order butterworth high-pass filter first. The cutoff frequency is derived from the average spectrum of the training drum samples and is set to 8000 Hz. The extracted activity matrix from this part is used only for hihat detection. More details on the template extraction and activity detection will be elaborated in the following sections. 
 
 %============= System + high pass figure here
 \begin{figure}
@@ -87,31 +138,19 @@ Here I will put my system flowchart, and explain my processing procedure step by
  \label{fig:flowchart}
 \end{figure}
 
-
-
-
-
 \subsubsection{Template Extraction}\label{subsubsec:template extraction}
-1)extract templates
-
-
+The drum basis matrix is created by extracting template spectrum from the training drum samples. To extract the template spectrum for one class of drum, all the events in the class are firstly concatenated. Next, the median spectrum within these concatenated events is selected as the template. Each individual event has a length of 4 blocks (approximately 80ms), and only three classes (hihat, bass drum and snare drum) are trained in the current setup.   
 
 \subsubsection{Activity Detection}\label{subsubsec:activity detection}
-2)thresholding on activity matrix
-
+Once the drum activity matrix has been calculated, the drum transcription could be achieved by onset detection and peak picking. The activity of each entry in the drum basis matrix could be considered as the novelty function of each individual drum, and a median filter of a window size = 100ms is used to create an adaptive threshold for better pick peaking results. 
 
 \section{Evaluation}\label{sec:Evaluation}
-
-about 2 pages
-
 \subsection{Dataset Description}\label{subsec:dataset description}
 
-1)dataset description
+In this project, all of the experiments have been conducted on the “minus one” subset from the ENST public drum dataset (cite: ENST DATASET). This dataset consist of recordings from three different drummers performing on their own drum kits. Each set of the recordings contain single hits, short phrases of drum beats, drum solos, and short play through with the accompaniments. Particularly, the minus one subset, which has 64 tracks of polyphonic music, is used in this paper. Each track in the minus one subset has a length of approximately 70 seconds, and its style varies from each other. Specifically, this subset contains many drum playing techniques such as ghost notes, flam, and drag…etc, which could be considered difficult for many of the existing drum transcription algorithms. The accompaniments are mixed with the “wet mix” in the dataset without any modification of the magnitudes. The onset counts of each class within different drummer’s recordings are shown in Table 1. More details on the creation process of this dataset could be found in their corresponding paper.  
 
-In this project, all of the experiments have been conducted on the “minus one” subset from the ENST public drum dataset [22].  This dataset consist of recordings from three different drummers performing on their own drum kits. The recording contains single hits on different drums, short phrases of drum beats, drum solos, and short play through with the accompaniments. The minus one public subset has 64 tracks of polyphonic music; each track has a length of approximately 70 seconds. The music style varies from each other. Particularly, this subset contains many drum playing techniques such as ghost notes, flam, and drag…etc, which could be considered difficult for many of the existing drum transcription algorithms. The accompaniments are mixed with the “wet mix” in the dataset without any modification of the magnitudes.   
-
-The onset counts of each class within different drummer’s recordings are shown in Table 1. More details on the creation process of this dataset could be found in their corresponding paper. 
-
+As for the training process, the drum samples were taken from the tracks of single hits. Each track contains 5 to 6 single hits on different drums. The onset position of these single hits were assigned directly from the annotation during the training process.  
+ 
 %============= Onset event counts in the used tracks
 \begin{table}[h]
 \begin{center}
@@ -129,12 +168,15 @@ Total     & 6247 & 5712 & 5185 & 17144 \\ \hline
 \end{table}
 
 \subsection{Evaluation Procedure}\label{subsec:evaluation procedure}
-To keep classifiers from seeing the data during the training phase, a cross-performer validation process has been performed. As shown in Fig 2, when a drummer’s recordings is selected as the training data, the classifier will be tested using the other drummer’s recordings. The process applies to every drummer’s recordings, and the performance of the training data is the average of the test results from the other two drummers.
 
-The accuracy of the classification has been evaluated by calculating the precision, recall and F-scores. 
+In this paper, two different evaluation processes have been performed. The evaluation only focus on transcribing close hihat, snare drum and bass drum, therefore, for tracks that are performed with ride cymbal, open hihat, cross stick..etc, they are excluded in the evaluation process. A subset of 53 out of the 64 tracks are used in the evaluation process. 
 
+The first evaluation process uses training samples from all the drummers to train the drum basis matrix, and test it on all the 53 tracks. In addition, two experiments using filters to enhance the performances have been conducted. All the filters are set with a constant cutoff frequency derived from the average spectrum. 
 
-one figure here showing the procedure
+The second evaluation process involves a cross-performer validation. As shown in Fig 2, when a drummer is selected as the source of training data, the trained basis matrix will be constructed only based on his recordings, and will be used to decompose the other drummer’s recordings. This process aims to simulate the real situation, where the drum sounds in the template might be totally different from the sounds in the target signals.
+
+The evaluation metrics follow by the standard calculation of the precision, recall and F-measure. A difference within 50ms between the annotation and a hit is considered as true positive.   
+
 %============= Cross-performer validation figure
 \begin{figure}
  \centerline{\framebox{
@@ -143,14 +185,27 @@ one figure here showing the procedure
  \label{fig:cross}
 \end{figure}
 
-
-
-
-
-
 \subsection{Evaluation Results}\label{subsec:evaluation results}
 
-3)basic results + improved results (filtering)
+To determine the rank {\itshape k} of the algorithm, k = {5, 10, 20, 40, 80, 160, 320} have been tested. The resulting F-measures of every drum are shown in \figref{fig:rankTest}. A general trend of performance drop as {\itshape k} increases could be observed, especially for lower frequency sounds such as SD and BD.   
+
+%============= Rank Test Figure
+\begin{figure}
+ \centerline{\framebox{
+ \includegraphics[width=\columnwidth]{rankTest.png}}}
+ \caption{Average F-measure versus rank change in harmonic activity matrix.}
+ \label{fig:rankTest}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
 
 
 %============= Train on All templates
@@ -174,7 +229,8 @@ one figure here showing the procedure
  \label{tab:basic results}
 \end{table}
 
-4)system properties (rank change, iteration and convergence, cross training and testing)
+
+
 
 %============= Train on Drummer 1 templates
 \begin{table}[h]
@@ -243,29 +299,14 @@ one figure here showing the procedure
 \end{center}
 \end{table}
 
-%============= Rank Test Figure
-\begin{figure}
- \centerline{\framebox{
- \includegraphics[width=\columnwidth]{rankTest.png}}}
- \caption{Average F-measure versus rank change in harmonic activity matrix.}
- \label{fig:rankTest}
-\end{figure}
-
-
-
-
-\subsection{Discussions}\label{subsec:discussions}
-
-5)discussion
-
-although the results seem to be comparable, NMF based method still has some advantages over instance based methods: 1. simultaneous sounds will be detected separately  2. require less labeled data during the training process 3. 
+Although the results seem to be comparable, NMF based method still has some advantages over instance based methods: 1. simultaneous sounds will be detected separately  2. require less labeled data during the training process 3. 
 
 
 
 
 \section{Conclusion}\label{sec:Conclusion}
 
-about 0.5 page
+In this paper, a drum transcription system in polyphonic music using semi-supervised NMF has been presented. This method uses a pre-trained drum basis matrix to decompose the target signal, extract the drum activity matrix, and adapt the harmonic parts. This evaluation results show that this method is able to achieve 61~77\% accuracy in polyphonic music. Furthermore, the results from the cross-performer validation indicate that this method still apply to the situations when minimum prior knowledge about the drum sounds in the target signal is given.  
 
 
 \section{Reference}
