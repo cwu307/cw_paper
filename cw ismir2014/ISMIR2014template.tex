@@ -11,7 +11,7 @@
 
 % Title.
 % ------
-\title{DRUM TRANSCRIPTION IN POLYPHONIC MUSIC USING SEMI-SUPERVISED NON-NEGATIVE MATRIX FACTORIZATION}
+\title{DRUM TRANSCRIPTION USING SEMI-SUPERVISED NON-NEGATIVE MATRIX FACTORIZATION}
 
 % Single address
 % To use with only one author or several with the same address
@@ -390,7 +390,11 @@ ANYTHING ELSE TO DISCUSS HERE?
 
 We have presented a drum transcription system for polyphonic music using semi-supervised NMF. This method uses a pre-trained drum basis matrix to decompose the target signal and extract the drum activity matrix. This evaluation results show that this method is able to achieve 61~77\% accuracy in polyphonic music. 
 It has the following advantages: 
-First, simultaneous sounds can be detected separately. Traditional systems for drum detection often have difficulties with simultaneous events, especially when the number of instruments increases. %Normally, when more classes of drums are being considered in a instance-based transcription task, more combination of classes need to be considered, and the situation could be more complicated. With a NMF approach, there is no need to train more classes to handle such situations. 
+First, simultaneous sounds can be detected separately. Traditional systems for drum detection often have difficulties with simultaneous events, especially when the number of instruments increases. 
+
+NUMBER OF TRAINING SAMPLES...
+
+%Normally, when more classes of drums are being considered in a instance-based transcription task, more combination of classes need to be considered, and the situation could be more complicated. With a NMF approach, there is no need to train more classes to handle such situations. 
 Second, adjustment of the parameter $r$ allows the algorithm to adapt to different different types of polyphonic music. 
 Third, cross-perfomer evaluation results indicate a robustness against template mismatches, possibly allowing the application in situations with minimum prior knowledge. %Furthermore, the results from the cross-performer validation indicate that this method still apply to the situations when minimum prior knowledge about the drum sounds in the target signal is given.
 Fourth, the approach requires only trivial extensions to be able to be used as a drum separation system.
