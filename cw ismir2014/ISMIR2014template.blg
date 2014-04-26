@@ -1,0 +1,58 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: ISMIR2014template.aux
+The style file: plain.bst
+Illegal, another \bibdata command---line 72 of file ISMIR2014template.aux
+ : \bibdata
+ :         {ismir2014template}
+I'm skipping whatever remains of this command
+Database file #1: cwIsmirRef.bib
+Warning--I didn't find a database entry for ""
+Warning--I didn't find a database entry for "tzanetakis_musical_2002"
+Warning--there's a number but no volume in Alves2009
+Warning--there's a number but no series in FitzGerald2003
+Warning--there's a number but no series in FitzGerald2002
+Warning--there's a number but no series in Seung2001
+Warning--can't use both volume and number fields in Yoshii2007
+You've used 20 entries,
+            2118 wiz_defined-function locations,
+            622 strings with 8156 characters,
+and the built_in function-call counts, 7124 in all, are:
+= -- 686
+> -- 339
+< -- 11
++ -- 132
+- -- 112
+* -- 460
+:= -- 1141
+add.period$ -- 60
+call.type$ -- 20
+change.case$ -- 116
+chr.to.int$ -- 0
+cite$ -- 25
+duplicate$ -- 306
+empty$ -- 566
+format.name$ -- 112
+if$ -- 1527
+int.to.chr$ -- 0
+int.to.str$ -- 20
+missing$ -- 20
+newline$ -- 103
+num.names$ -- 40
+pop$ -- 139
+preamble$ -- 1
+purify$ -- 96
+quote$ -- 0
+skip$ -- 231
+stack$ -- 0
+substring$ -- 366
+swap$ -- 96
+text.length$ -- 11
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 80
+warning$ -- 5
+while$ -- 65
+width$ -- 22
+write$ -- 216
+(There was 1 error message)
