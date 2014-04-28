@@ -309,75 +309,97 @@ The results in the middle column of \tabref{tab:basicResults} indicate that by f
 %There are three experiment setups using the same training data and testing data as mentioned in \ref{subsec:evaluation procedure}. In the first setup, the original signals of the drum samples are used to train the basis matrix, and the original signals from the minus one subset are used as the target signals. The results show that the average F-measure for HH, BD and SD are 0.654, 0.776 and 0.617 respectively. A second setup uses three different filters to pre-process the extracted templates as well as the target signals. A high-pass filter with $f_{hp} = \unit[8000]{Hz}$ is used for HH; a band-pass filter with $f_{bp} = \unit[200--500]{Hz}$ is used for SD; a low-pass filter with $f_{sd} = \unit[150]{Hz}$ is used for BD. The results show that the performance for HH has a significant improvement of 0.702, but the performance for BD and SD drop slightly. Finally, a setup uses only high-pass filter to retain the best overall results has been settled in the current implementation. 
 
 \subsubsection{Evaluation II}
-LETS THINK OF WAYS TO CUMMARIZE THESE THREE TABLES IN ONE TABLE AND A GRAPH, MAYBE DISCARDED PRECISION AND RECALL. MAYBE ALSO OVERALL AVERAGE MEASURES (TRAINING WITH 1, TESTING WITH ALL)?
+%LETS THINK OF WAYS TO CUMMARIZE THESE THREE TABLES IN ONE TABLE AND A GRAPH, MAYBE DISCARDED PRECISION AND RECALL. MAYBE ALSO OVERALL AVERAGE MEASURES (TRAINING WITH 1, TESTING WITH ALL)?
 
-In order to investigate the dependency of our approach with respect to the similarity of training and test drum sounds, we conduct a cross-performer evaluation as shown in \figref{fig:cross}. No filters have been applied during the process. There results are listed in \tabref{tab:trainDr1}, \tabref{tab:trainDr2}, and \tabref{tab:trainDr3}.
+In order to investigate the dependency of our approach with respect to the similarity of training and test drum sounds, we conduct a cross-performer evaluation as shown in \figref{fig:cross}. No filters have been applied during the process. Their results are listed in \tabref{tab:crossResults}.
 
-%============= Train on Drummer 1 templates
+%============= Cross-Performer results 
 \begin{table}[h]
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|}
 \hline
-\multicolumn{2}{|c}{Training} & \multicolumn{3}{|c|}{Drummer 1}   \\ \hline
-\multicolumn{2}{|c|}{Testing} & Drummer 1 & Drummer 2 & Drummer 3 \\ \hline
-\multirow{3}{*}{HH}    & P    & 0.662     & 0.621     & 0.564     \\ \cline{2-5} 
-                       & R    & 0.670     & 0.749     & 0.692     \\ \cline{2-5} 
-                       & F    & 0.666     & \textbf{0.679}     & 0.622     \\ \hline
-\multirow{3}{*}{BD}    & P    & 0.620     & 0.781     & 0.850      \\ \cline{2-5} 
-                       & R    & 0.393     & 0.914     & 0.900      \\ \cline{2-5} 
-                       & F    & 0.481     & 0.842     & \textbf{0.874}     \\ \hline
-\multirow{3}{*}{SD}    & P    & 0.639     & 0.800     & 0.589     \\ \cline{2-5} 
-                       & R    & 0.546     & 0.608     & 0.487     \\ \cline{2-5} 
-                       & F    & 0.588     & \textbf{0.691}     & 0.533     \\ \hline
+\multicolumn{2}{|c|}{Training} & Dr1            & Dr2     & Dr3            & \multirow{2}{*}{Avg.} \\ \cline{1-5}
+\multicolumn{2}{|c|}{Testing}  & Dr2+Dr3        & Dr1+Dr3 & Dr1+Dr2        &                       \\ \hline
+HH             & P             & 0.593          & 0.601   & 0.561          & 0.585                 \\ \hline
+               & R             & 0.721          & 0.683   & 0.696          & 0.700                 \\ \hline
+               & F             & \textbf{0.651} & 0.639   & 0.621          & 0.637                 \\ \hline
+BD             & P             & 0.816          & 0.583   & 0.831          & 0.743                 \\ \hline
+               & R             & 0.907          & 0.728   & 0.948          & 0.861                 \\ \hline
+               & F             & 0.859          & 0.647   & \textbf{0.886} & 0.797                 \\ \hline
+SD             & P             & 0.694          & 0.577   & 0.590          & 0.620                 \\ \hline
+               & R             & 0.547          & 0.518   & 0.566          & 0.544                 \\ \hline
+               & F             & \textbf{0.612} & 0.546   & 0.578          & 0.578                 \\ \hline
 \end{tabular}
- \caption{Transcription results using drummer 1 training templates.}
- \label{tab:trainDr1}
-\end{center}
+ \caption{Transcription results of cross-performer validation.}
+ \label{tab:crossResults}
+ \end{center}
 \end{table}
 
-%============= Train on Drummer 2 templates
-\begin{table}[h]
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\multicolumn{2}{|c}{Training} & \multicolumn{3}{|c|}{Drummer 2}   \\ \hline
-\multicolumn{2}{|c|}{Testing} & Drummer 1 & Drummer 2 & Drummer 3 \\ \hline
-\multirow{3}{*}{HH}    & P    & 0.661     & 0.600     & 0.541     \\ \cline{2-5} 
-                       & R    & 0.667     & 0.787     & 0.699     \\ \cline{2-5} 
-                       & F    & 0.664     & \textbf{0.681}     & 0.610     \\ \hline
-\multirow{3}{*}{BD}    & P    & 0.466     & 0.846     & 0.699     \\ \cline{2-5} 
-                       & R    & 0.603     & 0.986     & 0.854     \\ \cline{2-5} 
-                       & F    & 0.525     & \textbf{0.910}     & 0.769     \\ \hline
-\multirow{3}{*}{SD}    & P    & 0.625     & 0.849     & 0.529     \\ \cline{2-5} 
-                       & R    & 0.550     & 0.624     & 0.486     \\ \cline{2-5} 
-                       & F    & 0.585     & \textbf{0.719}     & 0.506     \\ \hline
-\end{tabular}
- \caption{Transcription results using drummer 2 training templates.}
- \label{tab:trainDr2}
-\end{center}
-\end{table}
+%%============= Train on Drummer 1 templates
+%\begin{table}[h]
+%\begin{center}
+%\begin{tabular}{|c|c|c|c|c|}
+%\hline
+%\multicolumn{2}{|c}{Training} & \multicolumn{3}{|c|}{Drummer 1}   \\ \hline
+%\multicolumn{2}{|c|}{Testing} & Drummer 1 & Drummer 2 & Drummer 3 \\ \hline
+%\multirow{3}{*}{HH}    & P    & 0.662     & 0.621     & 0.564     \\ \cline{2-5} 
+%                       & R    & 0.670     & 0.749     & 0.692     \\ \cline{2-5} 
+%                       & F    & 0.666     & \textbf{0.679}     & 0.622     \\ \hline
+%\multirow{3}{*}{BD}    & P    & 0.620     & 0.781     & 0.850      \\ \cline{2-5} 
+%                       & R    & 0.393     & 0.914     & 0.900      \\ \cline{2-5} 
+%                       & F    & 0.481     & 0.842     & \textbf{0.874}     \\ \hline
+%\multirow{3}{*}{SD}    & P    & 0.639     & 0.800     & 0.589     \\ \cline{2-5} 
+%                       & R    & 0.546     & 0.608     & 0.487     \\ \cline{2-5} 
+%                       & F    & 0.588     & \textbf{0.691}     & 0.533     \\ \hline
+%\end{tabular}
+% \caption{Transcription results using drummer 1 training templates.}
+% \label{tab:trainDr1}
+%\end{center}
+%\end{table}
 
-%============= Train on Drummer 3 templates
-\begin{table}[h]
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\multicolumn{2}{|c}{Training} & \multicolumn{3}{|c|}{Drummer 3}   \\ \hline
-\multicolumn{2}{|c|}{Testing} & Drummer 1 & Drummer 2 & Drummer 3 \\ \hline
-\multirow{3}{*}{HH}    & P    & 0.614     & 0.599     & 0.523     \\ \cline{2-5} 
-                       & R    & 0.660     & 0.717     & 0.675     \\ \cline{2-5} 
-                       & F    & 0.636     & \textbf{0.652}     & 0.589     \\ \hline
-\multirow{3}{*}{BD}    & P    & 0.506     & 0.862     & 0.800     \\ \cline{2-5} 
-                       & R    & 0.636     & 0.965     & 0.932     \\ \cline{2-5} 
-                       & F    & 0.564     & \textbf{0.910}     & 0.861     \\ \hline
-\multirow{3}{*}{SD}    & P    & 0.477     & 0.615     & 0.564     \\ \cline{2-5} 
-                       & R    & 0.580     & 0.598     & 0.534     \\ \cline{2-5} 
-                       & F    & 0.523     & \textbf{0.607}     & 0.548     \\ \hline
-\end{tabular}
- \caption{Transcription results using drummer 3 training templates.}
- \label{tab:trainDr3}
-\end{center}
-\end{table}
+%%============= Train on Drummer 2 templates
+%\begin{table}[h]
+%\begin{center}
+%\begin{tabular}{|c|c|c|c|c|}
+%\hline
+%\multicolumn{2}{|c}{Training} & \multicolumn{3}{|c|}{Drummer 2}   \\ \hline
+%\multicolumn{2}{|c|}{Testing} & Drummer 1 & Drummer 2 & Drummer 3 \\ \hline
+%\multirow{3}{*}{HH}    & P    & 0.661     & 0.600     & 0.541     \\ \cline{2-5} 
+%                       & R    & 0.667     & 0.787     & 0.699     \\ \cline{2-5} 
+%                       & F    & 0.664     & \textbf{0.681}     & 0.610     \\ \hline
+%\multirow{3}{*}{BD}    & P    & 0.466     & 0.846     & 0.699     \\ \cline{2-5} 
+%                       & R    & 0.603     & 0.986     & 0.854     \\ \cline{2-5} 
+%                       & F    & 0.525     & \textbf{0.910}     & 0.769     \\ \hline
+%\multirow{3}{*}{SD}    & P    & 0.625     & 0.849     & 0.529     \\ \cline{2-5} 
+%                       & R    & 0.550     & 0.624     & 0.486     \\ \cline{2-5} 
+%                       & F    & 0.585     & \textbf{0.719}     & 0.506     \\ \hline
+%\end{tabular}
+% \caption{Transcription results using drummer 2 training templates.}
+% \label{tab:trainDr2}
+%\end{center}
+%\end{table}
+
+%%============= Train on Drummer 3 templates
+%\begin{table}[h]
+%\begin{center}
+%\begin{tabular}{|c|c|c|c|c|}
+%\hline
+%\multicolumn{2}{|c}{Training} & \multicolumn{3}{|c|}{Drummer 3}   \\ \hline
+%\multicolumn{2}{|c|}{Testing} & Drummer 1 & Drummer 2 & Drummer 3 \\ \hline
+%\multirow{3}{*}{HH}    & P    & 0.614     & 0.599     & 0.523     \\ \cline{2-5} 
+%                       & R    & 0.660     & 0.717     & 0.675     \\ \cline{2-5} 
+%                       & F    & 0.636     & \textbf{0.652}     & 0.589     \\ \hline
+%\multirow{3}{*}{BD}    & P    & 0.506     & 0.862     & 0.800     \\ \cline{2-5} 
+%                       & R    & 0.636     & 0.965     & 0.932     \\ \cline{2-5} 
+%                       & F    & 0.564     & \textbf{0.910}     & 0.861     \\ \hline
+%\multirow{3}{*}{SD}    & P    & 0.477     & 0.615     & 0.564     \\ \cline{2-5} 
+%                       & R    & 0.580     & 0.598     & 0.534     \\ \cline{2-5} 
+%                       & F    & 0.523     & \textbf{0.607}     & 0.548     \\ \hline
+%\end{tabular}
+% \caption{Transcription results using drummer 3 training templates.}
+% \label{tab:trainDr3}
+%\end{center}
+%\end{table}
 
 The results show a simple trend: the test set featuring drummer 2 give nearly always the best results, regardless of the training set. The Bass Drum of drummer 2 seems to be particularly easy to detect. An even more surprising result is that there does not seem to be an obvious increase of the F-measure when the training drummer and test set drummer are identical.
 These results indicate that this algorithm is relatively robust against differences between the drum template and the sound of the drum to be detected. This would allow to construct a template from different sound sources independent of the recording to be analyzed allowing far more general applications. However, the performance of this setup still needs to be confirmed with a cross-data set validation.

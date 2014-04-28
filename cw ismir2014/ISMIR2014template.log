@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  28 APR 2014 02:22
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  28 APR 2014 11:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -320,30 +320,11 @@ sults for sig-nals pre-processed
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 268.
 [4 <./cross.png> <./rankTest.png (PNG copy)>]
-Overfull \hbox (12.53223pt too wide) in paragraph at lines 312--313
-\OT1/ptm/m/n/10 LETS THINK OF WAYS TO CUM-MA-RIZE THESE THREE
- []
-
-
-Overfull \hbox (0.89233pt too wide) in paragraph at lines 312--313
-\OT1/ptm/m/n/10 TA-BLES IN ONE TA-BLE AND A GRAPH, MAYBE DIS-
- []
-
-
-Overfull \hbox (9.28456pt too wide) in paragraph at lines 314--315
-\OT1/ptm/m/n/10 with re-spect to the sim-i-lar-ity of train-ing and test drum s
-ounds,
- []
-
-
 Overfull \hbox (12.74529pt too wide) in paragraph at lines 314--315
 \OT1/ptm/m/n/10 we con-duct a cross-performer eval-u-a-tion as shown in [].
  []
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[5] (./ISMIR2014template.bbl
+(./ISMIR2014template.bbl
 Underfull \hbox (badness 2875) in paragraph at lines 4--9
 []\OT1/ptm/m/n/10 DS Alves, Jouni Paulus, and J Fon-seca.  Drum
  []
@@ -365,7 +346,7 @@ Underfull \hbox (badness 5064) in paragraph at lines 4--9
 10 ,
  []
 
-
+[5]
 Underfull \hbox (badness 1533) in paragraph at lines 65--69
 []\OT1/ptm/m/n/10 Perfecto Her-rera, Alexan-dre Yete-rian, and Fa-bien
  []
@@ -377,10 +358,10 @@ Underfull \hbox (badness 1824) in paragraph at lines 117--122
 
 ) [6] (./ISMIR2014template.aux) ) 
 Here is how much of TeX's memory you used:
- 2457 strings out of 493315
- 33441 string characters out of 6137904
- 110351 words of memory out of 5000000
- 5856 multiletter control sequences out of 15000+600000
+ 2455 strings out of 493315
+ 33417 string characters out of 6137904
+ 103335 words of memory out of 5000000
+ 5854 multiletter control sequences out of 15000+600000
  19843 words of font info for 45 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  37i,13n,23p,1599b,357s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -395,7 +376,7 @@ y8.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><
 /usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local
 /texlive/2013/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2
 013/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ISMIR2014template.pdf (6 pages, 234515 bytes).
+Output written on ISMIR2014template.pdf (6 pages, 232563 bytes).
 PDF statistics:
  72 PDF objects out of 1000 (max. 8388607)
  46 compressed objects within 1 object stream
