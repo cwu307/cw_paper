@@ -4,6 +4,7 @@
 % -----------------------------------------------
 
 \documentclass{article}
+%\usepackage[english]{babel}
 \usepackage{ismir2014,amsmath,cite}
 \usepackage{graphicx}
 \usepackage{multirow}
@@ -11,7 +12,7 @@
 
 % Title.
 % ------
-\title{DRUM TRANSCRIPTION USING SEMI-SUPERVISED NON-NEGATIVE MATRIX FACTORIZATION}
+\title{Drum Transcription Using Semi-Supervised Non-Negative Matrix Factorization}
 
 % Single address
 % To use with only one author or several with the same address
@@ -68,27 +69,32 @@ This study explores the application of the popular transcription method of Non-N
 
 \section{Related Work}\label{sec:related works}
 
-The early attempts to transcribe percussive sounds mainly focused on classifying monophonic signals \cite{herrera_automatic_2002, herrera_automatic_2003}. With standard approaches such as feature extraction and classification, fairly high accuracy were reported in the previous studies. 
-For most real-world applications, however, the input file is a mixture of percussive and harmonic sound sources. in the real use case, a drum transcription system is expected to work in polyphonic signal instead of monophonic. Therefore, solving this problem in the context of polyphonic music had become another criterion, and different methods could be found in previous research \cite{fitzgerald_drum_2003,yoshii_automatic_2004,dittmar_drum_2005,tanghe_algorithm_2005,gillet_transcription_2008,dittmar_further_2004}.  According to \cite{gillet_transcription_2008}, recent studies on the drum transcription in polyphonic music could be categorized into three types: segment and classify, separate and detect, match and adapt.  For the first type of approaches, the common procedure starts by applying onset detection to the audio signal in order to segment the music event. Once the event has been detected, various features from time or spectral domain of the signal will be extracted, and a classifier will be trained to classify the event based on the extracted features. This type of approaches seem to perform well when the data and features are well chosen \cite{tanghe_algorithm_2005,alves_drum_2009}. However, to get good results, sufficient amount of data, careful preprocessing and training steps are required in this type of systems. Additionally, to handle the situation of simultaneous sounds, more classes need to be trained.
+The early attempts to transcribe percussive sounds mainly focused on the classification of signals containing only drum sounds. For these systems, standard approaches with a feature extractor and a subsequent classification engine are able to produce results with high accuracy \cite{herrera_automatic_2002, herrera_automatic_2003}. 
 
-The second type of approaches is based on the assumption that music signal is a superposition of different sound sources. By decomposing the signal and into different source templates and corresponding activities, the music content could be transcribed by detecting onsets of these activities. Different methods such as Independent Subspace Analysis (ISA) \cite{fitzgerald_sub-band_2002}, Prior Subspace Analysis (PSA) \cite{fitzgerald_drum_2003}, and Non-negative Matrix Factorization (NMF) \cite{paulus_drum_2005,moreau_drum_2007,alves_drum_2009} are the examples in this category. This type of approaches is usually easier to interpret, since most of the decompositions have been done on the spectrogram of the signal. Also, the separate nature allows simultaneous events to be handled easily in this case. However, to be able to transcribe different kinds of music, a large template might be required prior to the decomposition. Moreover, the number of rank during the decomposition process could be difficult to determine in some cases. 
+For many real-world applications, however, the input file is a mixture of percussive and harmonic sound sources. Therefore, a drum transcription system is expected to work on this mixture of sounds instead of exclusively on percussive sounds. 
+%Therefore, solving this problem in the context of polyphonic music had become another criterion, and different methods could be found in previous research .  
+Gillet and Richard divide systems for the drum transcription from mixtures into three categories \cite{gillet_transcription_2008}: (i) \textit{segment and classify}, (ii) \textit{separate and detect}, and (iii) \textit{match and adapt}.  Systems of the first category (segment and classify) usually segment the audio signal into a series of events by applying automatic onset detection and extract various features from time or spectral domain. Each event segment is then classified based on the extracted features. 
+This approach seems to perform well when features are well chosen \cite{tanghe_algorithm_2005,alves_drum_2009}. However, a sufficient amount of training data and carefully adjusted pre-processing is required in order to get good results. Furthermore, the possibility of  simultaneous sounds increases the number of  classes significantly.
 
-The third type of approaches uses pre-trained templates to detect drum events \cite{yoshii_drum_2007}. An iterative process has been taken to search for the closest matches to these templates and adapt them. The proposed system has been evaluated and performed well in MIREX 2005 drum detection competition. However, to coverage a wider range of sounds, multiple seed templates need to be prepared prior to the process.
+The second type of approaches (separate and detect) is based on the assumption that the music signal is a superposition of different sound sources. By decomposing the signal and into source templates with corresponding activation functions, the music content could be transcribed by identifying the templates and analysing the activities for each template. 
+Different methods such as Independent Subspace Analysis \cite{fitzgerald_sub-band_2002}, Prior Subspace Analysis \cite{fitzgerald_drum_2003}, and Non-negative Matrix Factorization (NMF, see below) \cite{paulus_drum_2005,moreau_drum_2007,alves_drum_2009} fall into this category. The advantage of these approaches is that they usually are easier to interpret since most of the decompositions are done on the spectrogram of the signal. Furthermore, the handling of simultaneous and overlapping events is inherent to the approach. However, to be able to transcribe different kinds of music, a large template might be required prior to the decomposition. I DO NOT UNDERSTAND THIS HOWEVER SENTENCE. Another difficulty is the determination of the rank required for the decomposition process.
 
-In this paper, a method based on the NMF approach has been presented. Although NMF has been proven to be effective in music transcription \cite{smaragdis_non-negative_2003}, it is still difficult to determine the number of sources in the target signal for a correct rank parameter setting. Therefore, the goal of this paper is to develop an algorithm that provides a more general use case, which only requires users to input a few drum samples prior to the decomposition process. This method aims to serve as an alternative way to transcribe drum tracks in polyphonic music, leading toward an end user application for general drum transcription tasks.  
+The third type of approaches (match and adapt) uses pre-trained templates to detect drum events \cite{yoshii_drum_2007}. The templates are searched for the closest match and adapted in an iterative process. In order to cover a wide range of sounds, multiple seed templates need to be prepared prior to the process. I AM NOT SURE IF I UNDERSTOOD PROPERLY --- PLEASE DOUBLECHECK.
  
+WHAT ABOUT THESE PUBLICATIONS --- THEY ARE NOT REFERENCED IN THE OVERVIEW: \cite{yoshii_automatic_2004,dittmar_drum_2005,dittmar_further_2004,scholler_sparse_2011}.
 \section{Method}\label{sec:method}
 \subsection{Algorithm Description}\label{subsec:algorithm description}
 % introduce NMF here
-The basic concept of NMF is to approximate a non-negative matrix $V$ with two non-negative matrices $W$ and $H$ as shown in Eq.~\eqref{eq:approx}.
 
+In this paper, we present a method based on NMF. Although NMF has been proven to be effective in music transcription \cite{smaragdis_non-negative_2003}, it is still difficult to determine the number of sources in the target signal for a correct rank parameter setting. The goal of our system is the transcription of drum tracks in complex mixtures while only requiring a few drum samples for training prior to the decomposition process. 
+
+The basic concept of NMF is to approximate a non-negative matrix $V$ with two non-negative matrices $W$ and $H$ as shown in Eq.~\eqref{eq:approx}.
 % equation here
 \begin{equation}
 V \approx WH
 \label{eq:approx}
 \end{equation}
-
-That is, given a $m \times n$ matrix $V$, the NMF will decompose the matrix into the product of a $m \times r$ matrix $W$ and a $r \times n$ matrix $H$, with $r$ being the rank of the NMF decomposition. $W$ is the dictionary matrix, and $H$ is the activation matrix. In most audio applications, $V$ is the spectrogram to be decomposed, $W$ contains the magnitude spectra of the salient components, and $H$ indicates the activation of these components with respect to time. The matrices $W$ and $H$ are obtained through an iterative process that minimizes a distance measure between the target spectrogram $V$ and its approximation. \cite{lee_algorithms_2000}. 
+Given a $m \times n$ matrix $V$, NMF will decompose the matrix into the product of a $m \times r$ matrix $W$ and a $r \times n$ matrix $H$, with $r$ being the rank of the NMF decomposition. $W$ is the dictionary matrix, and $H$ is the activation matrix. In most audio applications, $V$ is the spectrogram to be decomposed, $W$ contains the magnitude spectra of the salient components, and $H$ indicates the activation of these components with respect to time. The matrices $W$ and $H$ are obtained through an iterative process that minimizes a distance measure between the target spectrogram $V$ and its approximation. \cite{lee_algorithms_2000}. 
 
 The application of this method to music transcription, however, offers some challenges. 
 First, the number of sound sources and notes within a music recording is usually unknown. It is therefore difficult to estimate a correct rank number and obtain a clear representation of the decomposed  components. 
