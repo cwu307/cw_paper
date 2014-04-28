@@ -42,6 +42,13 @@ O.~Gillet and G.~Richard.
 \newblock {\em Audio, Speech, and Language Processing, IEEE Transactions on},
   16(3):529--540, March 2008.
 
+\bibitem{Gillet2006}
+Olivier Gillet and G~Richard.
+\newblock {Enst-drums: an extensive audio-visual database for drum signals
+  processing}.
+\newblock In {\em Proceedings of the 7th International Symposium on Music
+  Information Retrieval}, 2006.
+
 \bibitem{Helen2005}
 M~Hel\'{e}n and Tuomas Virtanen.
 \newblock {Separation of drums from polyphonic music using non-negative matrix

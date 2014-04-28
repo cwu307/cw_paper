@@ -2,57 +2,55 @@ This is BibTeX, Version 0.99d (TeX Live 2013)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: ISMIR2014template.aux
 The style file: plain.bst
-Illegal, another \bibdata command---line 72 of file ISMIR2014template.aux
- : \bibdata
- :         {ismir2014template}
+Illegal, another \bibstyle command---line 80 of file ISMIR2014template.aux
+ : \bibstyle
+ :          {ismir2014}
 I'm skipping whatever remains of this command
 Database file #1: cwIsmirRef.bib
-Warning--I didn't find a database entry for ""
-Warning--I didn't find a database entry for "tzanetakis_musical_2002"
 Warning--there's a number but no volume in Alves2009
 Warning--there's a number but no series in FitzGerald2003
 Warning--there's a number but no series in FitzGerald2002
 Warning--there's a number but no series in Seung2001
 Warning--can't use both volume and number fields in Yoshii2007
-You've used 20 entries,
+You've used 21 entries,
             2118 wiz_defined-function locations,
-            622 strings with 8156 characters,
-and the built_in function-call counts, 7124 in all, are:
-= -- 686
-> -- 339
+            627 strings with 8340 characters,
+and the built_in function-call counts, 7396 in all, are:
+= -- 709
+> -- 352
 < -- 11
-+ -- 132
-- -- 112
-* -- 460
-:= -- 1141
-add.period$ -- 60
-call.type$ -- 20
-change.case$ -- 116
++ -- 137
+- -- 116
+* -- 473
+:= -- 1186
+add.period$ -- 63
+call.type$ -- 21
+change.case$ -- 121
 chr.to.int$ -- 0
-cite$ -- 25
-duplicate$ -- 306
-empty$ -- 566
-format.name$ -- 112
-if$ -- 1527
+cite$ -- 26
+duplicate$ -- 320
+empty$ -- 594
+format.name$ -- 116
+if$ -- 1586
 int.to.chr$ -- 0
-int.to.str$ -- 20
-missing$ -- 20
-newline$ -- 103
-num.names$ -- 40
-pop$ -- 139
+int.to.str$ -- 21
+missing$ -- 21
+newline$ -- 108
+num.names$ -- 42
+pop$ -- 148
 preamble$ -- 1
-purify$ -- 96
+purify$ -- 100
 quote$ -- 0
-skip$ -- 231
+skip$ -- 239
 stack$ -- 0
-substring$ -- 366
-swap$ -- 96
+substring$ -- 371
+swap$ -- 98
 text.length$ -- 11
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 80
+type$ -- 84
 warning$ -- 5
-while$ -- 65
-width$ -- 22
-write$ -- 216
+while$ -- 67
+width$ -- 23
+write$ -- 226
 (There was 1 error message)
