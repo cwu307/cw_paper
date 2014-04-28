@@ -62,7 +62,7 @@ A complete transcription system comprises many related sub-tasks such as multi-p
 
 %Drum track, especially in pop music, often plays an important role in determining music structure, style, rhythm and tempo. In many cases, it shares the same importance as the harmonic part in the music. That said, a good drum transcription system could provide essential information of the music content, and could potentially facilitate the realization of many interesting applications. For example, a drum transcription and drum source separation task could mutually benefit from each other and provide the possibility to manipulate drum sounds within an existing drum track \cite{3,4}.  Also, music education could be an application of a drum transcription system, for it could help students identify drum event within a polyphonic music, and provide instructions by analyzing and comparing the differences between the input and reference performances. Furthermore, such system could also be integrated as a part of machine listening, improving the existing systems of robotic musicians \cite{5}.
 
-This study explores the application of the popular transcription method of Non-Negative Matrix Factorization (NMF) for drum transcription in polyphonic music. The paper is structured as follows: Section~\ref{sec:related works} provides an overview of the research in this area. In Sect.~\secref{sec:method} we present our approach; evaluation results are being presented and discussed in Sect.~\ref{sec:Evaluation}. Section~\ref{sec:Conclusion} provides a summary, conclusion, and directions of future work.
+This study explores the application of the popular transcription method of Non-Negative Matrix Factorization (NMF) for drum transcription in polyphonic music. The paper is structured as follows: \secref{sec:related works} provides an overview of the research in this area. In \secref{sec:method} we present our approach; evaluation results are being presented and discussed in \secref{sec:Evaluation}. \secref{sec:Conclusion} provides a summary, conclusion, and directions of future work.
 
 %Therefore, this study aims to explore alternative solutions to drum transcription in polyphonic music. The final goal of this paper is to find a potential direction to push the limit of this task, leading toward further musical applications.
 
@@ -150,9 +150,9 @@ The time positions of the drum events can then be extracted with peak-picking th
 
 \figref{fig:flowchart} shows the flow chart of the implemented system. The basic setup is shown on the right hand side. 
 The STFT of the signals will be calculated using a window size and a hop size of $2048$ and $512$, respectively. 
-A pre-trained dictionary matrix will be constructed from the training set, consisting of isolated drum sounds (see Sect.~\ref{subsubsec:template extraction}). 
+A pre-trained dictionary matrix will be constructed from the training set, consisting of isolated drum sounds (see \secref{subsubsec:template extraction}). 
 Next, the semi-supervised NMF will be performed with rank $r$ as described above. 
-Finally, the activation Matrix $H_D$ is evaluated to determine the onset positions and their corresponding classes  (see Sect.~\ref{subsubsec:template extraction}).  
+Finally, the activation Matrix $H_D$ is evaluated to determine the onset positions and their corresponding classes  (see \secref{subsubsec:template extraction}).  
 
 The gray area in \figref{fig:flowchart} is an optional addition to the system. Preliminary tests showed improved Hi-Hat (HH) detection accuracy when applying a high-pass filter to both the template and the music signal. We used a 2nd order Butterworth high-pass filter with a heuristically determined cutoff frequency of \unit[8000]{Hz}. %In this case, matrix $H_D$ will have the dimensions $m \times 1$. 
 % Actually I still use the full template to decompose the filtered signal, and only take activation from HH for onset detection...
@@ -189,7 +189,7 @@ The experiments have been conducted on the \textit{minus one} subset from the EN
 
 The accompaniments are mixed with the drum tracks in the data set without any modification (e.g., no level adjustment). The distribution of onset counts per class per drummer is shown in \tabref{tab:onsetCount}. %More details on the creation process of this data set could be found in their corresponding paper.  
 
-The drums template (see Sect.~\ref{subsubsec:template extraction}) have been generated from the tracks with single hits. Each track contains 5 to 6 single hits on different drums. The onset position of these single hits were determined using the annotated ground truth. 
+The drums template (see \secref{subsubsec:template extraction}) have been generated from the tracks with single hits. Each track contains 5 to 6 single hits on different drums. The onset position of these single hits were determined using the annotated ground truth. 
  
 %============= Onset event counts in the used tracks
 \begin{table}[h]
@@ -473,7 +473,7 @@ There are some possible directions for the future works: first of all, a compari
     %Editorial Acme, Porto, 2012.
 %
 %\end{thebibliography}
-\bibliographystyle{ismir2014}
+%\bibliographystyle{ismir2014}
 \bibliography{cwIsmirRef}
 %\bibliography{ismir2014template}
 

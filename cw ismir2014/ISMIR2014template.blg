@@ -1,56 +1,9 @@
-This is BibTeX, Version 0.99d (TeX Live 2013)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: ISMIR2014template.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: ISMIR2014template.aux
 The style file: plain.bst
-Illegal, another \bibstyle command---line 80 of file ISMIR2014template.aux
- : \bibstyle
- :          {ismir2014}
-I'm skipping whatever remains of this command
 Database file #1: cwIsmirRef.bib
 Warning--there's a number but no volume in Alves2009
 Warning--there's a number but no series in FitzGerald2003
 Warning--there's a number but no series in FitzGerald2002
 Warning--there's a number but no series in Seung2001
 Warning--can't use both volume and number fields in Yoshii2007
-You've used 21 entries,
-            2118 wiz_defined-function locations,
-            627 strings with 8340 characters,
-and the built_in function-call counts, 7396 in all, are:
-= -- 709
-> -- 352
-< -- 11
-+ -- 137
-- -- 116
-* -- 473
-:= -- 1186
-add.period$ -- 63
-call.type$ -- 21
-change.case$ -- 121
-chr.to.int$ -- 0
-cite$ -- 26
-duplicate$ -- 320
-empty$ -- 594
-format.name$ -- 116
-if$ -- 1586
-int.to.chr$ -- 0
-int.to.str$ -- 21
-missing$ -- 21
-newline$ -- 108
-num.names$ -- 42
-pop$ -- 148
-preamble$ -- 1
-purify$ -- 100
-quote$ -- 0
-skip$ -- 239
-stack$ -- 0
-substring$ -- 371
-swap$ -- 98
-text.length$ -- 11
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 84
-warning$ -- 5
-while$ -- 67
-width$ -- 23
-write$ -- 226
-(There was 1 error message)
+(There were 5 warnings)
