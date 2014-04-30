@@ -47,7 +47,7 @@
 \maketitle
 %
 \begin{abstract}
-In this paper, a drum transcription algorithm using semi-supervised non-negative matrix factorization has been presented. This method allows users to separate percussive activities from harmonic activities with pre-trained drum templates, and detect drum events from the extracted percussive activity matrix. A polyphonic subset from ENST drum data set has been used for training and testing of the algorithm. The system has been tested using different rank settings, and a cross-performer validation process has been performed to evaluate the reliability of the system.  The results show that the system can achieve 61 to 77\% recognition rate on multiple drums in polyphonic music. In the future, more efforts will be put on differentiating different playing styles and more drum parts, leading toward a complete drum transcription system.
+In this paper, a drum transcription algorithm using semi-supervised non-negative matrix factorization has been presented. This method allows users to separate percussive activities from harmonic activities with pre-trained drum templates, and detect drum events from the extracted percussive activation matrix. A polyphonic subset from ENST drum data set has been used for training and testing of the algorithm. The system has been tested using different rank settings, and a cross-performer validation process has been performed to evaluate the reliability of the system.  The results show that the system can achieve 61 to 77\% recognition rate on multiple drums in polyphonic music. In the future, more efforts will be put on differentiating different playing styles and more drum parts, leading toward a complete drum transcription system.
 
 \end{abstract}
 %
@@ -59,7 +59,7 @@ Automatic music transcription is one of the most intensively researched areas in
 
 %WHAT IS CITATION [2]? A: just a reference to make my point on intellegence music system. Removed
 
-A complete transcription system comprises many related sub-tasks such as multi-pitch detection, onset detection, instrument recognition, and rhythm extraction \cite{benetos_automatic_2013}. While the main focus is mostly on pitched instruments, a considerable amount of publications deal with the transcription of percussive sounds in polyphonic music. The drum track in popular music conveys information about tempo, rhythm, style, and possibly the structure of a song. A drum transcription system alone enables applications in music production \cite{yoshii_drumix:_2007}, music education, and interactive music performance \cite{weinberg_interactive_2009}.
+A complete transcription system comprises many related sub-tasks such as multi-pitch detection, onset detection, instrument recognition, and rhythm extraction \cite{benetos_automatic_2013}. While the main focus is mostly on pitched instruments, a considerable amount of publications deal with the transcription of percussive sounds in polyphonic music. The drum track in popular music conveys information about tempo, rhythm, style, and possibly the structure of a song. A drum transcription system alone enables applications in active listening \cite{yoshii_drumix:_2007}, music education, and interactive music performance \cite{weinberg_interactive_2009}.
 
 %Drum track, especially in pop music, often plays an important role in determining music structure, style, rhythm and tempo. In many cases, it shares the same importance as the harmonic part in the music. That said, a good drum transcription system could provide essential information of the music content, and could potentially facilitate the realization of many interesting applications. For example, a drum transcription and drum source separation task could mutually benefit from each other and provide the possibility to manipulate drum sounds within an existing drum track \cite{3,4}.  Also, music education could be an application of a drum transcription system, for it could help students identify drum event within a polyphonic music, and provide instructions by analyzing and comparing the differences between the input and reference performances. Furthermore, such system could also be integrated as a part of machine listening, improving the existing systems of robotic musicians \cite{5}.
 
@@ -77,9 +77,9 @@ Gillet and Richard divide systems for the drum transcription from mixtures into 
 This approach seems to perform well when features are well chosen \cite{gillet_drumloop_2004, tanghe_algorithm_2005, dittmar_drum_2005}. However, a sufficient amount of training data and carefully adjusted pre-processing is required in order to get good results. Furthermore, the possibility of  simultaneous sounds increases the number of  classes significantly.
 
 The second type of approaches (separate and detect) is based on the assumption that the music signal is a superposition of different sound sources. By decomposing the signal and into source templates with corresponding activation functions, the music content could be transcribed by identifying the templates and analysing the activities for each template. 
-Different methods such as Independent Subspace Analysis \cite{fitzgerald_sub-band_2002}, Prior Subspace Analysis \cite{fitzgerald_drum_2003}, and Non-negative Matrix Factorization (NMF, see below) \cite{paulus_drum_2005,moreau_drum_2007,alves_drum_2009} fall into this category. The advantage of these approaches is that they usually are easier to interpret since most of the decompositions are done on the spectrogram of the signal. Furthermore, the handling of simultaneous and overlapping events is inherent to the approach. However, to be able to transcribe different kinds of music, a large template might be required prior to the decomposition. I DO NOT UNDERSTAND THIS HOWEVER SENTENCE. Another difficulty is the determination of the rank required for the decomposition process.
+Different methods such as Independent Subspace Analysis \cite{fitzgerald_sub-band_2002}, Prior Subspace Analysis \cite{fitzgerald_drum_2003}, and Non-negative Matrix Factorization (NMF, see below) \cite{paulus_drum_2005,moreau_drum_2007,alves_drum_2009} fall into this category. The advantage of these approaches is that they usually are easier to interpret since most of the decompositions are done on the spectrogram of the signal. Furthermore, the handling of simultaneous and overlapping events is inherent to the approach. However, in the context of NMF with a pre-determined dictionary matrix, whether or not the templates are representative enough is one potential problem. Another difficulty is the determination of the rank required for the decomposition process.
 
-The third type of approaches (match and adapt) uses pre-trained templates to detect drum events \cite{yoshii_automatic_2004, yoshii_drum_2007}. The templates are searched for the closest match and adapted in an iterative process. In order to cover a wide range of sounds, multiple seed templates need to be prepared prior to the process. I AM NOT SURE IF I UNDERSTOOD PROPERLY --- PLEASE DOUBLECHECK.
+The third type of approaches (match and adapt) uses pre-trained templates to detect drum events \cite{yoshii_automatic_2004, yoshii_drum_2007}. The templates are searched for the closest match and adapted in an iterative process. %In order to cover a wide range of sounds, multiple seed templates need to be prepared prior to the process. I AM NOT SURE IF I UNDERSTOOD PROPERLY --- PLEASE DOUBLECHECK.
  
 WHAT ABOUT THESE PUBLICATIONS --- THEY ARE NOT REFERENCED IN THE OVERVIEW: \cite{scholler_sparse_2011}.
 
@@ -103,7 +103,7 @@ Second, it is hard to identify the corresponding instrument of every component i
 Third, when multiple similar entries exist in the dictionary matrix, the corresponding activation matrix could be activated at these entries simultaneously and might cause some confusions. %MAYBE THERE IS A POINT TO BE MADE ABOUT THE ACTIVITY MATRIX AS WELL?
 Different methods have been proposed in the previous studies to address these issues. Virtanen trained an SVM to separate drum components from the harmonic components; the rank number was derived empirically during the factorization process \cite{helen_separation_2005}. The identified drum components and their corresponding activities could later be used to reconstruct the drum signal, resulting in a system for drum source separation. Virtanen's approach requires a significant amount of training data for the classifier and, more importantly, the results can be expected to be very susceptible to choice of rank. %However, this method requires separated data to train the classifier, and the results could be data-dependent.
 %I think I need to be careful in this paragraph... 
-Yoo proposed a co-factorization algorithm \cite{yoo_nonnegative_2010} to simultaneously factorize a drum track a target signal containing this track and use the basis matrix from the drum track to identify the drum components in the target signal. This method ensures that the drum components in both basis matrices remain the same over the iterations, and thus proper isolation of the harmonic components from the drum components. The need to obtain a drum track prior to the factorization process, however, impacts the usefulness this approach for many application scenarios.
+Yoo proposed a co-factorization algorithm \cite{yoo_nonnegative_2010} to simultaneously factorize a prior drum track and a target signal, and use the basis matrix from the drum track to identify the drum components in the target signal. This method ensures that the drum components in both basis matrices remain the same over the iterations, and thus proper isolation of the harmonic components from the drum components. This work provides an alternative solution for identifying drum components after the decomposition, but the high rank setting makes it difficult to interpret the result for transcription tasks.
 
 %============= Factorization figure
 \begin{figure}
@@ -114,8 +114,8 @@ Yoo proposed a co-factorization algorithm \cite{yoo_nonnegative_2010} to simulta
 \end{figure}
 
 % introduce my modification here 
-Nevertheless, Yoo's work on co-factorization inspired our work to present a similar system without the requirement the prior drum track. \figref{fig:factorization} visualizes the basic concept: the matrices $W$ and $H$ are split into the  matrices $W_D$ and $W_H$, and  $H_D$ and $H_H$, respectively. 
-The matrix $W_D$ is initialized with the drum templates to be detected and will not be updated. Matrices $W_H$, $H_H$, and $H_D$ can be initialized with random numbers. 
+Nevertheless, Yoo's work on co-factorization inspired our work to present a similar system without the co-factorization process. \figref{fig:factorization} visualizes the basic concept from Yoo's work: the matrices $W$ and $H$ are split into the  matrices $W_D$ and $W_H$, and  $H_D$ and $H_H$, respectively. 
+In our work, the matrix $W_D$ is initialized with the drum templates to be detected and will not be updated. Matrices $W_H$, $H_H$, and $H_D$ can be initialized with random numbers. 
 The cost function as shown in Eq.~\eqref{eq:costFunc} is minimized by applying gradient decent and multiplicative update rules, the matrices  $W_H$, $H_H$, and $H_D$ will be updated according to Eqs.~\eqref{eq:updateHD}--\eqref{eq:updateHH}.  %\eqref{eq:updateHD} \eqref{eq:updateWH} \eqref{eq:updateHH}.  
 % equation here
 \begin{equation}
@@ -269,7 +269,7 @@ In an initial test to determine the rank $r_H$ of the algorithm, $r_H = {5, 10, 
  \label{fig:rankTest}
 \end{figure}
 
-\subsubsection{Evaluation I}
+\subsubsection{Evaluation I}\label{subsec:Evaluation1}
 \tabref{tab:basicResults} shows the results (precision, recall, and F-measure) when using the complete training and test set. 
 The results for the standard setup (the white section of \figref{fig:flowchart}) are given in the column named \textit{Standard}. The middle column (\textit{HPF+LPF+BPF}) presents the results for signals pre-processed with filters. More specifically, we use three filters corresponding to the three instruments we intend to detect; the filter frequencies are derived from the median magnitude spectra: 
 \begin{itemize}
@@ -409,9 +409,10 @@ SD             & P             & 0.694          & 0.577   & 0.590          & 0.6
 %\end{center}
 %\end{table}
 
-THIS PARAGRAPH NEEDS TO BE MODIFIED TO BETTER DESCRIBE THE CONDENSED RESULTS
+%THIS PARAGRAPH NEEDS TO BE MODIFIED TO BETTER DESCRIBE THE CONDENSED RESULTS
 
-The results show a simple trend: the test set featuring drummer 2 give nearly always the best results, regardless of the training set. The Bass Drum of drummer 2 seems to be particularly easy to detect. An even more surprising result is that there does not seem to be an obvious increase of the F-measure when the training drummer and test set drummer are identical.
+The results show a simple trend: the test set containing drummer 2 give nearly always the best results, regardless of the training set. Also, when training with different drummer's recordings, the F-measure from HH and SD are mostly within the same range as the results reported in \ref{subsec:Evaluation1} except for BD. This could be due to the fact that Bass Drum of drummer 2 is easy to detect.
+%The Bass Drum of drummer 2 seems to be particularly easy to detect. An even more surprising result is that there does not seem to be an obvious increase of the F-measure when the training drummer and test set drummer are identical.
 These results indicate that this algorithm is relatively robust against differences between the drum template and the sound of the drum to be detected. This would allow to construct a template from different sound sources independent of the recording to be analyzed allowing far more general applications. However, the performance of this setup still needs to be confirmed with a cross-data set validation.
 
 %ANYTHING ELSE TO DISCUSS HERE?
@@ -424,17 +425,18 @@ These results indicate that this algorithm is relatively robust against differen
 
 \section{Conclusion}\label{sec:Conclusion}
 
-We have presented a drum transcription system for polyphonic music using semi-supervised NMF. This method uses a pre-trained dictionary matrix to decompose the target signal and extract the activation matrix. This evaluation results show that this method is able to achieve 61-77\% accuracy in polyphonic music. 
+We have presented a drum transcription system for polyphonic music using semi-supervised NMF. This method uses a pre-trained dictionary matrix to decompose the target signal and extract the activation matrix. This evaluation results show that this method is able to achieve 61 to 77\% accuracy in polyphonic music. 
 It has the following advantages: 
-First, simultaneous sounds can be detected separately. Traditional systems for drum detection often have difficulties with simultaneous events, especially when the number of instruments increases. 
+First, the fixed dictionary matrix in the model makes it easier to interpret the corresponding activation matrix for transcription tasks, and simultaneous sounds can be detected separately. 
+%Traditional systems for drum detection often have difficulties with simultaneous events, especially when the number of instruments increases. 
 %Normally, when more classes of drums are being considered in a instance-based transcription task, more combination of classes need to be considered, and the situation could be more complicated. With a NMF approach, there is no need to train more classes to handle such situations. 
-Second, adjustment of the parameter $r$ allows the algorithm to adapt to different different types of polyphonic music. 
+Second, adjustment of the parameter $r_H$ allows the algorithm to adapt to different different types of polyphonic music. 
 Third, cross-perfomer evaluation results indicate a robustness against template mismatches, possibly allowing the application in situations with minimum prior knowledge. %Furthermore, the results from the cross-performer validation indicate that this method still apply to the situations when minimum prior knowledge about the drum sounds in the target signal is given.
 Fourth, the approach requires only trivial extensions to be able to be used as a drum separation system.
 Last but not least, the approach only requires a few drum samples to train the dictionary matrix, and the evaluation results indicate that the performance is comparable with the existing methods. This means the current approach has less constraints on the user input data, and could potentially be realized as a generic drum transcription system .
 
 %FUTURE WORK: ADD HERE WHAT YOU MIGHT WANT TO DO SPECIFICALLY (WHAT YOU PLAN TO DO) AND MORE GENERAL DIRECTIONS.
-There are some possible directions for the future works: first of all, a comparison between this approach with Probabilistic Latent Component Analysis (PLCA) and looking for means to adapt the template during the decomposition might be a way to further generalize the current method. Also, other distance metrics such as KL-divergence or beta divergence could be implemented for better approximations. Finally, finding a method to automatically determine the rank $r_H$ could optimize this approach against different polyphonic music. To achieve a complete drum transcription system in polyphonic music, however, more factors such as playing techniques and different drum setups still need to be addressed in the future. 
+There are some possible directions for the future works: first of all, a comparison between this approach with Probabilistic Latent Component Analysis (PLCA) and looking for means to adapt the template during the decomposition might be a way to further generalize the current method. Also, other distance metrics such as KL-divergence or could be implemented for better approximations. Finally, finding a method to automatically determine the rank $r_H$ could optimize this approach against different polyphonic music. To achieve a complete drum transcription system in polyphonic music, however, more factors such as playing techniques and more drum classes still need to be addressed in the future. 
 
 %Dummycite: \cite{tzanetakis_musical_2002}
 
