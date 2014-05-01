@@ -1,9 +1,46 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: ISMIR2014template.aux
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: ISMIR2014template.aux
 The style file: plain.bst
 Database file #1: cwIsmirRef.bib
-Warning--there's a number but no volume in Alves2009
-Warning--there's a number but no series in FitzGerald2003
-Warning--there's a number but no series in FitzGerald2002
-Warning--there's a number but no series in Seung2001
-Warning--can't use both volume and number fields in Yoshii2007
-(There were 5 warnings)
+You've used 21 entries,
+            2118 wiz_defined-function locations,
+            609 strings with 8366 characters,
+and the built_in function-call counts, 7209 in all, are:
+= -- 701
+> -- 337
+< -- 5
++ -- 132
+- -- 110
+* -- 460
+:= -- 1174
+add.period$ -- 67
+call.type$ -- 21
+change.case$ -- 118
+chr.to.int$ -- 0
+cite$ -- 21
+duplicate$ -- 319
+empty$ -- 617
+format.name$ -- 110
+if$ -- 1553
+int.to.chr$ -- 0
+int.to.str$ -- 21
+missing$ -- 21
+newline$ -- 108
+num.names$ -- 42
+pop$ -- 170
+preamble$ -- 1
+purify$ -- 97
+quote$ -- 0
+skip$ -- 187
+stack$ -- 0
+substring$ -- 342
+swap$ -- 66
+text.length$ -- 5
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 84
+warning$ -- 0
+while$ -- 63
+width$ -- 23
+write$ -- 234

@@ -1,137 +1,141 @@
 \begin{thebibliography}{10}
 
-\bibitem{Alves2009}
-DS~Alves, Jouni Paulus, and J~Fonseca.
-\newblock {Drum transcription from multichannel recordings with non-negative
-  matrix factorization}.
-\newblock {\em 17th European Signal Processing Conference (EUSIPCO 2009)},
-  (Eusipco):894--898, 2009.
+\bibitem{alves_drum_2009}
+David~S Alves, Jouni Paulus, and Jos{\'e} Fonseca.
+\newblock Drum transcription from multichannel recordings with non-negative
+  matrix factorization.
+\newblock In {\em Proceedings of the European Signal Processing Conference
+  ({EUSIPCO)}}, Glasgow, 2009.
 
-\bibitem{Benetos2013}
+\bibitem{benetos_automatic_2013}
 Emmanouil Benetos, Simon Dixon, Dimitrios Giannoulis, Holger Kirchhoff, and
   Anssi Klapuri.
-\newblock {Automatic music transcription: challenges and future directions}.
-\newblock {\em Journal of Intelligent Information Systems}, July 2013.
+\newblock Automatic music transcription: Challenges and future directions.
+\newblock {\em Journal of Intelligent Information Systems}, 41(3):407---434,
+  December 2013.
 
-\bibitem{Dittmar2005}
+\bibitem{dittmar_drum_2005}
 Christian Dittmar.
-\newblock {Drum detection from polyphonic audio via detailed analysis of the
-  time frequency domain}.
-\newblock {\em 1st Music Information Retrieval Evaluation eXchange}, 2005.
+\newblock Drum detection from polyphonic audio via detailed analysis of the
+  time frequency domain.
+\newblock In {\em Proceedings of the Music Information Retrieval Evaluation
+  {eXchange} ({MIREX)}}, 2005.
 
-\bibitem{Dittmar2012}
-Christian Dittmar and Christian Uhle.
-\newblock {Further steps towards drum transcription of polyphonic music}.
-\newblock {\em Audio Engineering Society Convention 116}, 2004.
+\bibitem{fitzgerald_sub-band_2002}
+Derry {FitzGerald} and Bob Lawlor.
+\newblock Sub-band independent subspace analysis for drum transcription.
+\newblock In {\em Proceedings of the International Conference on Digital Audio
+  Effects ({DAFX)}}, Hamburg, 2002.
 
-\bibitem{FitzGerald2003}
-D~FitzGerald, Bob Lawlor, and Eugene Coyle.
-\newblock {Drum transcription in the presence of pitched instruments using
-  prior subspace analysis}.
-\newblock In {\em The Irish Signals \& Systems Conference}, number~3, 2003.
+\bibitem{fitzgerald_drum_2003}
+Derry {FitzGerald}, Bob Lawlor, and Eugene Coyle.
+\newblock Drum transcription in the presence of pitched instruments using prior
+  subspace analysis.
+\newblock In {\em Proceedings of the Irish Signals \& Systems Conference
+  ({ISSC)}}, Limerick, 2003.
 
-\bibitem{FitzGerald2002}
-D~FitzGerald, R~Lawlor, and Eugene Coyle.
-\newblock {Sub-band Independent Subspace Analysis For Drum transcription}.
-\newblock In {\em Digital Audio Effects Conference (DAFX02)}, number~5, pages
-  65--69, 2002.
+\bibitem{gillet_drumloop_2004}
+Olivier Gillet and Ga{\"e}l Richard.
+\newblock {Automatic transcription of drum loops}.
+\newblock In {\em Acoustics, Speech, and Signal Processing (ICASSP)}, pages
+  2--5, 2004.
 
-\bibitem{Gillet2008}
-O.~Gillet and G.~Richard.
-\newblock {Transcription and separation of drum signals from polyphonic music}.
-\newblock {\em Audio, Speech, and Language Processing, IEEE Transactions on},
-  16(3):529--540, March 2008.
+\bibitem{gillet_enst-drums:_2006}
+Olivier Gillet and Ga{\"e}l Richard.
+\newblock {ENST-Drums:} an extensive audio-visual database for drum signals
+  processing.
+\newblock In {\em {ISMIR}}, Victoria, 2006.
 
-\bibitem{Gillet2006}
-Olivier Gillet and G~Richard.
-\newblock {Enst-drums: an extensive audio-visual database for drum signals
-  processing}.
-\newblock In {\em Proceedings of the 7th International Symposium on Music
-  Information Retrieval}, 2006.
+\bibitem{gillet_transcription_2008}
+Olivier Gillet and Ga{\"e}l Richard.
+\newblock Transcription and separation of drum signals from polyphonic music.
+\newblock {\em Transactions on Audio, Speech, and Language Processing},
+  16(3):529---540, March 2008.
 
-\bibitem{Helen2005}
-M~Hel\'{e}n and Tuomas Virtanen.
-\newblock {Separation of drums from polyphonic music using non-negative matrix
-  factorization and support vector machine}.
-\newblock In {\em Proceedings of the 13th European Signal Processing
-  Conference}, 2005.
+\bibitem{helen_separation_2005}
+Marko Helen and Tuomas Virtanen.
+\newblock Separation of drums from polyphonic music using non-negative matrix
+  factorization and support vector machine.
+\newblock In {\em Proceedings of the European Signal Processing Conference
+  ({EUSIPCO)}}, Talya, 2005.
 
-\bibitem{Society2003}
-P~Herrera, A~Dehamel, and F~Gouyon.
-\newblock {Automatic labeling of unpitched percussive sounds}.
-\newblock {\em Audio Engineering Society 114th Convention}, 2003.
+\bibitem{herrera_automatic_2003}
+Perfecto Herrera, Amaury Dehamel, and Fabien Gouyon.
+\newblock Automatic labeling of unpitched percussion sounds.
+\newblock In {\em Proceedings of the 114th Audio Engineering Society
+  Convention}. {AES}, March 2003.
 
-\bibitem{Herrera2002}
+\bibitem{herrera_automatic_2002}
 Perfecto Herrera, Alexandre Yeterian, and Fabien Gouyon.
-\newblock {Automatic classification of drum sounds: a comparison of feature
-  selection methods and classification techniques}.
-\newblock {\em Music and Artificial Intelligence}, pages 69--80, 2002.
+\newblock Automatic classification of drum sounds: a comparison of feature
+  selection methods and classification techniques.
+\newblock In {\em Proceedings of the 2nd International Conference on Music and
+  Artificial Intelligence ({ICMAI)}}, 2002.
 
-\bibitem{Moreau2007}
+\bibitem{lee_algorithms_2000}
+Daniel~D Lee and H~Sebastian Seung.
+\newblock Algorithms for non-negative matrix factorization.
+\newblock In {\em Advances in Neural Information Processing Systems ({NIPS)}},
+  2000.
+
+\bibitem{moreau_drum_2007}
 Arnaud Moreau and Arthur Flexer.
-\newblock {Drum transcription in polyphonic music using non-negative matrix
-  factorization}.
-\newblock In {\em International Symposium on Music Information Retrieval},
-  2007.
+\newblock Drum transcription in polyphonic music using non-negative matrix
+  factorisation.
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval ({ISMIR)}}, pages 353---354, 2007.
 
-\bibitem{Paulus2005}
+\bibitem{paulus_drum_2005}
 Jouni Paulus and Tuomas Virtanen.
-\newblock {Drum transcription with non-negative spectrogram factorisation}.
-\newblock In {\em Proceedings of the 13th European Signal Processing
-  Conference}, 2005.
+\newblock Drum transcription with non-negative spectrogram factorisation.
+\newblock In {\em Proceedings of the 13th European Signal Processing Conference
+  ({EUSIPCO)}}, page~4, Talya, 2005.
 
-\bibitem{Seung2001}
-D~Seung and L~Lee.
-\newblock {Algorithms for non-negative matrix factorization}.
-\newblock In {\em Advances in neural information processing systems},
-  number~13, pages 556--562, 2001.
+\bibitem{smaragdis_non-negative_2003}
+Paris Smaragdis and Judith~C Brown.
+\newblock Non-negative matrix factorization for polyphonic music transcription.
+\newblock In {\em Proceedings of the Workshop on Applications of Signal
+  Processing to Audio and Acoustics ({WASPAA))}}, New Paltz, 2003. {IEEE}.
 
-\bibitem{Smaragdis2003}
-P~Smaragdis and JC~Brown.
-\newblock {Non-negative matrix factorization for polyphonic music
-  transcription}.
-\newblock {\em Applications of Signal Processing to Audio and Acoustics, 2003
-  IEEE Workshop on.}, pages 177--180, 2003.
+\bibitem{tanghe_algorithm_2005}
+Koen Tanghe, Sven Degroeve, and Bernard De~Baets.
+\newblock An algorithm for detecting and labeling drum events in polyphonic
+  music.
+\newblock In {\em Proceedings of the Music Information Retrieval Evaluation
+  {eXchange} ({MIREX)}}, 2005.
 
-\bibitem{Tanghe2005b}
-K~Tanghe, S~Degroeve, and B~De Baets.
-\newblock {An algorithm for detecting and labeling drum events in polyphonic
-  music}.
-\newblock In {\em Proceedings of 1st Music Information Retrieval Evaluation
-  eXchange (MIREX)}, 2005.
+\bibitem{weinberg_interactive_2009}
+Gil Weinberg, Aparna Raman, and Trishul Mallikarjuna.
+\newblock Interactive jamming with shimon: a social robotic musician.
+\newblock In {\em Proceedings of the 4th {ACM/IEEE} international conference on
+  Human robot interaction}, pages 233---234. {ACM}, 2009.
 
-\bibitem{Weinberg2009}
-Gil Weinberg, A~Raman, and T~Mallikarjuna.
-\newblock {Interactive jamming with Shimon: a social robotic musician}.
-\newblock {\em Proceedings of the 4th ACM/IEEE international conference on
-  Human robot interaction}, pages 233--234, 2009.
-
-\bibitem{Yoo2010}
+\bibitem{yoo_nonnegative_2010}
 Jiho Yoo, Minje Kim, Kyeongok Kang, and Seungjin Choi.
-\newblock {Nonnegative matrix partial co-factorization for drum source
-  separation}.
-\newblock In {\em Acoustics Speech and Signal Processing (ICASSP), 2010 IEEE
-  International Conference on}, pages 1942--1945, 2010.
+\newblock Nonnegative matrix partial co-factorization for drum source
+  separation.
+\newblock In {\em Proceedings of the International Conference on Acoustics
+  Speech and Signal Processing ({ICASSP)}}, pages 1942---1945, Dallas, 2010.
+  {IEEE}.
 
-\bibitem{Yoshii2007a}
-Kazuyoshi Yoshii, Masataka Goto, Kazunori Komatani, Tetsuya Ogata, and
-  HG~Okuno.
-\newblock {Drumix: An audio player with real-time drum-part rearrangement
-  functions for active music listening}.
-\newblock {\em IPSJ Journal}, 48(3), 2007.
+\bibitem{yoshii_drumix:_2007}
+Kazuyoshi Yoshii, Masataka Goto, and Kazunori Komatani.
+\newblock Drumix: An audio player with real-time drum-part rearrangement
+  functions for active music listening.
+\newblock {\em {IPSJ} Digital Courier}, 3:134---144, 2007.
 
-\bibitem{Yoshii2004b}
-Kazuyoshi Yoshii, Masataka Goto, and HG~Okuno.
-\newblock {Drum sound identification for polyphonic music using template
-  adaptation and matching methods}.
-\newblock In {\em ISCA Tutorial and Research Workshop on Statistical and
-  Perceptual Audio Processing}, 2004.
-
-\bibitem{Yoshii2007}
+\bibitem{yoshii_automatic_2004}
 Kazuyoshi Yoshii, Masataka Goto, and Hiroshi~G. Okuno.
-\newblock {Drum Sound Recognition for Polyphonic Audio Signals by Adaptation
-  and Matching of Spectrogram Templates With Harmonic Structure Suppression}.
-\newblock In {\em IEEE Transactions on Audio, Speech and Language Processing},
-  volume~15, pages 333--345, January 2007.
+\newblock Automatic drum sound description for real-world music using template
+  adaptation and matching methods.
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval ({ISMIR)}}, Barcelona, 2004.
+
+\bibitem{yoshii_drum_2007}
+Kazuyoshi Yoshii, Masataka Goto, and Hiroshi~G Okuno.
+\newblock Drum sound recognition for polyphonic audio signals by adaptation and
+  matching of spectrogram templates with harmonic structure suppression.
+\newblock {\em Transactions on Audio, Speech and Language Processing},
+  15(1):333---345, January 2007.
 
 \end{thebibliography}
