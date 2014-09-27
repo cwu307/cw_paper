@@ -1,0 +1,154 @@
+\begin{thebibliography}{10}
+
+\bibitem{benetos_automatic_2013}
+Emmanouil Benetos, Simon Dixon, Dimitrios Giannoulis, Holger Kirchhoff, and
+  Anssi Klapuri,
+\newblock ``Automatic music transcription: Challenges and future directions,''
+\newblock {\em Journal of Intelligent Information Systems}, vol. 41, no. 3, pp.
+  407---434, Dec. 2013.
+
+\bibitem{yoshii_drumix:_2007}
+Kazuyoshi Yoshii, Masataka Goto, and Kazunori Komatani,
+\newblock ``Drumix: An audio player with real-time drum-part rearrangement
+  functions for active music listening,''
+\newblock {\em {IPSJ} Digital Courier}, vol. 3, pp. 134---144, 2007.
+
+\bibitem{weinberg_interactive_2009}
+Gil Weinberg, Aparna Raman, and Trishul Mallikarjuna,
+\newblock ``Interactive jamming with shimon: a social robotic musician,''
+\newblock in {\em Proceedings of the 4th {ACM/IEEE} international conference on
+  Human robot interaction}. 2009, pp. 233---234, {ACM}.
+
+\bibitem{herrera_automatic_2003}
+Perfecto Herrera, Amaury Dehamel, and Fabien Gouyon,
+\newblock ``Automatic labeling of unpitched percussion sounds,''
+\newblock in {\em Proceedings of the 114th Audio Engineering Society
+  Convention}. Mar. 2003, {AES}.
+
+\bibitem{gillet_transcription_2008}
+Olivier Gillet and Ga{\"e}l Richard,
+\newblock ``Transcription and separation of drum signals from polyphonic
+  music,''
+\newblock {\em Transactions on Audio, Speech, and Language Processing}, vol.
+  16, no. 3, pp. 529---540, Mar. 2008.
+
+\bibitem{gillet_automatic_2004}
+Olivier Gillet and Ga{\"e}l Richard,
+\newblock ``Automatic transcription of drum loops,''
+\newblock in {\em Proceedings of the International Conference on Acoustics,
+  Speech, and Signal Processing ({ICASSP)}}, May 2004, pp. iv--269--iv--272
+  vol.4,
+\newblock 00062.
+
+\bibitem{dittmar_drum_2005}
+Christian Dittmar,
+\newblock ``Drum detection from polyphonic audio via detailed analysis of the
+  time frequency domain,''
+\newblock in {\em Proceedings of the Music Information Retrieval Evaluation
+  {eXchange} ({MIREX)}}, 2005.
+
+\bibitem{fitzgerald_sub-band_2002}
+Derry {FitzGerald} and Bob Lawlor,
+\newblock ``Sub-band independent subspace analysis for drum transcription,''
+\newblock in {\em Proceedings of the International Conference on Digital Audio
+  Effects ({DAFX)}}, Hamburg, 2002.
+
+\bibitem{fitzgerald_drum_2003}
+Derry {FitzGerald}, Bob Lawlor, and Eugene Coyle,
+\newblock ``Drum transcription in the presence of pitched instruments using
+  prior subspace analysis,''
+\newblock in {\em Proceedings of the Irish Signals \& Systems Conference
+  ({ISSC)}}, Limerick, 2003.
+
+\bibitem{moreau_drum_2007}
+Arnaud Moreau and Arthur Flexer,
+\newblock ``Drum transcription in polyphonic music using non-negative matrix
+  factorisation,''
+\newblock in {\em Proceedings of the International Conference on Music
+  Information Retrieval ({ISMIR)}}, 2007, pp. 353---354.
+
+\bibitem{alves_drum_2009}
+David~S Alves, Jouni Paulus, and Jos{\'e} Fonseca,
+\newblock ``Drum transcription from multichannel recordings with non-negative
+  matrix factorization,''
+\newblock in {\em Proceedings of the European Signal Processing Conference
+  ({EUSIPCO)}}, Glasgow, 2009.
+
+\bibitem{yoshii_drum_2007}
+Kazuyoshi Yoshii, Masataka Goto, and Hiroshi~G Okuno,
+\newblock ``Drum sound recognition for polyphonic audio signals by adaptation
+  and matching of spectrogram templates with harmonic structure suppression,''
+\newblock {\em Transactions on Audio, Speech and Language Processing}, vol. 15,
+  no. 1, pp. 333---345, Jan. 2007.
+
+\bibitem{smaragdis_ssnmf_2007}
+Paris Smaragdis, Bhiksha Raj, and Madhusudana Shashanka,
+\newblock ``{Supervised and semi-supervised separation of sounds from
+  single-channel mixtures},''
+\newblock in {\em Proceedings of the 7th international conference on
+  Independent component analysis and signal separation}, 2007, number~1, pp.
+  414--421.
+
+\bibitem{raczynski_hnmf_2007}
+Stanislaw~A. Raczyński, Nobutaka Ono, and Shigeki Sagayama,
+\newblock ``{Multipitch analysis with harmonic nonnegative matrix
+  approximation},''
+\newblock in {\em Proceedings of International Conference on Music Information
+  Retrieval (ISMIR)}, 2007.
+
+\bibitem{smaragdis_non-negative_2003}
+Paris Smaragdis and Judith~C Brown,
+\newblock ``Non-negative matrix factorization for polyphonic music
+  transcription,''
+\newblock in {\em Proceedings of the Workshop on Applications of Signal
+  Processing to Audio and Acoustics ({WASPAA))}}, New Paltz, 2003, {IEEE}.
+
+\bibitem{lee_algorithms_2000}
+Daniel~D Lee and H~Sebastian Seung,
+\newblock ``Algorithms for non-negative matrix factorization,''
+\newblock in {\em Advances in Neural Information Processing Systems ({NIPS)}},
+  2000.
+
+\bibitem{helen_separation_2005}
+Marko Helen and Tuomas Virtanen,
+\newblock ``Separation of drums from polyphonic music using non-negative matrix
+  factorization and support vector machine,''
+\newblock in {\em Proceedings of the European Signal Processing Conference
+  ({EUSIPCO)}}, Talya, 2005.
+
+\bibitem{yoo_nonnegative_2010}
+Jiho Yoo, Minje Kim, Kyeongok Kang, and Seungjin Choi,
+\newblock ``Nonnegative matrix partial co-factorization for drum source
+  separation,''
+\newblock in {\em Proceedings of the International Conference on Acoustics
+  Speech and Signal Processing ({ICASSP)}}, Dallas, 2010, pp. 1942---1945,
+  {IEEE}.
+
+\bibitem{gillet_enst-drums:_2006}
+Olivier Gillet and Ga\"{e}l Richard,
+\newblock ``{Enst-drums: an extensive audio-visual database for drum signals
+  processing},''
+\newblock in {\em Proceedings of International Conference on Music Information
+  Retrieval (ISMIR)}, 2006.
+
+\bibitem{smaragdis_plca_2014}
+Paris Smaragdis, Cedric Fevotte, Gautham~J. Mysore, Nasser Mohammadiha, and
+  Matthew Hoffman,
+\newblock ``{Static and Dynamic Source Separation Using Nonnegative
+  Factorizations: A unified view},''
+\newblock {\em IEEE Signal Processing Magazine}, vol. 31, no. 3, pp. 66--75,
+  May 2014.
+
+\bibitem{ouo_inmf_2010}
+Mikkel~N. Schmidt and Morten M\o~rup,
+\newblock ``{Infinite non-negative matrix factorization},''
+\newblock in {\em European Signal Processing Conference (EUSIPCO)}, 2010.
+
+\bibitem{Virtanen_ssnmf_2007}
+Tuomas Virtanen,
+\newblock ``{Monaural sound source separation by nonnegative matrix
+  factorization with temporal continuity and sparseness criteria},''
+\newblock in {\em IEEE transactions on audio, speech, and language processing},
+  2007, vol.~15, pp. 1066--1074.
+
+\end{thebibliography}
