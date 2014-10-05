@@ -7,7 +7,7 @@ Emmanouil Benetos, Simon Dixon, Dimitrios Giannoulis, Holger Kirchhoff, and
 \newblock {\em Journal of Intelligent Information Systems}, vol. 41, no. 3, pp.
   407---434, Dec. 2013.
 
-\bibitem{yoshii_drumix:_2007}
+\bibitem{yoshii_Drumix:_2007}
 Kazuyoshi Yoshii, Masataka Goto, and Kazunori Komatani,
 \newblock ``Drumix: An audio player with real-time drum-part rearrangement
   functions for active music listening,''
@@ -40,7 +40,7 @@ Olivier Gillet and Ga{\"e}l Richard,
   vol.4,
 \newblock 00062.
 
-\bibitem{dittmar_drum_2005}
+\bibitem{dittmar_Drum_2005}
 Christian Dittmar,
 \newblock ``Drum detection from polyphonic audio via detailed analysis of the
   time frequency domain,''
@@ -53,28 +53,28 @@ Derry {FitzGerald} and Bob Lawlor,
 \newblock in {\em Proceedings of the International Conference on Digital Audio
   Effects ({DAFX)}}, Hamburg, 2002.
 
-\bibitem{fitzgerald_drum_2003}
+\bibitem{fitzgerald_Drum_2003}
 Derry {FitzGerald}, Bob Lawlor, and Eugene Coyle,
 \newblock ``Drum transcription in the presence of pitched instruments using
   prior subspace analysis,''
 \newblock in {\em Proceedings of the Irish Signals \& Systems Conference
   ({ISSC)}}, Limerick, 2003.
 
-\bibitem{moreau_drum_2007}
+\bibitem{moreau_Drum_2007}
 Arnaud Moreau and Arthur Flexer,
 \newblock ``Drum transcription in polyphonic music using non-negative matrix
   factorisation,''
 \newblock in {\em Proceedings of the International Conference on Music
   Information Retrieval ({ISMIR)}}, 2007, pp. 353---354.
 
-\bibitem{alves_drum_2009}
+\bibitem{alves_Drum_2009}
 David~S Alves, Jouni Paulus, and Jos{\'e} Fonseca,
 \newblock ``Drum transcription from multichannel recordings with non-negative
   matrix factorization,''
 \newblock in {\em Proceedings of the European Signal Processing Conference
   ({EUSIPCO)}}, Glasgow, 2009.
 
-\bibitem{yoshii_drum_2007}
+\bibitem{yoshii_Drum_2007}
 Kazuyoshi Yoshii, Masataka Goto, and Hiroshi~G Okuno,
 \newblock ``Drum sound recognition for polyphonic audio signals by adaptation
   and matching of spectrogram templates with harmonic structure suppression,''
@@ -89,7 +89,7 @@ Paris Smaragdis, Bhiksha Raj, and Madhusudana Shashanka,
   Independent component analysis and signal separation}, 2007, number~1, pp.
   414--421.
 
-\bibitem{raczynski_hnmf_2007}
+\bibitem{raczynski_Hnmf_2007}
 Stanislaw~A. Raczyński, Nobutaka Ono, and Shigeki Sagayama,
 \newblock ``{Multipitch analysis with harmonic nonnegative matrix
   approximation},''
