@@ -86,8 +86,7 @@ Paris Smaragdis, Bhiksha Raj, and Madhusudana Shashanka,
 \newblock ``{Supervised and semi-supervised separation of sounds from
   single-channel mixtures},''
 \newblock in {\em Proceedings of the 7th international conference on
-  Independent component analysis and signal separation}, 2007, number~1, pp.
-  414--421.
+  Independent component analysis and signal separation}, 2007, pp. 414--421.
 
 \bibitem{raczynski_Hnmf_2007}
 Stanislaw~A. Raczyński, Nobutaka Ono, and Shigeki Sagayama,
@@ -101,7 +100,7 @@ Paris Smaragdis and Judith~C Brown,
 \newblock ``Non-negative matrix factorization for polyphonic music
   transcription,''
 \newblock in {\em Proceedings of the Workshop on Applications of Signal
-  Processing to Audio and Acoustics ({WASPAA))}}, New Paltz, 2003, {IEEE}.
+  Processing to Audio and Acoustics ({WASPAA)}}, New Paltz, 2003, {IEEE}.
 
 \bibitem{lee_algorithms_2000}
 Daniel~D Lee and H~Sebastian Seung,
@@ -148,7 +147,7 @@ Mikkel~N. Schmidt and Morten M\o~rup,
 Tuomas Virtanen,
 \newblock ``{Monaural sound source separation by nonnegative matrix
   factorization with temporal continuity and sparseness criteria},''
-\newblock in {\em IEEE transactions on audio, speech, and language processing},
-  2007, vol.~15, pp. 1066--1074.
+\newblock {\em IEEE transactions on audio, speech, and language processing},
+  vol. 15, no. 3, pp. 1066--1074, 2007.
 
 \end{thebibliography}

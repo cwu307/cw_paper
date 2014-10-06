@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: cw_icassp2015.aux
+The style file: IEEEbib.bst
+Database file #1: cwIcasspRef.bib
+You've used 22 entries,
+            1838 wiz_defined-function locations,
+            585 strings with 8425 characters,
+and the built_in function-call counts, 5596 in all, are:
+= -- 497
+> -- 216
+< -- 5
++ -- 80
+- -- 58
+* -- 414
+:= -- 824
+add.period$ -- 24
+call.type$ -- 22
+change.case$ -- 22
+chr.to.int$ -- 0
+cite$ -- 22
+duplicate$ -- 285
+empty$ -- 606
+format.name$ -- 58
+if$ -- 1294
+int.to.chr$ -- 0
+int.to.str$ -- 22
+missing$ -- 22
+newline$ -- 114
+num.names$ -- 22
+pop$ -- 108
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 114
+stack$ -- 0
+substring$ -- 366
+swap$ -- 77
+text.length$ -- 5
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 49
+width$ -- 24
+write$ -- 245
