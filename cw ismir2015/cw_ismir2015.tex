@@ -1,0 +1,414 @@
+% -----------------------------------------------
+% Template for ISMIR Papers
+% 2015 version, based on previous ISMIR templates
+% -----------------------------------------------
+
+\documentclass{article}
+\usepackage{ismir,amsmath,cite}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{units}
+\usepackage{microtype}
+
+
+
+% Title.
+% ------
+\title{Drum Transcription Using Partially Fixed Non-Negative Matrix Factorization with Template Adaptation}
+
+% Single address
+% To use with only one author or several with the same address
+% ---------------
+%\oneauthor
+% {Names should be omitted for double-blind reviewing}
+% {Affiliations should be omitted for double-blind reviewing}
+
+% Two addresses
+% --------------
+\twoauthors
+  {Chih-Wei Wu} {Georgia Institute of Technology \\ Center for Music Technology \\ {\tt cwu307@gatech.edu}}
+  {Alexander Lerch} {Georgia Institute of Technology \\ Center for Music Technology \\ {\tt alexander.lerch@gatech.edu}}
+
+% Three addresses
+% --------------
+%\threeauthors
+%  {First author} {Affiliation1 \\ {\tt author1@ismir.edu}}
+%  {Second author} {\bf Retain these fake authors in\\\bf submission to preserve the formatting}
+%  {Third author} {Affiliation3 \\ {\tt author3@ismir.edu}}
+
+% Four addresses
+% --------------
+%\fourauthors
+%  {First author} {Affiliation1 \\ {\tt author1@ismir.edu}}
+%  {Second author}{Affiliation2 \\ {\tt author2@ismir.edu}}
+%  {Third author} {Affiliation3 \\ {\tt author3@ismir.edu}}
+%  {Fourth author} {Affiliation4 \\ {\tt author4@ismir.edu}}
+
+\begin{document}
+%
+\maketitle
+%
+\begin{abstract}
+In this paper, a drum transcription algorithm using partially fixed non-negative matrix factorization with template adaptation is presented. The proposed method allows users to identify percussive events in complex mixtures of music with a minimal training set. The algorithm decomposes the music signal into two parts: percussive part with pre-defined drum templates and harmonic part with undefined entries. The harmonic part is able to adapt to the music content, allowing the algorithm to work in polyphonic mixtures. Drum events can be simply picked from the percussive activation matrix with onset detection. The algorithm also adapts the drum templates to each signal individually, providing a more flexible use case against unknown data. The performance of the proposed system has been evaluated and compared with other systems. The results show that template adaption helps to improve the transcription performance, and the evaluation results are comparable with state of the arts systems.  
+
+\end{abstract}
+%
+
+\section{Introduction}\label{sec:introduction}
+As being one of the most intensively researched areas in Music Information Retrieval (MIR), Automatic Music Transcription (AMT) is often considered the core technology that would enable high-level representations of music signals with the potential of improving virtually any MIR task. A complete transcription system comprises many related sub-tasks such as multi-pitch detection, onset detection, instrument recognition, and rhythm extraction \cite{benetos_automatic_2013}. While the main focus is mostly on pitched instruments, a considerable amount of publications deal with the transcription of percussive sounds in mixture of tonal and percussive instruments. The drum track in popular music conveys information about tempo, rhythm, style, and possibly the structure of a song. A drum transcription system alone enables applications in active listening \cite{yoshii_drumix:_2007}, music education, and interactive music performance \cite{weinberg_interactive_2009}.
+
+This study explores the application of the popular transcription method of Non-Negative Matrix Factorization (NMF) for drum transcription in polyphonic music. The proposed method addresses the problem of unknown sources in NMF with content and template adaptability. The paper is structured as follows: \secref{sec:related works} provides an overview of the research in this area. In \secref{sec:method} we present our approach; evaluation results are being presented and discussed in \secref{sec:Evaluation}. \secref{sec:Conclusion} provides a summary, conclusion, and directions of future work.
+
+\section{Related Work}\label{sec:related works}
+Automatic drum transcription systems, as summarized by Gillet and Richard \cite{gillet_transcription_2008}, can be divided into three categories: (i)~\textit{segment and classify}\cite{gillet_automatic_2004, tanghe_algorithm_2005, dittmar_drum_2005}, (ii)~\textit{separate and detect} \cite{fitzgerald_sub-band_2002, fitzgerald_drum_2003, paulus_drum_2005,moreau_drum_2007,alves_drum_2009}, and (iii)~\textit{match and adapt} \cite{yoshii_automatic_2004, yoshii_drum_2007}. 
+
+% talk about recent attempts here:
+Recently, more systems are built based on the second type of approaches (\textit{separate and detect}) as NMF-related methods become more and more popular. In this type of approaches, the music signal is assumed to be a superposition of multiple sound sources. By decomposing the signal into source templates with corresponding activation functions, the system is able to transcribe the musical events by analyzing the activation of different source templates. When NMF is applied to the task of music transcription, typically the following challenges have to be faced:
+
+First, the number of sound sources and notes within a music recording is usually unknown. To optimally decompose a signal, this number is necessary for determine the size of the dictionary and activation matrix. Without this information, it is difficult to determine a suitable rank $r$ setting for the decomposition process. This problem would be less severe when the sound sources in the target signal are available \cite{Lindsay-Smith2012}. However, in most cases, this prior information is difficult to acquire. Another approach is to build a dictionary that contains more source templates than the target signal. Benetos et al. used a probabilistic extension of NMF (Probabilistic Latent Component Analysis, PLCA) to jointly transcribe pitched and unpitched sounds in polyphonic music with a relatively large pre-trained dictionary\cite{Benetos2014}. Although this method can provide harmonic and percussive contents of the music simultaneous, its robustness against unknown sources still needs to be evaluated with larger datasets. 
+
+Second, it can be hard to identify the corresponding instrument of every component in the dictionary matrix $W$. This problem becomes more severe when the rank is selected too high or too low. Helen and Virtanen trained an SVM to separate drum components from the harmonic components; the rank number was derived empirically during the factorization process \cite{helen_separation_2005}. The identified drum components and their corresponding activities could later be used to reconstruct the drum signal, resulting in a system for drum source separation. Their approach requires a significant amount of training data for the classifier and, more importantly, the results can be expected to be very susceptible to choice of rank. Yoo et al.\ proposed a co-factorization algorithm \cite{yoo_nonnegative_2010} to simultaneously factorize a drum track and a polyphonic signal. They used the dictionary matrix from the drum track to identify the drum components in the polyphonic signal. This approach ensures that the drum components in both dictionary matrices are estimated only from the drum track, resulting in proper isolation of the harmonic components from the drum components. Since their system aims at drum separation they can work at very high ranks. For drum transcription, however, this approach is not directly applicable because of the association between the instruments and the entries in the dictionary matrix is unknown.  
+
+Third, a suitable penalty term or sparsity constraint for detecting percussive instruments still needs to be investigated. In general, these constraints are the additional terms in the cost function that will facilitate the sparseness or different properties in the resulting activation matrix. Virtanen proposed to use additional constraints for temporal continuity and sparseness \cite{virtanen_ssnmf_2007}. It is reported that by using the temporal continuity criterion, the detection accuracy and SNR of the pitched sounds can be improved in the source separation task, whereas no significant improvement is shown with the sparseness constraint. 
+
+Another issue is the adaptability of the extracted templates. When using supervised NMF, the algorithm loses its adaptability and might fail when the target signal is very different from the pre-trained dictionary. Dittmar and Gartner proposed to use adaptive bases during the NMF decomposition process\cite{Dittmar2014}. However, the results indicated that the adaptive process did not improve the performance of the transcription accuracy. Also, whether this method can work in the polyphonic mixtures remains to be shown. 
+
+Transcription methods other than NMF can avoid the above mentioned issues, but they can offer different challenges at the same time. Paulus and Klapuri proposed to use hidden markov models (HMM) for drum transcription \cite{Paulus2009a}. This method models temporal connections between drum events and detect the drum based on the probabilistic model. However, its complexity may increase drastically when more instruments are to be detected. Additionally, a larger dataset would be needed for this method to train a generic model. Another recent approach is to use bar information to classify the audio signal into different predefined drum patterns \cite{Thompson2014}. This approach requires additional information of the bar locations and a large dictionary, which can be impractical in some use cases.   
+
+% ======
+
+\section{Method}\label{sec:method}
+\subsection{Algorithm Description}\label{subsec:algorithm}
+% introduce NMF here
+The basic concept of NMF is to approximate a matrix $V$ with matrices $W$ and $H$ as $V \approx WH$ with non-negativity constraints. Given a $m \times n$ matrix $V$, NMF will decompose the matrix into the product of a $m \times r$ dictionary matrix $W$ and an $r \times n$ activation matrix $H$, with $r$ being the rank of the NMF decomposition. In most audio applications, $V$ is the spectrogram to be decomposed, $W$ contains the magnitude spectra of the salient components, and $H$ indicates the activation of these components with respect to time \cite{smaragdis_non-negative_2003}. The matrices $W$ and $H$ are estimated through an iterative process that minimizes a distance measure between the target spectrogram $V$ and its approximation \cite{lee_algorithms_2000}. 
+
+%============= Factorization figure
+\begin{figure}
+ \centering 
+% \centerline{\framebox{
+% \includegraphics[width=8.5cm]{factorization_small.png}}}
+  \centerline{
+ \includegraphics[width=6.5cm]{factorization.png}}
+ \caption{Illustration of the factorization process. Subscript $\mathrm{D}$: drum components $\mathrm{H}$: harmonic components. $\mathrm{A}$ is the weighting matrix. }
+ \label{fig:factorization}
+\end{figure}
+% introduce my modification here 
+
+%In this paper, we present a method based on NMF. 
+In this paper, we propose a method using partially-fixed NMF (here we refer it as PFNMF) to transcribe drum events in polyphonic signals. The idea of using NMF with prior knowledge of the target source within the mixture has been applied to source separation tasks \cite{smaragdis_ssnmf_2007}, and multipitch analysis \cite{raczynski_Hnmf_2007}. The method described here is based on similar ideas but with different emphasis: 
+(i)~we focus on a real world scenario in which users only have limited amount of training samples that are possibly different from the target source, and
+(ii)~we propose to use a small dictionary matrix which is both efficient and easily interpretable.
+(iii)~the proposed method is able to adapt to different contents in the polyphonic mixtures 
+
+To allow NMF to adapt the music content, a method inspired by \cite{yoo_nonnegative_2010} is proposed for drum transcription task. \figref{fig:factorization} visualizes a similar concept from the work of Yoo et al.: the matrices $W$ and $H$ are split into the  matrices $W_\mathrm{D}$ and $W_\mathrm{H}$, and  $H_\mathrm{D}$ and $H_\mathrm{H}$, respectively. Instead of using co-factorization, however, we propose to initialize the matrix $W_\mathrm{D}$ with drum templates and to not modify it during the factorization process. Matrices $W_\mathrm{H}$, $H_\mathrm{H}$, and $H_\mathrm{D}$ are initialized with random numbers. The rank $r_\mathrm{D}$ of $W_\mathrm{D}$ and $H_\mathrm{D}$ depends on the number of templates provided, and the rank $r_\mathrm{H}$ depends on the user's input. The total rank $r = r_\mathrm{D} + r_\mathrm{H}$.
+
+By increasing the $r_\mathrm{H}$, a larger $W_\mathrm{H}$ will be initialized to better adapt to the target signal. However, this unbalanced increase in components will also reduce the weight of the drum components in the optimization process, causing a significant drop in the performance. Therefore, a weighting matrix $\mathrm{A}$ is introduced to balance the weight between drum and harmonic components. The weighting matrix $\mathrm{A}$ is a $r \times r$ diagonal matrix, which contains $r_\mathrm{D}$ coefficients $\alpha$ and $r_\mathrm{H}$ coefficients $\beta$. In the paper, the coefficients are set to be $\alpha = (r_\mathrm{D} + r_\mathrm{H})/ r_\mathrm{D}$ and $\beta = r_\mathrm{H}/ (r_\mathrm{D} + r_\mathrm{H})$    
+
+The distance measure used in this paper is KL-divergence, in which \(D_\mathrm{KL}(x \mid y) = x\cdot\log\left(\nicefrac{x}{y}\right) + (y - x)\). %A sparsity constraint is applied on $H_\mathrm{D}$ using L1 norm with a coefficient $\lambda$. 
+The cost function as shown in Eq.~\eqref{eq:costFunc} is minimized by applying gradient decent and multiplicative update rules. 
+% equation here
+%\begin{equation}
+\begin{equation}
+\label{eq:costFunc}
+J = D_\mathrm{KL}(V \mid \alpha W_\mathrm{D}H_\mathrm{D} + \beta W_\mathrm{H}H_\mathrm{H})
+\end{equation}
+
+The matrices  $W_\mathrm{H}$, $H_\mathrm{H}$, and $H_\mathrm{D}$ will be updated according to \mbox{Eqs.~\eqref{eq:updateHD}--\eqref{eq:updateHH}}.   
+
+\begin{eqnarray}
+\label{eq:updateHD}
+H_\mathrm{D} &\leftarrow& H_\mathrm{D}\frac{\alpha W_\mathrm{D}^T( V / (\alpha W_\mathrm{D}H_\mathrm{D} + \beta W_\mathrm{H}H_\mathrm{H}))}{\alpha W_\mathrm{D}^T}\\
+%
+\label{eq:updateWH}
+W_\mathrm{H} &\leftarrow& W_\mathrm{H}\frac{(V/(\alpha W_\mathrm{D}H_\mathrm{D} + \beta W_\mathrm{H}H_\mathrm{H})) \beta H_\mathrm{H}^T}{\beta H_\mathrm{H}^T}\\
+%
+\label{eq:updateHH}
+H_\mathrm{H} &\leftarrow& H_\mathrm{H}\frac{\beta W_\mathrm{H}^T (V/(\alpha W_\mathrm{D}H_\mathrm{D} + \beta W_\mathrm{H}H_\mathrm{H}))}{\beta W_\mathrm{H}^T}
+\end{eqnarray}
+
+To summarize, the method consists of the following steps:
+%\begin{inparaenum}
+\begin{enumerate}
+    \item   Construct a $m \times r_\mathrm{D}$ dictionary matrix $W_\mathrm{D}$, with $r_\mathrm{D}$ being the number of drum components to be detected.
+    \item   Given a pre-defined rank $r_\mathrm{H}$, initialize a $m \times r_\mathrm{H}$ matrix $W_\mathrm{H}$, a $r_\mathrm{D} \times n$ matrix $H_\mathrm{D}$ and a $r_\mathrm{H} \times n$ matrix $H_\mathrm{H}$.
+    \item   Normalize $W_\mathrm{D}$ and $W_\mathrm{H}$. 
+    \item   Update $H_\mathrm{D}$, $W_\mathrm{H}$, and $H_\mathrm{H}$ using Eqs.~\eqref{eq:updateHD}--\eqref{eq:updateHH}.
+    \item   Calculate the cost of the current iteration using Eq.~\eqref{eq:costFunc}.
+    \item   Repeat step 3 to step 5 until convergence.
+\end{enumerate}
+%\end{inparaenum}
+The time positions of the drum events can then be extracted by applying a simple onset detection on the rows of matrix $H_\mathrm{D}$.
+
+\subsection{Template Adaptation}\label{subsec:templateAdapt}
+%why do I have to adapt the templates?
+While PFNMF retains the identity of each individual instrument by using pre-defined drum templates, it may fail to deal with the variations in the unknown data. One approach to address this issue is using template adaption method during the process. Previous approaches to include template adaptation in drum transcription process can be found in \cite{yoshii_drum_2007}, \cite{Dittmar2014}. These approaches usually start with seed templates and gradually adapt them to the target sources. In this paper, we propose two methods for template adaption with PFNMF. 
+
+\subsubsection{Method 1: Cross-correlation Based Update}\label{subsubsec:method1}
+%overview of the method
+In the first method, the drum template $W_\mathrm{D}$ is updated based on the cross-correlation between activation $H_\mathrm{H}$ and $H_\mathrm{D}$ for each individual drum. As described in section \ref{subsec:algorithm}, PFNMF starts by randomly initializing a $W_\mathrm{H}$ with rank $r_\mathrm{H}$. Although $W_\mathrm{H}$ tends exclude drum part and adapt to the harmonic content, it may still contain entries that belongs to percussive instruments due to the mismatch between the drum templates and the target sources. This will result in cross-talk between $H_\mathrm{H}$ and $H_\mathrm{D}$ and potentially decrease the performance. However, these entries may also provide complementary information to the original drum templates. To identify these entries, the normalized cross-correlation between $H_\mathrm{H}$ and $H_\mathrm{D}$ for each individual drum is computed using Eq.\eqref{rho}, where $x$ and $y$ represents different activation vectors, and $N$ is the number of samples in the activation vectors. A threshold $\rho_{thres}$ = 0.5 is defined for finding the complementary entries, and the drum template $W_\mathrm{D}$ can be updated using Eq.\eqref{update1}, where $W_\mathrm{H}^{(i)} (i = 1, ..., S)$ are the entries with their corresponding $\rho_{x, y}$ higher than $\rho_{thres}$, and $S$ is the number of the selected entries. The adaptation coefficient $\gamma = \frac{1}{2^{k}}$, where $k$ is the number of iteration. 
+
+\begin{equation}\label{rho}
+\rho_{x, y} = \frac{\sum_{n=1}^N x(n)\cdot y(n)}{\Vert x \Vert_2 \cdot \Vert y \Vert_2}
+\end{equation}    
+
+\begin{equation}
+\label{update1}
+W_\mathrm{D}^{\prime} = (1 - \gamma) W_\mathrm{D} + \gamma \frac{1}{S} \sum_{i=1}^S(\rho^{(i)} W_\mathrm{H}^{(i)})\\
+\end{equation}
+
+The method can be summarized in the following steps:
+%\begin{inparaenum}
+\begin{enumerate}
+    \item   Normalize $H_\mathrm{D}$ and $H_\mathrm{H}$. 
+    \item   Compute normalized cross-correlation between every entries of $H_\mathrm{D}$ and $H_\mathrm{H}$ using Eq.\eqref{rho}.
+    \item   Select entries $i = 1, ..., S$ with $\rho >= \rho_{thres}$.
+    \item   Update $W_\mathrm{D}$ using Eq.\eqref{update1}.
+    \item   Randomly re-initialize $W_\mathrm{H}^{(i)}$. 
+    \item   Perform PFNMF using $W_\mathrm{D}^{\prime}$.
+    \item   Repeat step 1 to step 6 until convergence. 
+\end{enumerate}
+
+\subsubsection{Method 2: Alternate Update}\label{subsubsec:method2}
+%overview of the method
+In the second method, the drum template $W_\mathrm{D}$ is adapted by alternatively fixing $W_\mathrm{D}$ and $H_\mathrm{D}$ during the process. The adaptation process starts by fixing $W_\mathrm{D}$, and PFNMF will try to fit a best activation $H_\mathrm{D}$ to approximate the drum part in the music. Once $H_\mathrm{D}$ is determined, a new iteration of PFNMF can be started by fixing $H_\mathrm{D}$ and allow $W_\mathrm{D}$, $W_\mathrm{H}$ and $H_\mathrm{H}$ to update. This constraint will guide the algorithm to fit better drum templates based on the current detected activation $H_\mathrm{D}$. The update rule for $W_\mathrm{D}$ is shown in Eq.\eqref{update2}. 
+
+\begin{equation}\label{update2}
+W_\mathrm{D} \leftarrow W_\mathrm{D}\frac{(V/(\alpha W_\mathrm{D}H_\mathrm{D} + \beta W_\mathrm{H}H_\mathrm{H})) \alpha H_\mathrm{D}^T}{\alpha H_\mathrm{D}^T}\\
+\end{equation}
+
+The method can be summarized in the following steps:
+\begin{enumerate}
+    \item   Perform PFNMF with fixed $W_\mathrm{D}$, update $H_\mathrm{D}$, $W_\mathrm{H}$ and $H_\mathrm{H}$. 
+    \item   Randomly re-initialize $W_\mathrm{H}$ and $H_\mathrm{H}$.
+    \item   Perform PFNMF with fixed $H_\mathrm{D}$, update $W_\mathrm{D}$, $W_\mathrm{H}$ and $H_\mathrm{H}$.
+    \item   Randomly re-initialize $H_\mathrm{D}$, $W_\mathrm{H}$ and $H_\mathrm{H}$ .
+    \item   Repeat step 1 to step 4 until convergence. 
+\end{enumerate}
+
+%summary of the two: adaptive coefficient? max iteration?
+Both of the above mentioned methods have the same criteria that will stop iterating when the error change between two consecutive iterations is smaller than $0.1\%$. The maximum iteration number is set to 20. However, the adaptation process usually converges after 5 to 10 iterations. 
+
+\subsection{Implementation}\label{subsec:processing steps}
+
+\figref{fig:flowchart} shows the flow chart of the implemented system. The STFT of the signals will be calculated using a window size and a hop size of $2048$ and $512$ with a sampling frequency of \unit[44.1]{kHz}. 
+A pre-trained dictionary matrix will be constructed from the training set, which consists of isolated drum sounds. 
+Next, the PFNMF will be performed with the initial drum dictionary and rank $r = r_\mathrm{D} + r_\mathrm{H}$ as described in section \ref{subsec:algorithm}. In each iteration, the drum dictionary will be updated using template adaptation methods described in section \ref{subsec:templateAdapt}. Finally, the activation Matrix $H_\mathrm{D}$ is evaluated to determine the onset positions and their corresponding classes.  
+
+\begin{figure}
+ \centerline{%\framebox{
+ \includegraphics[width=8.5cm]{flowchart.png}}%}
+ \caption{Flowchart of the drum transcription system}
+ \label{fig:flowchart}
+\end{figure}
+
+%\subsubsection{Template Extraction}\label{subsubsec:template extraction}
+The dictionary matrix $W_\mathrm{D}$ is created by extracting a template spectrum from isolated training drum samples. The template spectrum is a median spectrum of all individual events of one drum class in the training set. The length of each event  is approximately \unit[80]{ms}. The templates are extracted for the three classes: Hi-Hat (HH), Bass Drum (BD) and Snare Drum (SD).   
+
+%\subsubsection{Activity Detection}\label{subsubsec:activity detection}
+High values in the activation matrix $H_\mathrm{D}$ indicate the presence of a drum event. More specifically, the activity difference of each row of the activation matrix could be considered as the onset novelty function of each individual drum. We use a median filter as a standard approach to create an signal-adaptive threshold for peak picking \cite{Lerch2012}. In this paper, the length $b$ and the offset coefficient $\lambda$ of the median adaptive threshold are set to be \unit[0.1]{s} and 0.12 for every track; $b$ is the order of the filter, and $\lambda$ is a constant shift. 
+
+\section{EVALUATION}\label{sec:Evaluation}
+\subsection{Dataset Description}\label{subsec:data set description}
+The experiments have been conducted on two different datasets. The first one is the \textit{minus one} subset from the ENST public drum data set \cite{gillet_enst-drums:_2006}. This data set consists of recordings from three different drummers performing on their own drum kits. The set for each drummer contains individual hits, short phrases of drum beats, drum solos, and short excerpts played with the accompaniments. The minus one subset has 64 tracks of polyphonic music, and the sampling rate of every track is \unit[44.1]{kHz}. Each track in this subset has a length of approximately \unit[70]{s} with varying style. More specifically, the subset contains various drum playing techniques such as ghost notes, flam, and drag; these techniques are considered difficult to identify with existing drum transcription systems. The accompaniments are mixed with their corresponding drum tracks using a scaling factor of 1/3 and 2/3, which are the same settings as in \cite{Paulus2009a}. %The distribution of onset counts per class per drummer is shown in \tabref{tab:onsetCount}.
+ 
+%%============= Onset event counts in the used tracks
+%\begin{table}[ht]
+%\begin{footnotesize}
+%\centering
+%\begin{tabular}{|c|c|c|c|c|}
+%\hline
+% & Dr1    & Dr2    & Dr3    & Total \\ \hline
+%HH        & 1942 & 2145 & 1813 & 5900  \\ \hline
+%BD        & 2140 & 1488 & 1378 & 5006  \\ \hline
+%SD        & 2165 & 2079 & 1994 & 6238  \\ \hline
+%Total     & 6247 & 5712 & 5185 & 17144 \\ \hline
+%\end{tabular}
+% \caption{Onset counts in selected data set}%- IS THIS FOR THE 64 OR THE 53 TRACKS? -- 53!
+% \label{tab:onsetCount}
+%\end{footnotesize}
+%\end{table}
+
+Another dataset used for cross-dataset validation is IDMT-SMT-Drums \cite{Dittmar2014}. This dataset consists of 95 drum loop recordings from three drum kits (RealDrum, WaveDrum and TechnoDrum). The sampling rate of every track is \unit[44.1]{kHz}, and the total duration of the dataset is approximately two hours. This dataset also contains isolated drum hits that are used to synthesize the drum loops. However, in our experiments, we only use the drum loops for testing the robustness of our system against unknown sounds.   
+
+The drum templates have been generated from a different part of the ENST dataset which only contains single hits performed by the same group of drummers. Each track contains 5 to 6 single hits on different drums for each drummer. For every instrument (HH, BD, SD), one track per drummer is collected as training data. The onset position of these single hits was determined using the annotated ground truth. 
+
+\subsection{Evaluation Procedure}\label{subsec:evaluation procedure}
+We evaluate the proposed system in both monophonic and polyphonic mixtures, which are the same set of audio tracks with or without accompaniments. A three-fold cross-validation is applied to the evaluation process. Single drum hits collected from two drummers are used to train the system, complete mixtures from the third drummer are used to test the system, and the process repeats three times to test every drummer in the dataset. This process is the same as described in \cite{Paulus2009a}, the purpose is to prevent the system from seeing the test data. Note that the training data used in the system are single drum hits, and the number of onsets is significantly fewer than the test data. Typically, the training data only consists of 10 to 12 single hits of each drum class. This is similar to the real-world use case, where the users may only access to a limited number of training samples. 
+
+%First, we evaluate the system with the $14$ monophonic drum tracks in ENST dataset as selected in \cite{Thompson2014} and compare the results.
+%Second, we evaluate the system using the $53$ polyphonic drum tracks as described in \secref{subsec:data set description}. To further test the robustness of the system using different templates, another set of training samples from 200 Drum Machines dataset \footnote{http://colinraffel.com/wiki/mir\_datasets} is collected and tested in the experiments. 
+The evaluation metrics follow the standard calculation of the precision (P), recall (R), and F-measure (F). An onset is considered to be a match with the ground truth if the time deviation between the annotated and detected onset is less or equal to \unit[50]{ms}.  
+
+\subsection{Evaluation Results}\label{subsec:evaluation results}
+
+\subsubsection{Rank Estimation}\label{rank}
+In an initial test to determine the rank $r_\mathrm{H}$ of the PFNMF, $r_\mathrm{H} = {5, 10, 20, 40, 80, 160}$ have been tested in both monophonic and polyphonic signals. For the monophonic case, the same tracks as described in \secref{subsec:data set description} are used except for removing the accompaniments. The resulting individual F-measures are shown in \figref{fig:rankTest}. In the monophonic case, a general trend of increasing performance with increasing $r_\mathrm{H}$ can be observed up to $r_\mathrm{H} = 5$; As the $r_\mathrm{H}$ goes higher, the performance will slightly decrease and eventually reach a saturation point. In the polyphonic case, however, the saturation point seems to shift toward $r_\mathrm{H} = 80$ as indicated by the black line. 
+
+One explanation could be that when the signal contains no harmonic components, the extra templates might not benefit the decomposition process. Instead, cross talk between $W_\mathrm{D}$ and $W_\mathrm{H}$ might happen and introduce noise to the $H_\mathrm{D}$. On the other hand, if the signal contains harmonic components, increasing $r_\mathrm{H}$ could actually help the algorithm to better adapt to the signal, especially for high frequency parts of the drums (HH and SD). As a trade-off between accuracy and efficiency, a rank number $r_\mathrm{H} = 50$ is chosen as a general setting for transcribing polyphonic music in our experiments.
+
+%============= Rank Test Figure
+\begin{figure}
+ \centerline{
+ \includegraphics[width=10cm]{testOnK_mono_poly.png}}
+ \caption{Average F-measure versus harmonic rank $r_\mathrm{H}$ in (Top) monophonic (Bottom) polyphonic dataset}%WHY NOT ADD A GRID AND MAYBE INCREASE LINE THICKNESS?
+ \label{fig:rankTest}
+\end{figure}
+
+\subsubsection{Threshold Selection}\label{subsec:threshold}
+The transcription results can be obtained after applying onset detection on each drum activation (please see section \ref{subsec:processing steps}). However, the performance varies according to the selection of the signal-adaptive threshold. To evaluate the influence of different thresholds, the average F-measure of all drums with different $\lambda$ on IDMT-SMT-Drums dataset is shown in Figure [CITE FIGURE HERE]. A general trend as reported in \cite{Dittmar2014} can be observed as well. One major difference is that both PFNMF with adaptation method 1 (referred as APFNMF1) and adaptation method 2 (referred as APFNMF2) outperform the original algorithm. This verifies the assumption that template adaptation process does help the algorithm against the unknown sounds. The overall performance is slightly lower than \cite{Dittmar2014} due to the fact that the templates are extracted using ENST dataset. However, the average F-measure of APFNMF1 is 80.2\%, which indicates the robustness of the proposed method outside of dataset. 
+
+%============= Threshold Selection Figure
+\begin{figure}
+ \centerline{
+ \includegraphics[width=10cm]{testOnK_mono_poly.png}}
+ \caption{Average F-measure versus offset coefficient $\lambda$ using (a) PFNMF (Solid line) (b) APFNMF1 (Dotted line)(c) APFNMF2 (Diamond dotted line)}%add grid & increase thickness
+ \label{fig:thresTest}
+\end{figure}
+
+
+
+\subsubsection{Evaluation}\label{subsec:Evaluation}
+
+% TABLE 1
+\begin{table*}[t]
+\begin{footnotesize}
+\centering
+\begin{tabular*}{\textwidth}{@{\extracolsep{\stretch{1}}}*{6}{r}@{}}%{|llllll|}
+\hline
+Method                         & Metric & HH             & BD             & SD             & Mean           \\ \hline
+\multirow{3}{*}{PFNMF}         & P      & 0.918          & 0.886          & 0.825          & 0.876          \\
+                               & R      & 0.705          & 0.938          & 0.453          & 0.698          \\
+                               & F      & 0.797          & 0.911          & 0.585          & \textbf{0.764} \\ \hline
+\multirow{3}{*}{APFNMF1}       & P      & 0.909          & 0.955          & 0.837          & 0.900          \\
+                               & R      & 0.682          & 0.927          & 0.473          & 0.694          \\
+                               & F      & 0.779          & \textbf{0.940} & 0.604          & \textbf{0.774} \\ \hline
+\multirow{3}{*}{APFNMF2}       & P      & 0.928          & 0.914          & 0.854          & 0.898          \\
+                               & R      & 0.703          & 0.927          & 0.483          & 0.704          \\
+                               & F      & 0.799          & 0.920          & 0.617          & \textbf{0.779} \\ \hline
+\multirow{3}{*}{Gillet et al.\cite{gillet_transcription_2008}} & P      & 0.736          & 0.798          & 0.710          & 0.748          \\
+                               & R      & 0.865          & 0.700          & 0.642          & 0.735          \\
+                               & F      & 0.795          & 0.745          & \textbf{0.674} & \textbf{0.738} \\ \hline
+\multirow{3}{*}{Paulus et al.\cite{Paulus2009a}} & P      & 0.838          & 0.941          & 0.750          & 0.806          \\
+                               & R      & 0.849          & 0.921          & 0.567          & 0.843          \\
+                               & F      & \textbf{0.843} & 0.930          & 0.645          & \textbf{0.779} \\ \hline
+\end{tabular*}
+\end{footnotesize}
+\caption{Evaluation results for ENST drum dataset \textit{minus one} subset \textbf{without} accompaniments}\label{results1}
+\end{table*}
+
+% TABLE2
+\begin{table*}[t]
+\begin{footnotesize}
+\centering
+\begin{tabular*}{\textwidth}{@{\extracolsep{\stretch{1}}}*{6}{r}@{}}%{|llllll|}
+\hline
+Method                         & Metric & HH             & BD             & SD             & Mean           \\ \hline
+\multirow{3}{*}{PFNMF}         & P      & 0.902          & 0.714          & 0.684          & 0.766          \\
+                               & R      & 0.706          & 0.862          & 0.464          & 0.677          \\
+                               & F      & 0.792          & 0.781          & 0.552          & \textbf{0.708} \\ \hline
+\multirow{3}{*}{APFNMF1}       & P      & 0.904          & 0.781          & 0.758          & 0.814          \\
+                               & R      & 0.679          & 0.856          & 0.45           & 0.661          \\
+                               & F      & 0.775          & \textbf{0.816} & 0.564          & \textbf{0.719} \\ \hline
+\multirow{3}{*}{APFNMF2}       & P      & 0.908          & 0.774          & 0.726          & 0.802          \\
+                               & R      & 0.694          & 0.855          & 0.466          & 0.671          \\
+                               & F      & 0.786          & 0.812          & 0.567          & \textbf{0.722} \\ \hline
+\multirow{3}{*}{Gillet et al.\cite{gillet_transcription_2008}} & P      & 0.702          & 0.744          & 0.619          & 0.688          \\
+                               & R      & 0.818          & 0.653          & 0.552          & 0.674          \\
+                               & F      & 0.755          & 0.695          & \textbf{0.583} & \textbf{0.678} \\ \hline
+\multirow{3}{*}{Paulus et al.\cite{Paulus2009a}} & P      & 0.847          & 0.802          & 0.663          & 0.770          \\
+                               & R      & 0.826          & 0.815          & 0.453          & 0.698          \\
+                               & F      & \textbf{0.836} & 0.808          & 0.538          & \textbf{0.727} \\ \hline
+\end{tabular*}
+\end{footnotesize}
+\caption{Evaluation results for ENST drum dataset \textit{minus one} subset \textbf{with} accompaniments}\label{results2}
+\end{table*}
+
+
+%
+%%TABLE 2
+%% Please add the following required packages to your document preamble:
+%% \usepackage{multirow}
+%\begin{table*}[t]
+%\begin{footnotesize}
+%\centering
+%\begin{tabular*}{\textwidth}{@{\extracolsep{\stretch{1}}}*{7}{r}@{}}
+%\hline
+%Test Set                                                                                       & Method                         & Metric & HH             & BD             & SD             & Mean           \\ \hline
+%\multirow{15}{*}{\begin{tabular}[c]{@{}l@{}}ENST minus one \\ w/o Accompaniments\end{tabular}} & \multirow{3}{*}{PFNMF}         & P      & 0.918          & 0.886          & 0.825          & 0.876          \\
+%                                                                                               &                                & R      & 0.705          & 0.938          & 0.453          & 0.698          \\
+%                                                                                               &                                & F      & 0.797          & 0.911          & 0.585          & \textbf{0.764} \\ \cline{2-7} 
+%                                                                                               & \multirow{3}{*}{APFNMF1}       & P      & 0.909          & 0.955          & 0.837          & 0.900          \\
+%                                                                                               &                                & R      & 0.682          & 0.927          & 0.473          & 0.694          \\
+%                                                                                               &                                & F      & 0.779          & \textbf{0.940} & 0.604          & \textbf{0.774} \\ \cline{2-7} 
+%                                                                                               & \multirow{3}{*}{APFNMF2}       & P      & 0.928          & 0.914          & 0.854          & 0.898          \\
+%                                                                                               &                                & R      & 0.703          & 0.927          & 0.483          & 0.704          \\
+%                                                                                               &                                & F      & 0.799          & 0.920          & 0.617          & \textbf{0.779} \\ \cline{2-7} 
+%                                                                                               & \multirow{3}{*}{Gillet et al.\cite{gillet_transcription_2008}} & P      & 0.736          & 0.798          & 0.710          & 0.748          \\
+%                                                                                               &                                & R      & 0.865          & 0.700          & 0.642          & 0.735          \\
+%                                                                                               &                                & F      & 0.795          & 0.745          & \textbf{0.674} & \textbf{0.738} \\ \cline{2-7} 
+%                                                                                               & \multirow{3}{*}{Paulus et al.\cite{Paulus2009a}} & P      & 0.838          & 0.941          & 0.750          & 0.806          \\
+%                                                                                               &                                & R      & 0.849          & 0.921          & 0.567          & 0.843          \\
+%                                                                                               &                                & F      & \textbf{0.843} & 0.930          & 0.645          & \textbf{0.779} \\ \hline
+%\multirow{9}{*}{IDMT-SMT-Drums}                                                                & \multirow{3}{*}{PFNMF}         & P      & 0.784          & 0.861          & 0.55           & 0.731          \\
+%                                                                                               &                                & R      & 0.734          & 0.95           & 0.94           & 0.874          \\
+%                                                                                               &                                & F      & \textbf{0.758} & 0.903          & 0.693          & \textbf{0.785} \\ \cline{2-7} 
+%                                                                                               & \multirow{3}{*}{APFNMF1}       & P      & 0.767          & 0.917          & 0.602          & 0.762          \\
+%                                                                                               &                                & R      & 0.716          & 0.948          & 0.943          & 0.869          \\
+%                                                                                               &                                & F      & 0.740          & \textbf{0.932} & 0.734          & \textbf{0.802} \\ \cline{2-7} 
+%                                                                                               & \multirow{3}{*}{APFNMF2}       & P      & 0.744          & 0.912          & 0.607          & 0.754          \\
+%                                                                                               &                                & R      & 0.683          & 0.934          & 0.935          & 0.850          \\
+%                                                                                               &                                & F      & 0.712          & 0.922          & \textbf{0.736} & \textbf{0.790} \\ \hline
+%\end{tabular*}
+%\caption{Evaluation results for monophonic drum tracks}\label{results2}
+%\end{footnotesize}
+%\end{table*}
+
+
+
+% monophonic results
+\tabref{results1} shows the evaluation results on ENST drum dataset \textit{minus one} subset without accompaniments. The compared methods consist of Gillet et al. \cite{gillet_transcription_2008} using \textit{segment and classify} approach with late decision fusion and Paulus et al. \cite{Paulus2009a} using HMM with maximum likelihood linear regression (MLLR) for acoustic adaptation. All the compared methods use the same dataset with the same mixing settings. Since the target signals contain only drum components, the $r_\mathrm{H}$ can be set to be to a small number. In this experiment, $r_\mathrm{H}$ is set to 10 for absorbing drum sounds other than HH, BD and SD. The results show that our proposed method is able to transcribe drum events with an average F-measure = $77.9\%$ using APFNMF2. This result is higher than $73.8\%$ as reported in \cite{gillet_transcription_2008}, and at the same level of $77.9\%$ as \cite{Paulus2009a}.    
+
+In order to investigate the performance of the proposed system in the complete mixtures of music, another set of tracks as mentioned in \secref{subsec:evaluation procedure} has been used. The results, listed in \tabref{tab:polyResults}, show that the proposed system has better performances comparing with the reference system in \cite{gillet_transcription_2008}. The average F-measures using the original training samples are $78.0\%$, $76.5\%$, and $56.1\%$ for HH, BD, SD, respectively. Comparing with the reported F-measures of $77.7\%$, $65.0\%$, and $64.8\%$, our system shows great improvement in BD, and comparable accuracy in HH and SD. Another result using training samples from 200 Drum Machines shows a similar trend in both BD and SD, but slight worse result in HH. In the first case, only a few training samples are used to construct the dictionary; In the second case, the training samples are completely different from the target signals. The results from these cases indicate that the presented algorithm is relatively robust in polyphonic music. This would allow to construct a template from different sound sources independent of the recording to be analyzed allowing more general applications.
+
+ 
+%%============= Cross-Performer results 
+%\begin{table}[h]
+%\begin{footnotesize}
+%\begin{tabular}{|l|l|l|l|l|l|l|l|}
+%\hline
+%Method                    & \multicolumn{2}{l|}{Training}                  & Metric & HH             & BD             & SD             & Mean           \\ \hline
+%\multirow{6}{*}{Proposed} & \multicolumn{2}{l|}{\multirow{3}{*}{Original}} & P      & 0.877          & 0.702          & 0.686          & 0.755          \\ \cline{4-8} 
+%                          & \multicolumn{2}{l|}{}                          & R      & 0.703          & 0.842          & 0.482          & 0.675          \\ \cline{4-8} 
+%                          & \multicolumn{2}{l|}{}                          & F      & \textbf{0.780} & \textbf{0.765} & 0.561          & \textbf{0.704} \\ \cline{2-8} 
+%                          & \multicolumn{2}{l|}{\multirow{3}{*}{200 DM}}   & P      & 0.693          & 0.676          & 0.612          & 0.660          \\ \cline{4-8} 
+%                          & \multicolumn{2}{l|}{}                          & R      & 0.604          & 0.819          & 0.481          & 0.634          \\ \cline{4-8} 
+%                          & \multicolumn{2}{l|}{}                          & F      & 0.645          & 0.740          & 0.538          & 0.641          \\ \hline
+%\multicolumn{3}{|l|}{\multirow{3}{*}{Gillet et al.\cite{gillet_transcription_2008}}}                       & P      & 0.743          & 0.650          & 0.776          & 0.723          \\ \cline{4-8} 
+%\multicolumn{3}{|l|}{}                                                     & R      & 0.814          & 0.650          & 0.556          & 0.673          \\ \cline{4-8} 
+%\multicolumn{3}{|l|}{}                                                     & F      & 0.777          & 0.650          & \textbf{0.648} & 0.691          \\ \hline
+%\end{tabular}
+%\caption{Evaluation results for polyphonic drum tracks comparing with \cite{gillet_transcription_2008}}
+%\label{tab:polyResults}
+%\end{footnotesize}
+%\end{table}
+
+\section{Conclusion}\label{sec:Conclusion}
+We have presented a drum transcription system for both monophonic and polyphonic music using partially fixed NMF. This method uses a partially pre-trained dictionary matrix to decompose the target signal and to estimate the activation matrix. The initial test shows that increasing the $r_\mathrm{H}$ does help the algorithm to adapt to the harmonic components and increase the performance in polyphonic mixtures. The evaluation results show that this method is able to achieve average F-measures of 89.6\% and 70.4\% in monophonic and polyphonic music respectively for detecting 3 classes of drums. 
+
+The presented method has the following advantages: 
+First, the fixed dictionary matrix in the model makes it easier to interpret the corresponding activation matrix for transcription tasks.
+Second, simultaneous sounds can be detected separately without the need of training extra classes.  
+Third, adjustment of the parameter $r_\mathrm{H}$ allows the algorithm to adapt to different different types of polyphonic music. 
+Fourth, evaluation results indicate a robustness against template mismatches, possibly allowing the application in situations with minimum prior knowledge. 
+Last but not least, the approach only requires a few drum samples to train the dictionary matrix, and the evaluation results indicate that the performance is comparable with state-of-the art methods at lower algorithmic complexity. 
+
+Possible directions for future work are:
+%a comparison between this approach and Probabilistic Latent Component Analysis (PLCA) \cite{smaragdis_plca_2014}. 
+investigation into means to iteratively adapt the template during the decomposition as a way of improving the current method. Furthermore, the automatic estimation of $r_\mathrm{H}$ for any given signal using a probabilistic approach similar to  \cite{ouo_inmf_2010} might be a solution to rank selection. Finally, different penalty terms for the cost function, such as sparsity, temporal continuity \cite{virtanen_ssnmf_2007}, or rank $r_\mathrm{H}$ might be taken into account for better adjustment of the current method. 
+To reach the goal of a complete drum transcription system for polyphonic music, however, more factors such as playing techniques and more drum classes still need to be addressed in the future. 
+
+All of the methods and implementations described in this paper will be made available online.  
+
+\bibliography{cw_ismir2015.bib}
+\end{document}
