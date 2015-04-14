@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  14 APR 2015 04:15
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  14 APR 2015 04:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -299,7 +299,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 
 
  <./figs/cc_by.pdf>]
-Underfull \vbox (badness 5787) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 <factorization.png, id=18, 301.125pt x 89.6148pt>
@@ -383,7 +383,7 @@ Underfull \hbox (badness 1024) in paragraph at lines 182--187
 Here is how much of TeX's memory you used:
  4316 strings out of 493315
  64056 string characters out of 6137904
- 167708 words of memory out of 5000000
+ 167732 words of memory out of 5000000
  7474 multiletter control sequences out of 15000+600000
  31512 words of font info for 186 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
@@ -402,7 +402,7 @@ ocal/texlive/2013/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/tex
 live/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2013/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-dist
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on cw_ismir2015.pdf (8 pages, 238299 bytes).
+Output written on cw_ismir2015.pdf (8 pages, 238103 bytes).
 PDF statistics:
  97 PDF objects out of 1000 (max. 8388607)
  66 compressed objects within 1 object stream
