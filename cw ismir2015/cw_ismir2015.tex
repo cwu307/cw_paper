@@ -256,13 +256,13 @@ One explanation could be that when the signal contains no harmonic components, t
 \end{figure}
 
 \subsubsection{Threshold Selection}\label{subsec:threshold}
-The transcription results can be obtained after applying onset detection on each drum activation (please see Section \ref{subsec:processing steps}). However, the performance varies according to the selection of the signal-adaptive threshold. To evaluate the influence of different thresholds, the average F-measure of all drums with different $\lambda$ on IDMT-SMT-Drums dataset is shown in Figure [CITE FIGURE HERE]. A general trend of parabolic curve as reported in \cite{Dittmar2014} can be observed. One major difference is that both PFNMF with adaptation method 1 (referred as APFNMF1) and adaptation method 2 (referred as APFNMF2) outperform the original PFNMF. This verifies the assumption that template adaptation process does help the algorithm against the unknown sounds, since the templates and the test signals are from two different datasets. The overall performance is slightly lower than \cite{Dittmar2014} due to the mismatch in templates and target signals. However, the F-measures of APFNMF1 can reach $74.0\%$, $93.2\%$ and $73.4\%$ for HH, BD, SD respectively, which indicate the applicability of the proposed method across dataset. 
+The transcription results can be obtained after applying onset detection on each drum activation (please see Section \ref{subsec:processing steps}). However, the performance varies according to the selection of the signal-adaptive threshold. To evaluate the influence of different thresholds, the average F-measure of all drums with different $\lambda$ on IDMT-SMT-Drums dataset is shown in \figref{fig:thresTest}. A general trend of parabolic curve as reported in \cite{Dittmar2014} can be observed. One major difference is that in most regions of the curve, both adaptation method 1 (referred as APFNMF1) and adaptation method 2 (referred as APFNMF2) perform better than PFNMF. This verifies the assumption that template adaptation process does help the algorithm against the unknown sounds, since the templates and the test signals are from two different datasets in this case. The overall performance is slightly lower than \cite{Dittmar2014} due to the mismatch in templates and target signals. However, the F-measures of APFNMF1 can reach $74.0\%$, $93.2\%$ and $73.4\%$ for HH, BD, SD respectively, which indicate the applicability of the proposed method across dataset. 
 
 %============= Threshold Selection Figure
 \begin{figure}
  \centerline{
- \includegraphics[width=10cm]{testOnK_mono_poly.png}}
- \caption{Average F-measure versus offset coefficient $\lambda$ using (a) PFNMF (Solid line) (b) APFNMF1 (Dotted line)(c) APFNMF2 (Diamond dotted line)}%add grid & increase thickness
+ \includegraphics[width=10cm]{thresSelect.png}}
+ \caption{Average F-measure versus offset coefficient $\lambda$ using (a) PFNMF (Solid circle) (b) APFNMF1 (Dash diamond)(c) APFNMF2 (Dotted square)}%add grid & increase thickness
  \label{fig:thresTest}
 \end{figure}
 

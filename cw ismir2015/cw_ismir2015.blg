@@ -6,7 +6,7 @@ Database file #1: cw_ismir2015.bib.bib
 Warning--can't use both volume and number fields in Lindsay-Smith2012
 You've used 29 entries,
             2118 wiz_defined-function locations,
-            655 strings with 10025 characters,
+            655 strings with 10035 characters,
 and the built_in function-call counts, 10130 in all, are:
 = -- 985
 > -- 449
