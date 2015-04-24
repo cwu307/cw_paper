@@ -6,43 +6,43 @@ Database file #1: cw_ismir2015.bib.bib
 Warning--can't use both volume and number fields in Lindsay-Smith2012
 You've used 29 entries,
             2118 wiz_defined-function locations,
-            655 strings with 10035 characters,
-and the built_in function-call counts, 10130 in all, are:
-= -- 985
+            653 strings with 9987 characters,
+and the built_in function-call counts, 9932 in all, are:
+= -- 958
 > -- 449
-< -- 10
+< -- 8
 + -- 176
 - -- 146
-* -- 647
-:= -- 1620
+* -- 633
+:= -- 1601
 add.period$ -- 91
 call.type$ -- 29
 change.case$ -- 159
 chr.to.int$ -- 0
 cite$ -- 30
-duplicate$ -- 446
-empty$ -- 877
+duplicate$ -- 437
+empty$ -- 864
 format.name$ -- 146
-if$ -- 2192
+if$ -- 2143
 int.to.chr$ -- 0
 int.to.str$ -- 29
 missing$ -- 30
 newline$ -- 149
 num.names$ -- 58
-pop$ -- 226
+pop$ -- 228
 preamble$ -- 1
 purify$ -- 131
 quote$ -- 0
-skip$ -- 280
+skip$ -- 266
 stack$ -- 0
-substring$ -- 548
-swap$ -- 105
-text.length$ -- 10
+substring$ -- 512
+swap$ -- 95
+text.length$ -- 8
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 114
 warning$ -- 1
-while$ -- 92
+while$ -- 89
 width$ -- 31
-write$ -- 322
+write$ -- 320
 (There was 1 warning)

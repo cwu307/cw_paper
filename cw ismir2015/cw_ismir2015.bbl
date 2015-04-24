@@ -11,7 +11,7 @@ David~S Alves, Jouni Paulus, and Jos{\'e} Fonseca.
 Emmanouil Benetos, Simon Dixon, Dimitrios Giannoulis, Holger Kirchhoff, and
   Anssi Klapuri.
 \newblock Automatic music transcription: Challenges and future directions.
-\newblock {\em Journal of Intelligent Information Systems}, 41(3):407---434,
+\newblock {\em Journal of Intelligent Information Systems}, 41(3):407--434,
   December 2013.
 
 \bibitem{Benetos2014}
@@ -76,6 +76,12 @@ Marko Helen and Tuomas Virtanen.
 \newblock In {\em Proceedings of the European Signal Processing Conference
   ({EUSIPCO)}}, Talya, 2005.
 
+\bibitem{herrera_automatic_2003}
+Perfecto Herrera, Amaury Dehamel, and Fabien Gouyon.
+\newblock Automatic labeling of unpitched percussion sounds.
+\newblock In {\em Proceedings of the 114th Audio Engineering Society
+  Convention}. {AES}, March 2003.
+
 \bibitem{lee_algorithms_2000}
 Daniel~D Lee and H~Sebastian Seung.
 \newblock Algorithms for non-negative matrix factorization.
@@ -85,7 +91,7 @@ Daniel~D Lee and H~Sebastian Seung.
 \bibitem{Lerch2012}
 Alexander Lerch.
 \newblock {\em {An Introduction to Audio Content Analysis: Applications in
-  Signal Processing and Music Informatics}}, volume~5.
+  Signal Processing and Music Informatics}}.
 \newblock John Wiley \& Sons, 2012.
 
 \bibitem{Lindsay-Smith2012}
@@ -157,12 +163,6 @@ Tuomas Virtanen.
   with temporal continuity and sparseness criteria}.
 \newblock {\em IEEE transactions on audio, speech, and language processing},
   15(3):1066--1074, 2007.
-
-\bibitem{weinberg_interactive_2009}
-Gil Weinberg, Aparna Raman, and Trishul Mallikarjuna.
-\newblock Interactive jamming with shimon: a social robotic musician.
-\newblock In {\em Proceedings of the 4th {ACM/IEEE} international conference on
-  Human robot interaction}, pages 233---234. {ACM}, 2009.
 
 \bibitem{yoo_nonnegative_2010}
 Jiho Yoo, Minje Kim, Kyeongok Kang, and Seungjin Choi.
