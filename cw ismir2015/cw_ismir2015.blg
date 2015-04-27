@@ -6,34 +6,34 @@ Database file #1: cw_ismir2015.bib
 Warning--can't use both volume and number fields in Lindsay-Smith2012
 You've used 28 entries,
             2118 wiz_defined-function locations,
-            646 strings with 9763 characters,
-and the built_in function-call counts, 9657 in all, are:
-= -- 932
-> -- 436
+            646 strings with 9750 characters,
+and the built_in function-call counts, 9626 in all, are:
+= -- 930
+> -- 431
 < -- 8
-+ -- 171
-- -- 142
-* -- 619
-:= -- 1554
++ -- 169
+- -- 140
+* -- 614
+:= -- 1548
 add.period$ -- 88
 call.type$ -- 28
-change.case$ -- 154
+change.case$ -- 153
 chr.to.int$ -- 0
 cite$ -- 29
 duplicate$ -- 423
 empty$ -- 838
-format.name$ -- 142
-if$ -- 2083
+format.name$ -- 140
+if$ -- 2078
 int.to.chr$ -- 0
 int.to.str$ -- 28
 missing$ -- 29
 newline$ -- 144
 num.names$ -- 56
-pop$ -- 219
+pop$ -- 218
 preamble$ -- 1
-purify$ -- 127
+purify$ -- 126
 quote$ -- 0
-skip$ -- 260
+skip$ -- 261
 stack$ -- 0
 substring$ -- 507
 swap$ -- 94
