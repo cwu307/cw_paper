@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  27 APR 2015 13:05
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  9 JUL 2015 18:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -281,10 +281,13 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             `pcr' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 50.
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 50--50
- [][] 
- []
+(/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/omspcr.fd
+File: omspcr.fd 
+)
+LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 50.
 
 <figs/cc_by.pdf, id=1, 121.45375pt x 43.16125pt>
 File: figs/cc_by.pdf Graphic file (type pdf)
@@ -310,30 +313,32 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 Underfull \vbox (badness 2443) has occurred while \output is active []
 
 
-<flowchart.png, id=17, 584.4234pt x 147.4308pt>
-File: flowchart.png Graphic file (type png)
- <use flowchart.png>
-Package pdftex.def Info: flowchart.png used on input line 96.
-(pdftex.def)             Requested size: 241.84842pt x 61.00941pt.
- [2 <./flowchart.png>] <factorization2.png, id=27, 609.477pt x 140.6856pt>
-File: factorization2.png Graphic file (type png)
+<flow.pdf, id=18, 585.18625pt x 147.55125pt>
+File: flow.pdf Graphic file (type pdf)
+ <use flow.pdf>
+Package pdftex.def Info: flow.pdf used on input line 96.
+(pdftex.def)             Requested size: 241.84842pt x 60.98045pt.
 
-<use factorization2.png>
-Package pdftex.def Info: factorization2.png used on input line 117.
-(pdftex.def)             Requested size: 241.84842pt x 55.82457pt.
+Underfull \vbox (badness 1742) has occurred while \output is active []
+
+ [2 <./flow.pdf>] <factorization.pdf, id=52, 610.28pt x 120.45pt>
+File: factorization.pdf Graphic file (type pdf)
+ <use factorization.pdf>
+Package pdftex.def Info: factorization.pdf used on input line 117.
+(pdftex.def)             Requested size: 241.84842pt x 47.73251pt.
 
 Overfull \hbox (1.05334pt too wide) in paragraph at lines 160--161
 []\OT1/ptm/m/n/10 (-20) Calculate the cost of the cur-rent it-er-a-tion us-ing 
 Eq. []. 
  []
 
-[3 <./factorization2.png>] <rankTest_2.png, id=34, 1284.8pt x 703.62875pt>
+[3 <./factorization.pdf>] <rankTest_2.png, id=111, 1284.8pt x 703.62875pt>
 File: rankTest_2.png Graphic file (type png)
 
 <use rankTest_2.png>
 Package pdftex.def Info: rankTest_2.png used on input line 259.
 (pdftex.def)             Requested size: 284.52756pt x 155.81877pt.
- [4] <thresSelect.png, id=40, 1284.8pt x 703.62875pt>
+ [4] <thresSelect.png, id=117, 1284.8pt x 703.62875pt>
 File: thresSelect.png Graphic file (type png)
 
 <use thresSelect.png>
@@ -370,13 +375,13 @@ Underfull \hbox (badness 1024) in paragraph at lines 176--181
 
 ) [7] (./cw_ismir2015.aux) ) 
 Here is how much of TeX's memory you used:
- 4590 strings out of 493315
- 68662 string characters out of 6137904
- 173885 words of memory out of 5000000
- 7747 multiletter control sequences out of 15000+600000
+ 4607 strings out of 493315
+ 68956 string characters out of 6137904
+ 173738 words of memory out of 5000000
+ 7761 multiletter control sequences out of 15000+600000
  31311 words of font info for 184 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,15n,35p,1455b,387s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,14n,35p,1525b,373s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips
 /base/8r.enc}</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmex10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/
@@ -391,10 +396,10 @@ sr/local/texlive/2013/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local
 /texlive/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2
 013/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-
 dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on cw_ismir2015.pdf (7 pages, 243268 bytes).
+Output written on cw_ismir2015.pdf (7 pages, 265986 bytes).
 PDF statistics:
- 94 PDF objects out of 1000 (max. 8388607)
- 64 compressed objects within 1 object stream
+ 172 PDF objects out of 1000 (max. 8388607)
+ 123 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  22554 words of extra memory for PDF output out of 24883 (max. 10000000)
 

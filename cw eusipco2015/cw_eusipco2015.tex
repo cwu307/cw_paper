@@ -82,7 +82,7 @@ When NMF is applied to the task of music transcription, typically the following 
 First, the number of sound sources and notes within a music recording is usually unknown. It is therefore difficult to determine a suitable rank $r$ in order to obtain a clear differentiation of the decomposed components in the dictionary matrix. 
 Second, it can be  hard to identify the corresponding instrument of every component in the dictionary matrix $W$. This problem becomes more severe when the rank is selected too high or too low. 
 Third, when multiple similar entries exist in the dictionary matrix, the corresponding activation matrix could be activated at these entries simultaneously, which in turn increases the difficulty of intuitively interpreting the results. %MAYBE THERE IS A POINT TO BE MADE ABOUT THE ACTIVITY MATRIX AS WELL?
-Different methods have been proposed in previous studies to address these issues. Helen and Virtanen trained an SVM to separate drum components from the harmonic components; the rank number was derived empirically during the factorization process \cite{helen_separation_2005}. The identified drum components and their corresponding activities could later be used to reconstruct the drum signal, resulting in a system for drum source separation. Their approach requires a significant amount of training data for the classifier and, more importantly, the results can be expected to be very susceptible to choice of rank. %However, this method requires separated data to train the classifier, and the results could be data-dependent.
+Different methods have been proposed in previous studies to address these issues. Helen and Virtanen trained an SVM to separate drum components from the harmonic components; the rank number was derived empirically during the factorization process \cite{helen_separation_2005}. The identified drum components and their corresponding activities could later be used to reconstruct the drum signal, resulting in a system for drum source separation. Their approach requires a significant amount of training data for the classifier and, more importantly, the results can be expected to be very sensitive to choice of rank. %However, this method requires separated data to train the classifier, and the results could be data-dependent.
 %I think I need to be careful in this paragraph... 
 
 Yoo et al.\ proposed a co-factorization algorithm \cite{yoo_nonnegative_2010} to simultaneously factorize a drum track and a polyphonic signal. They used the dictionary matrix from the drum track to identify the drum components in the polyphonic signal. This approach ensures that the drum components in both dictionary matrices are estimated only from the drum track, resulting in proper isolation of the harmonic components from the drum components. Since their system aims at drum separation they can work at very high ranks. For drum transcription, however, the approach is not directly applicable because of the probable lack of interpretability of the dictionary matrix.
@@ -99,7 +99,7 @@ Yoo et al.\ proposed a co-factorization algorithm \cite{yoo_nonnegative_2010} to
 % introduce my modification here 
 
 Nevertheless, their work inspired our approach to drum transcription. \figref{fig:factorization} visualizes the basic concept from the work of Yoo et al.: the matrices $W$ and $H$ are split into the  matrices $W_\mathrm{D}$ and $W_\mathrm{H}$, and  $H_\mathrm{D}$ and $H_\mathrm{H}$, respectively. Instead of using co-factorization, however, we propose to initialize the matrix $W_\mathrm{D}$ with drum templates and to not modify it during the factorization process. Matrices $W_\mathrm{H}$, $H_\mathrm{H}$, and $H_\mathrm{D}$ are initialized with random numbers. 
-The distance measure used in this paper is KL-divergence, in which \(D_\mathrm{KL}(x \mid y) = x\cdot\log\left(\nicefrac{x}{y}\right) + (y - x)\). The cost function as shown in \eqref{eq:costFunc} is minimized by applying gradient decent and multiplicative update rules, the matrices  $W_\mathrm{H}$, $H_\mathrm{H}$, and $H_\mathrm{D}$ will be updated according to \eqref{eq:updateHD}--\eqref{eq:updateHH}.  %\eqref{eq:updateHD} \eqref{eq:updateWH} \eqref{eq:updateHH}.  
+The distance measure used in this paper is KL-divergence, in which \(D_\mathrm{KL}(x \mid y) = x\cdot\log\left(\nicefrac{x}{y}\right) + (y - x)\). The cost function as shown in \eqref{eq:costFunc} is minimized by applying gradient decent and multiplicative update rules as described in \cite{lee_algorithms_2000}, and the matrices  $W_\mathrm{H}$, $H_\mathrm{H}$, and $H_\mathrm{D}$ will be updated according to \eqref{eq:updateHD}--\eqref{eq:updateHH}.  %\eqref{eq:updateHD} \eqref{eq:updateWH} \eqref{eq:updateHH}.  
 % equation here
 %\begin{equation}
 \begin{eqnarray}
@@ -132,8 +132,7 @@ The time positions of the drum events can then be extracted by applying a simple
 
 \subsection{Implementation}\label{subsec:processing steps}
 
-\figref{fig:flowchart} shows the flow chart of the implemented system. The basic setup is shown on the right hand side. 
-The STFT of the signals will be calculated using a window size and a hop size of $2048$ and $512$ with a sampling frequency of \unit[44.1]{kHz}. 
+\figref{fig:flowchart} shows the flow chart of the implemented system. Since the NMF is based on a constructive assumption of multiple sources, the representation of the signal must be superimposable. Therefore, a magnitude spectrogram is used to instead of other audio specific features. The STFT of the signals will be calculated using a window size and a hop size of $2048$ and $512$ with a sampling frequency of \unit[44.1]{kHz}. 
 A pre-trained dictionary matrix will be constructed from the training set, consisting of isolated drum sounds. 
 Next, the partially fixed NMF will be performed with rank $r = r_\mathrm{D} + r_\mathrm{H}$ as described above. 
 Finally, the activation Matrix $H_\mathrm{D}$ is evaluated to determine the onset positions and their corresponding classes.  
@@ -149,16 +148,15 @@ Finally, the activation Matrix $H_\mathrm{D}$ is evaluated to determine the onse
 As mentioned above, the dictionary matrix $W_\mathrm{D}$ is created by extracting a template spectrum from isolated training drum samples. The template magnitude spectrum is a median spectrum of all individual events of one drum class in the training set. The length of each event  is approximately \unit[80]{ms}. The templates are extracted for the three classes Hi-Hat (HH), Bass Drum (BD) and Snare Drum (SD).   
 
 %\subsubsection{Activity Detection}\label{subsubsec:activity detection}
-High values in the activation matrix $H_\mathrm{D}$ indicate the presence of a drum event. More specifically, the activity difference of each row of the dictionary matrix could be considered as the onset novelty function of each individual drum. We use a median filter to create an adaptive threshold for peak picking.  
+High values in the activation matrix $H_\mathrm{D}$ indicate the presence of a drum event. More specifically, the activity difference of each row of the activation matrix could be considered as the onset novelty function of each individual drum. We use a median filter to create an adaptive threshold for peak picking.  
 %I DON'T THINK WE NEED MORE DETAILS HERE --- ESPECIALLY THE EQUATION DOES NOT SEEM NECESSARY.
-The implementation of the median filter is shown in \eqref{eq:medianFilter}. The $G$ is the time-varying threshold. $Q$ is a function that extracts the median from previous input signal within a fixed window size. $\lambda$ is an offset coefficient to control the sensitivity of the threshold. We set the window size to be \unit[0.1]{s} and the $\lambda$  to be 0.12 for every track, respectively.
+The implementation of the median filter is shown in \eqref{eq:medianFilter}. The $G$ is the time-varying threshold. $Q$ is a function that extracts the median from previous input signal within a fixed window size. $\lambda$ is an offset coefficient to control the sensitivity of the threshold. For every track, we set the window size to be \unit[0.1]{s} and the $\lambda$  to be 0.12 of the maximum value, respectively.
 % equation here
 \begin{equation}
 G(t) = \lambda + Q(t)
 \label{eq:medianFilter}
 \end{equation}\\
-\vspace{-2mm}
-
+\vspace{-8mm}
 %============= Onset event counts in the used tracks
 \begin{table}[ht]
 \begin{footnotesize}
@@ -175,6 +173,7 @@ Total     & 6247 & 5712 & 5185 & 17144 \\ \hline
  \label{tab:onsetCount}
 \end{footnotesize}
 \end{table}
+\vspace{-4mm}
 
 \section{EVALUATION}\label{sec:Evaluation}
 \subsection{Dataset Description}\label{subsec:data set description}
@@ -200,14 +199,14 @@ The evaluation metrics follow the standard calculation of the precision (P), rec
 An onset is considered to be a match with the ground truth if the time deviation between the annotated and detected onset is less or equal to \unit[50]{ms}.  
 
 \subsection{Evaluation Results}\label{subsec:evaluation results}
-In an initial test to determine the rank $r_\mathrm{H}$ of the algorithm, $r_\mathrm{H} = {5, 10, 20, 40, 80, 160, 320}$ have been tested. The resulting individual F-measures are shown in \figref{fig:rankTest}. A general trend of decreasing performance with increasing $r_\mathrm{H}$ can be observed, especially for lower frequency sounds such as SD and BD. Based on this observation, a rank number $r_\mathrm{H} = 10$ is chosen in current setup.
+In an initial test to determine the rank $r_\mathrm{H}$ of the algorithm, $r_\mathrm{H} = {5, 10, 20, 40, 80, 160}$ have been tested. The resulting individual F-measures are shown in \figref{fig:rankTest}. A general trend of decreasing performance with increasing $r_\mathrm{H}$ can be observed, especially for lower frequency sounds such as SD and BD. Based on this observation, a rank number $r_\mathrm{H} = 10$ is chosen in current setup.
 
 %In an initial test to determine the rank $r_\mathrm{H}$ of the algorithm, a range of $r_\mathrm{H}$ from 5 to 320 have been tested. The results indicates a general trend of decreasing performance with increasing $r_\mathrm{H}$. Therefore, in current setup, a rank number $r_\mathrm{H} = 10$ is chosen. %SO IS THIS THE OVERALL RANK HERE OR ONLY THE HARMONIC RANK?
 
 %============= Rank Test Figure
 \begin{figure}
  \centerline{
- \includegraphics[width=8.5cm]{rankTest.png}}
+ \includegraphics[width=9.0cm]{rankTest_fixed.png}}
  \caption{Average F-measure versus harmonic rank $r_\mathrm{H}$}%WHY NOT ADD A GRID AND MAYBE INCREASE LINE THICKNESS?
  \label{fig:rankTest}
 \end{figure}
