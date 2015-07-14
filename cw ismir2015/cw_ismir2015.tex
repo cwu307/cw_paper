@@ -88,7 +88,7 @@ Another issue is the adaptability of the extracted templates. When using supervi
 
 \figref{fig:flowchart} shows the flow chart of the implemented system. The STFT of the signals will be calculated using a Hann window with a window length and a hop size of $2048$ and $512$, respectively, and the sample rate is \unit[44.1]{kHz}. The resulting magnitude spectrogram is used as the input representation. 
 A pre-trained dictionary matrix $W_\mathrm{D}$ will be constructed from the training set, which consists of isolated drum sounds. 
-Next, the initial drum dictionary will be used in the partially fixed NMF (PFNMF) process\cite{Wu2015} and updated by the selected template adaptation methods described in \secref{subsec:algorithm}. Finally, the activation matrix $H_\mathrm{D}$ is processed to determine the onset positions and their corresponding classes. 
+Next, the initial drum dictionary will be used in the partially fixed NMF (PFNMF) process and updated by the selected template adaptation methods described in \secref{subsec:algorithm}. Finally, the activation matrix $H_\mathrm{D}$ is processed to determine the onset positions and their corresponding classes. 
 
 \begin{figure}
  \centerline{%\framebox{

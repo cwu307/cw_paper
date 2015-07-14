@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  13 JUL 2015 19:52
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.30)  13 JUL 2015 19:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -388,7 +388,7 @@ sr/local/texlive/2013/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local
 /texlive/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2
 013/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-
 dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on cw_ismir2015.pdf (7 pages, 266134 bytes).
+Output written on cw_ismir2015.pdf (7 pages, 266118 bytes).
 PDF statistics:
  172 PDF objects out of 1000 (max. 8388607)
  123 compressed objects within 2 object streams
