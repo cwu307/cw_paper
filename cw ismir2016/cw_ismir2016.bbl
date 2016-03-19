@@ -1,0 +1,133 @@
+\begin{thebibliography}{10}
+
+\bibitem{Benetos2013}
+Emmanouil Benetos, Simon Dixon, Dimitrios Giannoulis, Holger Kirchhoff, and
+  Anssi Klapuri.
+\newblock {Automatic music transcription: challenges and future directions}.
+\newblock {\em Journal of Intelligent Information Systems}, jul 2013.
+
+\bibitem{Benetos2014}
+Emmanouil Benetos, Sebastian Ewert, and Tillman Weyde.
+\newblock {Automatic transcription of pitched and unpitched sounds from
+  polyphonic music}.
+\newblock In {\em Proceedings of the International Conference on Acoustics
+  Speech and Signal Processing (ICASSP)}, 2014.
+
+\bibitem{Bittner2015a}
+Rachel~M. Bittner, Justin Salamon, Slim Essid, and Juan~P. Bello.
+\newblock {Melody extraction by contour classification}.
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval (ISMIR)}, pages 500--506, 2015.
+
+\bibitem{Chang2011}
+Chih-Chung Chang and Chih-Jen Lin.
+\newblock {LIBSVM : a library for support vector machines}.
+\newblock {\em ACM Transactions on Intelligent Systems and Technology},
+  2(3):27:1--27:27, 2011.
+
+\bibitem{Chen2015}
+Yuan-ping Chen, Li~Su, and Yi-hsuan Yang.
+\newblock {Electric Guitar Playing Technique Detection in Real-World Recordings
+  Based on F0 Sequence Pattern Recognition}.
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval (ISMIR)}, pages 708--714, 2015.
+
+\bibitem{Dittmar2014}
+Christian Dittmar and Daniel G{\"{a}}rtner.
+\newblock {Real-time Transcription and Separation of Drum Recording Based on
+  NMF Decomposition}.
+\newblock In {\em Proceedings of the International Conference on Digital Audio
+  Effects (DAFX)}, pages 1--8, 2014.
+
+\bibitem{Gillet2006}
+Olivier Gillet and Ga{\"{e}}l Richard.
+\newblock {Enst-drums: an extensive audio-visual database for drum signals
+  processing}.
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval (ISMIR)}, 2006.
+
+\bibitem{Hamel2009}
+Philippe Hamel, Sean Wood, and Douglas Eck.
+\newblock {Automatic Identification of Instrument Classes in Polyphonic and
+  Poly-Instrument Audio.}
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval (ISMIR)}, pages 399--404, 2009.
+
+\bibitem{Hochenbaum2011}
+Jordan Hochenbaum and A~Kapur.
+\newblock {Drum Stroke Computing: Multimodal Signal Processing for Drum Stroke
+  Identification and Performance Metrics}.
+\newblock {\em Proceedings of the International Conference on New Interfaces
+  for Musical Expression (NIME)}, 2011.
+
+\bibitem{Humphrey2015}
+Eric~J Humphrey and Juan~P Bello.
+\newblock {Four timely insights on automatic chord estimation}.
+\newblock {\em Proceedings of the International Conference on Music Information
+  Retrieval (ISMIR)}, 2015.
+
+\bibitem{Li2015a}
+Pei-Ching Li, Li~Su, Yi-hsuan Yang, and Alvin W.~Y. Su.
+\newblock {Analysis of Expressive Musical Terms in Violin using Score-Informed
+  and Expression-Based Audio Features}.
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval (ISMIR)}, 2015.
+
+\bibitem{Prockup2013}
+Matthew Prockup, Erik~M. Schmidt, Jeffrey Scott, and Youngmoo~E. Kim.
+\newblock {Toward Understanding Expressive Percussion Through Content Based
+  Analysis.}
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval (ISMIR)}, 2013.
+
+\bibitem{Roebel2015}
+Axel Roebel, Jordi Pons, Marco Liuni, and Mathieu Lagrange.
+\newblock {On Automatic Drum Transcription Using Non-Negative Matrix
+  Deconvolution and Itakura Saito Divergence}.
+\newblock In {\em Proceedings of the IEEE International Conference on
+  Acoustics, Speech, and Signal Processing (ICASSP)}, 2015.
+
+\bibitem{Rossing2001}
+Thomas~D Rossing.
+\newblock {Acoustics of percussion instruments: Recent progress}.
+\newblock {\em Acoustical Science and Technology}, 22(3):177--188, 2001.
+
+\bibitem{Stone2009}
+George~Lawrence Stone.
+\newblock {\em {Stick Control: for the Snare Drummer}}.
+\newblock Alfred Music, 2009.
+
+\bibitem{Su2014a}
+Li~Su, Li-Fan Yu, and Yi-Hsuan Yang.
+\newblock {Sparse ceptral and phase codes for guitar playing technique
+  classification}.
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval (ISMIR)}, number Ismir, pages 9--14, 2014.
+
+\bibitem{Thompson2014}
+Lucas Thompson, Matthias Mauch, and Simon Dixon.
+\newblock {Drum Transcription via Classification of Bar-Level Rhythmic
+  Patterns}.
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval (ISMIR)}, 2014.
+
+\bibitem{Tindale2004}
+Adam~R. Tindale, Ajay Kapur, George Tzanetakis, and Ichiro Fujinaga.
+\newblock {Retrieval of percussion gestures using timbre classification
+  techniques.}
+\newblock In {\em in Proceedings of the International Conference on Music
+  Information Retrieval}, pages 541--544, 2004.
+
+\bibitem{Wu2015a}
+Chih-Wei Wu and Alexander Lerch.
+\newblock {Drum Transcription Using Partially Fixed Non-Negative Matrix
+  Factorization with Template Adaptation}.
+\newblock In {\em Proceedings of the International Conference on Music
+  Information Retrieval (ISMIR)}, pages 257--263, 2015.
+
+\bibitem{yang1999}
+Yiming Yang.
+\newblock {An Evaluation of Statistical Approaches to Text Categorization}.
+\newblock {\em Journal of Information Retrieval}, 1:69--90, 1999.
+
+\end{thebibliography}
