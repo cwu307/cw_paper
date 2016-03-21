@@ -1,48 +1,29 @@
-This is BibTeX, Version 0.99d (TeX Live 2013)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: cw_ismir2016.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: cw_ismir2016.aux
 The style file: plain.bst
-Database file #1: cw_ismir2016.bib.bib
-Warning--there's a number but no series in Su2014a
-You've used 20 entries,
-            2118 wiz_defined-function locations,
-            608 strings with 7700 characters,
-and the built_in function-call counts, 7108 in all, are:
-= -- 674
-> -- 332
-< -- 8
-+ -- 130
-- -- 110
-* -- 442
-:= -- 1133
-add.period$ -- 60
-call.type$ -- 20
-change.case$ -- 114
-chr.to.int$ -- 0
-cite$ -- 21
-duplicate$ -- 312
-empty$ -- 599
-format.name$ -- 110
-if$ -- 1533
-int.to.chr$ -- 0
-int.to.str$ -- 20
-missing$ -- 21
-newline$ -- 103
-num.names$ -- 40
-pop$ -- 156
-preamble$ -- 1
-purify$ -- 95
-quote$ -- 0
-skip$ -- 223
-stack$ -- 0
-substring$ -- 373
-swap$ -- 89
-text.length$ -- 8
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 78
-warning$ -- 1
-while$ -- 67
-width$ -- 22
-write$ -- 213
-(There was 1 warning)
+I couldn't open database file cw_ismir2016.bib.bib
+---line 83 of file cw_ismir2016.aux
+ : \bibdata{cw_ismir2016.bib
+ :                          }
+I'm skipping whatever remains of this command
+I found no database files---while reading file cw_ismir2016.aux
+Warning--I didn't find a database entry for "Benetos2013"
+Warning--I didn't find a database entry for "Bittner2015a"
+Warning--I didn't find a database entry for "Humphrey2015"
+Warning--I didn't find a database entry for "Hamel2009"
+Warning--I didn't find a database entry for "Su2014a"
+Warning--I didn't find a database entry for "Chen2015"
+Warning--I didn't find a database entry for "Li2015a"
+Warning--I didn't find a database entry for "Benetos2014"
+Warning--I didn't find a database entry for "Dittmar2014"
+Warning--I didn't find a database entry for "Thompson2014"
+Warning--I didn't find a database entry for "Roebel2015"
+Warning--I didn't find a database entry for "Wu2015a"
+Warning--I didn't find a database entry for "Rossing2001"
+Warning--I didn't find a database entry for "Stone2009"
+Warning--I didn't find a database entry for "Tindale2004"
+Warning--I didn't find a database entry for "Prockup2013"
+Warning--I didn't find a database entry for "Hochenbaum2011"
+Warning--I didn't find a database entry for "Gillet2006"
+Warning--I didn't find a database entry for "yang1999"
+Warning--I didn't find a database entry for "Chang2011"
+(There were 2 error messages)
