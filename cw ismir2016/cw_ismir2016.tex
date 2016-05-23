@@ -25,10 +25,10 @@
 % Single address
 % To use with only one author or several with the same address
 % ---------------
-%\oneauthor
-% {Names should be omitted for double-blind reviewing}
-% {Affiliations should be omitted for double-blind reviewing}
-
+\oneauthor
+ {Chih-Wei Wu, Alexander Lerch}
+ {Georgia Institute of Technology, Center for Music Technology\\ {\tt \{cwu307, alexander.lerch\}@gatech.edu}}
+ 
 % Two addresses
 % --------------
 %\twoauthors
@@ -41,10 +41,10 @@
 
 % Three addresses
 % --------------
-\threeauthors
-  {First Author} {Affiliation1 \\ {\tt author1@ismir.edu}}
-  {Second Author} {\bf Retain these fake authors in\\\bf submission to preserve the formatting}
-  {Third Author} {Affiliation3 \\ {\tt author3@ismir.edu}}
+%\threeauthors
+%  {First Author} {Affiliation1 \\ {\tt author1@ismir.edu}}
+%  {Second Author} {\bf Retain these fake authors in\\\bf submission to preserve the formatting}
+%  {Third Author} {Affiliation3 \\ {\tt author3@ismir.edu}}
 
 %% To make customize author list in Creative Common license, uncomment and customize the next line
 %  \def\authorname{First Author, Second Author, Third Author} 
@@ -73,8 +73,7 @@
 %In this paper, the problem of drum playing technique detection in the polyphonic mixtures of music is addressed, and a system using features extracted from the Non-negative Matrix Factorization (NMF) activation functions is presented. The proposed method focuses on detecting 4 rudimentary techniques: \textit{strike}, \textit{buzz roll}, \textit{flam} and \textit{drag}. To evaluate the system, two datasets are introduced for both training and testing purposes. For training, a dataset consisting of the 4 major rudiments has been created. For testing, the ENST drum dataset minus one subset has been manually annotated. The evaluation process includes a comparison of different sets of features under different controlled conditions. In this preliminary work towards drum playing technique detection in the real-world recordings, we show the capability of the proposed system as well as the challenges and limitations in the context of polyphonic mixtures. The results demonstrate the potential of using NMF activation functions to obtain more detailed information about the drum playing, however, the performance in the polyphonic mixtures has to be improved with further investigations on different pre-processing steps in the future. 
 
 In this paper, the problem of drum playing technique detection in polyphonic mixtures of music is addressed. We focus on the identification of 4 rudimentary techniques: strike, buzz roll, flam, and drag. The specifics and the challenges of this task are being discussed, and different sets of features are compared, including baseline spectral features, as well as various features extracted from NMF-based activation functions. We investigate the capabilities and limitations of
-the presented system in the case of real-world recordings and polyphonic mixtures. To design and evaluate the system, two datasets are introduced: a
-training dataset generated from individual drum hits, and additional annotations of the well-known ENST drum dataset minus one subset as test dataset. The results demonstrate issues with the traditionally used spectral features, and indicate the potential of using NMF activation functions for playing technique detection, however, the performance of polyphonic music still leaves room for future improvement.
+the presented system in the case of real-world recordings and polyphonic mixtures. To design and evaluate the system, two datasets are introduced: a training dataset generated from individual drum hits, and additional annotations of the well-known ENST drum dataset minus one subset as test dataset. The results demonstrate issues with the traditionally used spectral features, and indicate the potential of using NMF activation functions for playing technique detection, however, the performance of polyphonic music still leaves room for future improvement.
 \end{abstract}
 
 %
@@ -135,10 +134,10 @@ Percussive instruments, generating sounds through vibrations induced by strikes 
 There are also other playing techniques that are commonly used to create timbral variations in a drum set, such as \textit{Brush}, \textit{Cross Stick}, \textit{Rim Shot}, etc. Most drum transcription systems, however, focus on single strikes instead of these playing techniques \cite{Benetos2014, Dittmar2014, Thompson2014, Roebel2015, Wu2015a}. 
 
 % 2004 paper
-In an early attempt to retrieve percussion gestures from the audio signal, Tindale et al.~investigated the timbral variations of the snare drum sounds induced by different excitations \cite{Tindale2004}. Three expert players were asked to play on different locations on the snare drums (center, halfway, edge, etc.) with different excitation (strike, rim shot, and brush), resulting in a dataset with 1260 individual samples. The classification results for this dataset based on standard spectral and temporal features (e.g., centroid, flux, MFCCs, etc.) and classifiers (e.g., kNN and SVM) were reported, and an overall accuracy of around 90\% was achieved. Since the dataset is relatively small, howver, it is difficult to generalize the results to different scenarios.  
+In an early attempt to retrieve percussion gestures from the audio signal, Tindale et al.~investigated the timbral variations of the snare drum sounds induced by different excitations \cite{Tindale2004}. Three expert players were asked to play on different locations on the snare drums (center, halfway, edge, etc.) with different excitations (strike, rim shot, and brush), resulting in a dataset with 1260 individual samples. The classification results for this dataset based on standard spectral and temporal features (e.g., centroid, flux, MFCCs, etc.) and classifiers (e.g., k-Nearest Neighbors (k-NN) and Support Vector Machine (SVM)) were reported, and an overall accuracy of around 90\% was achieved. Since the dataset is relatively small, howver, it is difficult to generalize the results to different scenarios.  
 
 % 2013 paper
-Following the same direction, Prockup et al. further explored the discrepancy between more expressive gestures with a larger dataset that covers multiple drums of a standard drum set \cite{Prockup2013}. A dataset was created with combinations of different drums, stick heights, stroke intensities, strike positions and articulations. Using a machine learning based approach similar to \cite{Tindale2004}, various features were extracted from the samples, and a Support Vector Machine (SVM) was trained to classify the sounds. An accuracy of over 95\% was reported on multiple drums with a 4-class SVM and features such as MFCCs, Spectral features, and the proposed evolution features. 
+Following the same direction, Prockup et al.~further explored the discrepancy between more expressive gestures with a larger dataset that covers multiple drums of a standard drum set \cite{Prockup2013}. A dataset was created with combinations of different drums, stick heights, stroke intensities, strike positions and articulations. Using a machine learning based approach similar to \cite{Tindale2004}, various features were extracted from the samples, and a SVM was trained to classify the sounds. An accuracy of over 95\% was reported on multiple drums with a 4-class SVM and features such as MFCCs, Spectral features, and the proposed evolution features. 
 
 Both of the above mentioned studies showed promising results in classifying the isolated sounds, however, they were not evaluated with real-world drum recordings, and the applicability of these approaches for transcribing real-world drum recordings still needs to be tested. Additionally, the potential impact of polyphonic background music could be another concern of these approaches. 
  
@@ -156,7 +155,7 @@ In general, the above mentioned studies mainly focused on evaluating the discrim
 \begin{figure}
 \centering
 \includegraphics[width = 7 cm]{./figures/block_diagram.png}
-\caption{Block diagram of the proposed system}
+\caption{Block diagram of the proposed system {\color{red}(onset detection is bypassed in the current experiments)}}
 \label{fig:block}
 \end{figure}
 
@@ -172,9 +171,9 @@ Since the focus of this paper is on playing technique detection, the onset detec
 \subsubsection{Activation Functions (AF)}
 \label{sssec:activ}
 
-To detect drum playing technique in polyphonic music, a transcription method that is robust against the influence of background music is required. In this paper, we applied the drum transcription scheme as described in \cite{Wu2015a} for its adaptability to polyphonic mixtures of music. The flowchart of the process is shown in Fig.~\ref{fig:nmf}. This method decomposes the magnitude spectrogram of the complex mixtures with a fixed pre-trained drum dictionary and a randomly initialized entries for harmonic contents. Once the signal is decomposed, the activation function $h_{i}(n)$ of each individual drum can be extracted, in which $n$ is the block index and $i = \{HH, SD, BD\}$ indicates the type of drum
+To detect drum playing technique in polyphonic music, a transcription method that is robust against the influence of background music is required. In this paper, we applied the drum transcription scheme as described in \cite{Wu2015a} for its adaptability to polyphonic mixtures of music. The flowchart of the process is shown in Fig.~\ref{fig:nmf}. This method decomposes the magnitude spectrogram of the complex mixtures with a fixed pre-trained drum dictionary and a randomly initialized dictionary for harmonic contents. Once the signal is decomposed, the activation function $h_{i}(n)$ of each individual drum can be extracted, in which $n$ is the block index and $i = \{HH, SD, BD\}$ indicates the type of drum
 
-All of the audio samples are mono with a sampling rate of \unit[44.1]{kHz}. The Short Time Fourier Transform (STFT) of is computed with a block size of 512 and a hop size of 128, and a Hann window is applied to each block. The harmonic rank $r_{h} $ for the partially-fixed NMF is  $50$, and the dictionary is trained from the ENST drum dataset \cite{Gillet2006}. The resulting $h_{i}(n)$ is scaled to a range between 0 and 1 and smoothed using a median filter with an order of $p = 5$ samples. Since a template in the dictionary is intended to capture the activity of the same type of drum, the drum sounds with slightly different timbres will still result in similar $h_{i}(n)$. Therefore, the extracted activation function $h_{i}(n)$ can be considered as a timbre invariant transformation and is desirable for detecting the underlying techniques. Segments of these activation functions can be used directly as features or as the intermediate representation for the extraction of other features. 
+All of the audio samples are mono with a sampling rate of \unit[44.1]{kHz}. The Short Time Fourier Transform (STFT) of is computed with a block size of 512 and a hop size of 128, and a Hann window is applied to each block. The harmonic rank $r_{h} $ for the partially-fixed NMF is  $50$, {\color{red}and the drum dictionary is trained from the ENST drum dataset \cite{Gillet2006} with a total number of three templates (one template per drum).} The resulting $h_{i}(n)$ is scaled to a range between 0 and 1 and smoothed using a median filter with an order of $p = 5$ samples. Since a template in the dictionary is intended to capture the activity of the same type of drum, the drum sounds with slightly different timbres will still result in similar $h_{i}(n)$. Therefore, the extracted activation function $h_{i}(n)$ can be considered as a timbre invariant transformation and is desirable for detecting the underlying techniques. Segments of these activation functions can be used directly as features or as the intermediate representation for the extraction of other features. 
 
 \begin{figure}
 \centering
@@ -185,13 +184,13 @@ All of the audio samples are mono with a sampling rate of \unit[44.1]{kHz}. The 
 
 \subsubsection{Activation Derived Features (ADF)}
 \label{sssec:activ features}
-Once the activation functions $h_{i}(n)$ have been extracted from the audio data, various features can be derived for further classification. The steps can be summarized as follows: first, for every given onset at index $n_{o}$, a \unit[400]{ms} segment centered around $h_{i}(n_{o})$ will be selected. Next, the maximum value of the segment will be positioned at the center. Then, we extract the distribution features, the Inter-Onset Interval (IOI) features, the peak features, and the DTW features from this segment as described below. 
+Once the activation functions $h_{i}(n)$ have been extracted from the audio data, various features can be derived for further classification. The steps can be summarized as follows: first, for every given onset at index $n_{o}$, {\color{red}a \unit[400]{ms} segment centered around $h_{i}(n_{o})$ will be selected. Next, the maximum value within the segment will be positioned at the center}. Then, we extract the distribution features, the Inter-Onset Interval (IOI) features, the peak features, and the Dynamic Time Warping (DTW) features from this segment as described below. 
 
 \begin{enumerate}
 	\item \textbf{Distribution features, $d = 5$}: Spread, Skew, Crest, Centroid, and Flatness. These features are similar to the commonly used spectral features, which provide the general description of the pattern. 
 	\item \textbf{IOI features, $d = 2$}: IOI mean, and IOI standard deviation. These features are simple statistics of the IOI histogram.
 	\item \textbf{Peak features, $d = 8$}: side peak to main peak ratio $\alpha_{i}$, and side peak to main peak signed block index difference $\Delta b_{i}$ $i = \{1, 2, 3, 4\}$. These features are designed to describe the details of the patterns. To compute the peak features, first we find the local maxima and sort them in descending order, then we calculate the ratio and index difference between the side peak and the main (largest) peak as features.
-	\item \textbf{DTW features, $d = 4$}: the cumulative cost of a Dynamic Time Warping (DTW) distance between the current and the 4 template activation functions. To compute the DTW features, a median activation template of each playing technique is trained from the training data, and the cumulative cost of every DTW template for the given segment can be calculated. The examples of the extracted DTW templates for each technique are shown in Fig.~\ref{fig:atvall}.\\
+	\item \textbf{DTW features, $d = 4$}: the cumulative cost of a DTW distance between the current and the 4 template activation functions. To compute the DTW features, a median activation template of each playing technique is trained from the training data, and the cumulative cost of every DTW template for the given segment can be calculated. The examples of the extracted DTW templates for each technique are shown in Fig.~\ref{fig:atvall}.\\
 \end{enumerate}
 
 Finally, the resulting feature vector has a dimension $d = 19$.
@@ -377,9 +376,9 @@ In this paper, a system working towards drum playing technique detection in the 
 
 The possible directions for the future work are: first, investigate different source separation algorithms as a pre-processing step in order to get a cleaner representation. The results of Experiments 2 and 3 show that a cleaner input representation improves both the micro and macro-averaged accuracy by more than 20\%. Therefore, a good source separation method to isolate the snare drum sound could be beneficial. Common techniques such as HPSS and and other approaches for source separation should be investigated.
 
-Second, since the results in Experiment 3 implies that the system is susceptible to the disturbance from background music, a classification model trained on the slightly noisier data could possibly increase the robustness against the presence of unwanted sounds. The influence of adding different levels of random noise while training could be evaluated.
+Second, since the results in Experiment 3 implies that the system is susceptible to the disturbance from background music, a classification model trained on the slightly noisier data could {\color{red} expose the system to more variations of the activation funcitons and} possibly increase the robustness against the presence of unwanted sounds. The influence of adding different levels of random noise while training could be evaluated. 
 
-Third, the current dataset offers only a limited number of samples for the evaluation of playing technique detection in polyphonic mixtures of music. Due to the sparse nature of these playing techniques, their occurrence in existing datasets is rare and difficult to collect and annotate. However, to arrive at a statistically more meaningful conclusion, additional  data would be necessary.
+Third, the current dataset offers only a limited number of samples for the evaluation of playing technique detection in polyphonic mixtures of music. Due to the sparse nature of these playing techniques, their occurrence in existing datasets is rare and difficult to collect and annotate. However, to arrive at a statistically more meaningful conclusion, additional data would be necessary. 
 
 Last but not least, different state-of-the-art classification methods, such as deep neural networks, could also be applied to this task in searching for a better solution.
 
