@@ -296,7 +296,7 @@ In Experiment 1, a 10-fold cross validation on the training data using different
 
 \subsubsection{Experiment 2: Annotation-Informed Testing}\label{sssec:exp2}
 In Experiment 2, the same sets of features are extracted from the testing data for evaluation. Since the testing data is a completely different dataset with the real-world drum recordings, a verification of the feasibility of using the synthetic training data as well as the proposed feature representations is necessary. For this purpose, we simulate the best case scenario by using the snare channel as the input with an annotation-informed process for isolating the playing techniques. The resulting 182 segments are then classified using the trained SVM models from Experiment 1. With ADF, the best performance of 76.0 and 81.3\% was achieved for macro and micro-averaged accuracy, respectively. This experiment serves as a sanity check to the presented scheme. %and the results shown in Fig.~\ref{fig:exp1n2} (right) represent a glass ceiling for our experiment 3. 
-{\color{red}Note that strikes are excluded in this experiment, therefore, the micro-averaged accuracy mainly reflects the accuracy of the majority class, which is Roll.} 
+Note that strikes are excluded in this experiment, therefore, the micro-averaged accuracy mainly reflects the accuracy of the majority class, which is Roll.
 % we use the ground truth from the annotations to perfectly segment the playing technique events from the snare channel
 % this is a proof of concept to see whether the pre-trained model actually works
 % only consider a 3-class problem
