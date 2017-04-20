@@ -14,6 +14,7 @@
 \usepackage{ismir,amsmath,cite,url}
 \usepackage{graphicx}
 \usepackage{color}
+\usepackage{microtype}
 
 
 % Title.
@@ -74,7 +75,7 @@
 \maketitle
 %
 \begin{abstract}
-Automatic music performance assessment is an on-going field that involves the characterization of the audio recordings and the modeling of human judgements. To build a computational model that provides reliable feedback, the system must take into account various aspects of a performance, such as technical correctness and aesthetic standards. While progress has been made in many of the existing systems, the search for the most effective feature representation is still open-ended. In this study, we explore the possibility of using learned features from sparse coding. Specifically, we investigate the effectiveness of different combinations of three sets of features, namely the baseline, designed, and learned feature set. Additionally, we also compare the effectiveness of sparse coding based on different input representations. The proposed feature sets are evaluated in regression tasks, and the results implies the viability of feature learning in the context of automatic assessment of snare drum performances, leading towards the realization of software music tutoring systems.   
+The automatic assessment of (student) music performance involves the characterization of the audio recordings and the modeling of human judgments. To build a computational model that provides a reliable assessment, the system must take into account various aspects of a performance including technical correctness and aesthetic standards. While some progress has been made in recent years, the search for the most effective feature representation remains open-ended. In this study, we explore the possibility of using learned features from sparse coding. Specifically, we investigate the effectiveness of different combinations of three sets of features, namely a baseline set, a set of designed features, and a learned feature set. In addition, we compare the effectiveness of sparse coding based on different input representations. The proposed feature sets are evaluated in regression tasks on a large dataset of annotated recordings of students playing snare exercises. The results imply the general viability of feature learning in the context of automatic assessment of snare drum performances.   
 \end{abstract}
 %
 \section{Introduction}
@@ -111,6 +112,6 @@ WRITE SOMETHING HERE \cite{Author:00}
 
 
 % For bibtex users:
-\bibliography{cw_ismir2017_fba.bib}
+\bibliography{cw_ismir2017_fba}
 
 \end{document}
