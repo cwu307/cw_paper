@@ -1,0 +1,159 @@
+% -----------------------------------------------
+% Template for ISMIR Papers
+% 2017 version, based on previous ISMIR templates
+
+% Requirements :
+% * 6+n page length maximum
+% * 4MB maximum file size
+% * Copyright note must appear in the bottom left corner of first page
+% * Clearer statement about citing own work in anonymized submission
+% (see conference website for additional details)
+% -----------------------------------------------
+
+\documentclass{article}
+\usepackage{ismir,amsmath,cite,url}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{microtype}
+\usepackage{units}
+
+% Title.
+% ------
+\title{Automatic drum transcription using the student-teacher learning paradigm with unlabeled music data}
+
+% Note: Please do NOT use \thanks or a \footnote in any of the author markup
+
+% Single address
+% To use with only one author or several with the same address
+% ---------------
+%\oneauthor
+% {Names should be omitted for double-blind reviewing}
+% {Affiliations should be omitted for double-blind reviewing}
+
+%\oneauthor
+%{Chih-Wei Wu, Alexander Lerch}
+%{Georgia Institute of Technology, Center for Music Technology \\ \tt \{cwu307, alexander.lerch\}@gatech.edu}
+ 
+% Two addresses
+% --------------
+%\twoauthors
+%  {First author} {School \\ Department}
+%  {Second author} {Company \\ Address}
+
+%% To make customize author list in Creative Common license, uncomment and customize the next line
+%  \def\authorname{First Author, Second Author}
+
+
+% Three addresses
+% --------------
+\threeauthors
+  {First Author} {Affiliation1 \\ {\tt author1@ismir.edu}}
+  {Second Author} {\bf Retain these fake authors in\\\bf submission to preserve the formatting}
+  {Third Author} {Affiliation3 \\ {\tt author3@ismir.edu}}
+
+%% To make customize author list in Creative Common license, uncomment and customize the next line
+%  \def\authorname{First Author, Second Author, Third Author}
+
+% Four or more addresses
+% OR alternative format for large number of co-authors
+% ------------
+%\multauthor
+%{First author$^1$ \hspace{1cm} Second author$^1$ \hspace{1cm} Third author$^2$} { \bfseries{Fourth author$^3$ \hspace{1cm} Fifth author$^2$ \hspace{1cm} Sixth author$^1$}\\
+%  $^1$ Department of Computer Science, University , Country\\
+%$^2$ International Laboratories, City, Country\\
+%$^3$  Company, Address\\
+%{\tt\small CorrespondenceAuthor@ismir.edu, PossibleOtherAuthor@ismir.edu}
+%}
+%\def\authorname{First author, Second author, Third author, Fourth author, Fifth author, Sixth author}
+
+
+\sloppy % please retain sloppy command for improved formatting
+
+\begin{document}
+
+%
+\maketitle
+%
+\begin{abstract}
+Automatic drum transcription is a sub-task of automatic music transcription that converts drum-related audio events into musical notations. While noticeable progress has been made in the past by combining the pattern recognition methods with audio signal processing techniques, the major limitation of many state-of-the-art systems still originates from the difficulty of obtaining a meaningful amount of labeled data to support the data-driven algorithms. In this work, we address the challenge of insufficiently labeled data by exploring the possibility of utilizing unlabeled music data from online resources. Specifically, a student neural network is trained using the labels generated from teacher systems. The performance of the model is evaluated on a publicly available labeled dataset. The results show the general viability of using unlabeled music data to improve the performance of drum transcription systems. 
+\end{abstract}
+%
+\section{Introduction}
+Data availability, listed by Schedl et al.~\cite{Schedl2014} as one of the open challenges in the field of Music Information Retrieval (MIR), is an important problem that concerns many data-driven MIR systems. To build intelligent music systems, music data and its corresponding labels (annotations) play essential roles in representing critical examples for machines to learn from. Generally speaking, the more examples we collect in the dataset, the more likely we can develop a generic system accordingly. However, with constraints such as the complexity of music, the difficulty of generating labels, and the restrictions of intellectual property laws, building and sharing music datasets becomes a non-trivial task for the MIR community. As a result, many of the commonly used datasets for various MIR tasks are limited in different aspects. A typical example of such problem can be found in Automatic Music Transcription (AMT), which comprises many sub-tasks such as multi-pitch detection, onset detection, instrument recognition, and rhythm extraction . Benetos et al.~\cite{Benetos2013} pointed out that a large subset of AMT approaches only performed experiments on piano data, for which the audio aligned ground truth was easily obtained. This emphasis on piano may lead to models that are strongly biased towards piano-like instruments and cannot be generalized to other melodic instruments. 
+
+Automatic Drum Transcription (ADT), another sub-task in AMT that involves the extraction of drum events from audio signals, is also confined to the scope of the existing labeled datasets. As listed in \cite{Wu2016}, most of the ADT related datasets focus on collecting recordings of single drum hits \cite{Tindale2004, Prockup2013} and simple drum sequences without any accompaniment \cite{Dittmar2014}. These simplications, while providing the essential ingredients for building basic ADT systems, might fail to represent the real-world use cases, in which the drums sounds are embedded in a continuous stream of polyphonic mixtures. The ENST drum dataset \cite{Gillet2006}) partly compensates these drawbacks by offering more realistic and complex drum sequences with accompaniments, however, its size and diversity of music styles are still limited. Previous studies attempt to alleviate these issues through data augmentation \cite{Wu2016, Vogl2017}, but the inherent limitations of the datasets still pose problems for further advancing the performance of ADT systems. 
+% name a few possible solutions: unsupervised feature learning (self-taught), data augmentation (Richard and mine paper), or other general semi-supervised learning approaches.
+
+To address this challenge without introducing the additional cost of manual annotations, one potential solution is to explore the usefulness of the vast collection of unlabeled music data; this can be formulated as a \textit{Semi-supervised Learning} \cite{Chapelle2006} problem as defined in the field of machine learning. The general goal of this type of problem is to find the optimal solution given both labeled and unlabeled examples, and it has been applied successfully to different applications such as music genre classification \cite{Raina2007a}, music genre tagging \cite{Jao2015}, and music emotion recognition \cite{Wu2013a}.
+
+Inspired by the above mentioned approaches, this paper aims to address the issue of data availability in ADT systems by harnessing the information from the unlabeled music data. Specifically, this paper focuses on improving the ADT performances in polyphonic mixtures. The contributions of this paper include: 1) the insights into the viability of using unlabeled music data in ADT tasks 2) a general scheme for integrating unlabeled data to ADT systems 3) the demonstration of the potential improvements of ADT systems using the proposed method. This rest of the paper is structured as follows: Sect.~\ref{sec:related works} provides an overview of ADT research and student-teacher learning paradigm. In Sect.~\ref{sec:method} we introduce our approach; Sect.~\ref{sec:experiments} presents experiment results and discussions. Sect.~\ref{sec:conclusion} provides a summary, conclusion, and directions of future work.
+
+\section{Related Work}\label{sec:related works}
+In the broadest definition of ADT, it can be described as the process of converting drum related audio events, such as drum onset times and playing techniques, into musical representations such as scores or sheet music. To simplify this task while still capturing the essence, most of the existing systems mainly focus on detecting the onset times of HiHat (HH), Snare Drum (SD) and Bass Drum (BD). In many of the early systems, as summarized by FitzGerald and Paulus \cite{FitzGerald2006}, the focus was on transcribing signals containing only drum sounds. In most practical applications, however, an ADT system is expected to work on mixtures of percussive and harmonic sound sources. 
+
+Gillet and Richard propose to categorize automatic drum transcription systems into three categories \cite{Gillet2008}: (i)~\textit{segment and classify} \cite{Gillet2008, Gajhede2016}, which follows the basic pattern recognition approach by segmenting the signals into individual instances, and subsequently classifying each instance with pre-trained classifiers, (ii)~\textit{separate and detect} \cite{Dittmar2014, Wu2015a, Roebel2015}, in which the signal is converted into separated activation functions that represent the activities of different drums, followed by a simple peak picking process to identify their corresponding onset times, and (iii)~\textit{match and adapt} \cite{Zils2002, Yoshii2007b}, which identifies the drum events by template matching using a set of pre-trained drum templates and customized distance measures; the templates are iteratively adapted throughout the process. In addition to these three categories, language model based approach using Hidden Markov Models (HMM) \cite{Paulus2009a} and pattern matching approach using bar information \cite{Thompson2014} have also been applied to ADT tasks in previous work. 
+
+Following the recent success in deep learning \cite{Hinton2006}, several state-of-the-art ADT performances have been reported using Deep Neural Networks (DNNs). Specifically, Recurrent Neural Networks (RNNs), a variant of DNNs that models the temporal dependency of the input using recurrently connected nodes, have been adopted \cite{Vogl2016, Southall2016, Vogl2017}. Although this method is capable of learning complicated representations of drums from the audio signals, it is extremely demanding in terms of the number of training data and computing power. To reach their full potentials, DNNs require large amounts of training data; the size of currently available datasets appears to be insufficient.
+
+% talk about teacher-student learning , knowledge distillation, IBM paper, learning small-size, 
+To support data-hungry approaches such as DNNs, the idea of utilizing the unlabeled data becomes very appealing. Recently, the concept of student-teacher learning paradigm has emerged as an interesting way of incorporating unlabeled data with DNNs. Originally proposed as a model compression method, the basic idea of student-teacher learning is to transfer the knowledge of a large teacher model into a small and concise student model with minimum performance loss; this process, referred by Hinton et al.~ as "knowledge distillation" \cite{Hinton2015}, is achieved by training the student model with the soft targets generated from the teacher model. In other words, instead of learning from the hard targets (i.e., the ground truth), the student model indirectly acquires the knowledge by mimicing the output from the teacher model. As demonstrated by Li et al.~\cite{Li2014}, this process can be done by using labeled as well as unlabeled data. Successful applications of this paradigm can be found in tasks such as speech recognition \cite{Watanabe2017} and multilingual models \cite{Cui2017}, in which superior performances from the student model has also been reported.
+
+\section{Method}\label{sec:method}
+\subsection{System Overview}
+
+
+
+
+\subsection{Partially-Fixed NMF}
+%To detect drum playing technique in polyphonic music, a transcription method that is robust against the influence of background music is required. In this paper, we applied the drum transcription scheme as described in \cite{Wu2015a} for its adaptability to polyphonic mixtures of music. The flowchart of the process is shown in Fig.~\ref{fig:nmf}. This method decomposes the magnitude spectrogram of the complex mixtures with a fixed pre-trained drum dictionary and a randomly initialized dictionary for harmonic contents. Once the signal is decomposed, the activation function $h_{i}(n)$ of each individual drum can be extracted, in which $n$ is the block index and $i = \{HH, SD, BD\}$ indicates the type of drum
+
+\subsection{Neural Network Architecture}
+
+
+
+
+
+\subsection{Implementation}
+All of the audio samples are mono with a sampling rate of \unit[44.1]{kHz}. The Short Time Fourier Transform (STFT) of is computed with a block size of 512 and a hop size of 128, and a Hann window is applied to each block. The harmonic rank $r_{h} $ for the partially-fixed NMF is  $50$, and the drum dictionary is trained from the ENST drum dataset \cite{Gillet2006} with a total number of three templates (one template per drum). The resulting $h_{i}(n)$ is scaled to a range between 0 and 1 and smoothed using a median filter with an order of $p = 5$ samples. Since a template in the dictionary is intended to capture the activity of the same type of drum, the drum sounds with slightly different timbres will still result in similar $h_{i}(n)$. Therefore, the extracted activation function $h_{i}(n)$ can be considered as a timbre invariant transformation and is desirable for detecting the underlying techniques. Segments of these activation functions can be used directly as features or as the intermediate representation for the extraction of other features. 
+
+% template extraction
+Since ENST is the main testing dataset, the single hits in ENST dataset is not used for template extraction in order to ensure the generality of the proposed approach.
+
+\section{Experiments}\label{sec:experiments}
+
+\subsection{Dataset Description}
+% unlabeled data
+% criteria 
+
+
+
+%The experiments have been conducted on two different datasets. The first one is the \textit{minus one} subset from the ENST drum dataset \cite{gillet_enst-drums:_2006}. This dataset consists of recordings from three different drummers performing on their own drum kits. The set for each drummer contains individual hits, short phrases of drum beats, drum solos, and short excerpts played with accompaniments. The minus one subset has 64 tracks of polyphonic music, and the sampling rate of every track is \unit[44.1]{kHz}. Each track in this subset has a length of approximately \unit[70]{s} with varying style. More specifically, the subset contains various drum playing techniques such as ghost notes, flam, and drag; these techniques are considered difficult to identify with existing drum transcription systems\cite{gillet_transcription_2008}. The accompaniments are mixed with their corresponding drum tracks using a scaling factor of 1/3 and 2/3 in order to reproduce the evaluation settings as used in \cite{Paulus2009a}.
+
+
+
+\subsection{Experiment Setup}
+
+\subsection{Metrics}
+%The evaluation metrics follow the standard calculation of the precision (P), recall (R), and F-measure (F). To be consistent with \cite{gillet_transcription_2008}, an onset is considered to be a match with the ground truth if the time deviation in between is less or equal to \unit[50]{ms}. It should be noted that some authors use more restrictive settings, compare e.g.\ the \unit[30]{ms} as used in \cite{Paulus2009a}. 
+
+
+\subsection{Experiment Results}
+% the system has no prior knowledge about the testing data
+
+
+
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+% future directions: more teachers, different input representations, different student architectures, looking into other methods to use unlabeled data and compare their effectiveness
+
+
+
+
+\section{References}
+
+% For bibtex users:
+\bibliography{cw_ismir2017_drum}
+
+\end{document}
