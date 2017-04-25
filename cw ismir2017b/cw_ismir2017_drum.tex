@@ -16,6 +16,7 @@
 \usepackage{color}
 \usepackage{microtype}
 \usepackage{units}
+\usepackage{graphicx}
 
 % Title.
 % ------
@@ -100,51 +101,130 @@ To support data-hungry approaches such as DNNs, the idea of utilizing the unlabe
 
 \section{Method}\label{sec:method}
 \subsection{System Overview}
+The processing steps of the proposed method, as shown in Fig.~\ref{fig:flowchart}, consist of two phases, namely the training and testing phase. In the training phase, all of the unlabeled music data are passed through the teacher models in order to generate the soft targets. Specifically, these teacher models are ADT systems that will convert the audio signals into drum related activation functions (i.e., soft targets). The same unlabeled music data and the generated soft targets will then be used to train a student model, which is a regression model that minimizes the differences between its output and the soft targets. In the testing phase, the trained student model is used to predict the drum activations of the testing music data. Finally, a simple peak picking algorithm with an adaptive threshold will be used to identify the drum onset times from each activation function, producing the final transcription output. More details about the teacher and student models are elaborated in the following sections.  
 
-
-
+\begin{figure}
+\centering
+\includegraphics[width = 8 cm]{./figs/flowchart.pdf}
+\caption{The flowchart of the proposed method}
+\label{fig:flowchart}
+\end{figure}
 
 \subsection{Partially-Fixed NMF}
-%To detect drum playing technique in polyphonic music, a transcription method that is robust against the influence of background music is required. In this paper, we applied the drum transcription scheme as described in \cite{Wu2015a} for its adaptability to polyphonic mixtures of music. The flowchart of the process is shown in Fig.~\ref{fig:nmf}. This method decomposes the magnitude spectrogram of the complex mixtures with a fixed pre-trained drum dictionary and a randomly initialized dictionary for harmonic contents. Once the signal is decomposed, the activation function $h_{i}(n)$ of each individual drum can be extracted, in which $n$ is the block index and $i = \{HH, SD, BD\}$ indicates the type of drum
+The teacher model used in this paper is the Partially-Fixed Non-negative Matrix Factorization (PFNMF) \cite{Wu2015a}. This NMF based ADT system is chosen for its simplicity as well as the adaptability in polyphonic mixtures; it extends the basic NMF model by assuming the co-existence of both percussive and harmonic components in the audio signals, which can be expressed as $X \approx W_{D}H_{D} + W_{H}H_{H}$, for $X$ is a $m \times n$ magnitude spectrogram matrix with $m$ frequency bins and $n$ blocks, $W_{D}$ and $W_{H}$ are drum and harmonic dictionary matrices with dimensionality of $m \times r_{D}$ and $m \times r_{H}$, and $H_{D}$ and $H_{H}$ are their corresponding activation matrices with dimensionality of $r_{D} \times n$ and $r_{H} \times n$, respectively. $r_{D}$ usually corresponds to the number of drums to detect (e.g., $r_{D} = 3$ when consider only HH, BD, and SD), and $r_{H}$ is an user-defined parameter that varies according to the complexity of the target signal. 
 
-\subsection{Neural Network Architecture}
+The basic flowchart of PFNMF is shown in Fig.~\ref{fig:pfnmf}. It firstly decomposes the magnitude spectrogram of the polyphonic mixtures with a fixed pre-trained drum dictionary $W_{D}$ and a randomly initialized harmonic dictionary $W_{H}$. Once the signal is decomposed, the NMF based activation function $H_{D}(r, :)$ of each individual drum can be extracted, in which $r = \{1, 2, 3\}$ is the instrument index that corresponds to HH, BD, and SD, respectively. These activation functions can be interpreted as the active level of each instrument over time, and a sharp peak indicates the presence of a single drum hit.
 
+The conversion of these resulting activation functions into the soft targets takes another step of standard min-max scaling across the training data for each instrument; this process scales the soft targets to a numerical range between 0 and 1 and ensures the compatibility between the soft targets and the student model output (See Sect.~\ref{subsec:nn}). Finally, to introduce diversity into the soft targets, two PFNMF systems are created by initializing the algorithm with two different sets of drum dictionaries, forming an ensemble-like scenario that could potentially lead to better student performances. 
 
+\begin{figure}
+\centering
+\includegraphics[width = 8 cm]{./figs/nmf.png}
+\caption{The flowchart of PFNMF \cite{Wu2015a}}
+\label{fig:pfnmf}
+\end{figure}
 
+\subsection{Neural Network Architecture}\label{subsec:nn}
+In this paper, the student model is a fully connected, feed-forward DNN with three hidden layers. A neural network is a graphic model that comprises multiple layers of interconnected non-linear units (i.e., neurons). The basic formulation of a neuron can be expressed in Eq.~\ref{eq:nn_activ}, in which $a$ is the activation of the neuron, $W$ is the weight matrix, $b$ is the bias matrix, $l$ is the layer index, $j$ is the index of input neuron, and $k$ is the index of output neuron; $g( )$ is usually a non-linear function, such as \textit{sigmoid}, \textit{tanh} or \textit{relu}, to name just a few. When multiple layers of neurons are stacked together, the model creates a very complex and non-linear transformation from the input to the output, which allows the model to approximate any arbitrary function with great flexibility. 
 
+\begin{equation}\label{eq:nn_activ}
+a_{k}^{l} = g( \sum_{j=1}^{M} W_{j} a_{j}^{l-1} + b_{j}^{l-1})
+\end{equation}
+
+The architecture of the DNN in this paper is described as follows: the input layer contains $1025$ neurons that correspond to the size of the input representation. The first hidden layer comprises of a $1025$ neurons of \textit{tanh} activations with Batch Normalization. The second and third hidden layers are \textit{relu} activations with $512$ and $32$ neurons, respectively. Finally, the output layer consists of 3 neurons with \textit{sigmoid} activations that represent the activities of three different drums (i.e., HH, SD, and BD). To solve the optimization problem for learning the weights $W$ in a DNN, a stochastic gradient descent based optimization method, $Adam$, is selected as the optimizer. Since the goal is to generate activation functions for different instruments, the student neural network is configured as a regressor that minimizes the mean squared error between its output and the soft targets. A mini-batch consists of $640$ blocks is used for training, and the early stopping is applied when the minimum delta loss = $1e-6$ is not achieved for three consecutive epochs.  
 
 \subsection{Implementation}
-All of the audio samples are mono with a sampling rate of \unit[44.1]{kHz}. The Short Time Fourier Transform (STFT) of is computed with a block size of 512 and a hop size of 128, and a Hann window is applied to each block. The harmonic rank $r_{h} $ for the partially-fixed NMF is  $50$, and the drum dictionary is trained from the ENST drum dataset \cite{Gillet2006} with a total number of three templates (one template per drum). The resulting $h_{i}(n)$ is scaled to a range between 0 and 1 and smoothed using a median filter with an order of $p = 5$ samples. Since a template in the dictionary is intended to capture the activity of the same type of drum, the drum sounds with slightly different timbres will still result in similar $h_{i}(n)$. Therefore, the extracted activation function $h_{i}(n)$ can be considered as a timbre invariant transformation and is desirable for detecting the underlying techniques. Segments of these activation functions can be used directly as features or as the intermediate representation for the extraction of other features. 
+The input representation to both the teacher and student models is the magnitude spectrogram of the Short Time Fourier Transform (STFT) computed using a block size of 2048 and hop size of 512 samples with a Hann window applied to each block. Prior to the calculation of STFT, all of the audio signals are down-mixed to mono and resampled to a sampling rate of \unit[44.1]{kHz}. The resulting magnitude spectrogram is a $m \times n$ matrix, in which $m = 1025$ and $n = $ the number of blocks. 
 
-% template extraction
-Since ENST is the main testing dataset, the single hits in ENST dataset is not used for template extraction in order to ensure the generality of the proposed approach.
+For PFNMF, the open source Matlab implementation\footnote{https://github.com/cwu307/NmfDrumToolbox} is used in our experiments. Since both the unlabeled music data and the testing data are polyphonic mixtures, the harmonic rank $r_{H} $ for the PFNMF is set to $50$ as suggested in \cite{Wu2015a}. To fasten the process, no template adaptation methods are activated. The extraction of the pre-defined drum templates takes places on two publicly available drum datasets, namely the SMT-DRUM dataset \cite{Dittmar2014} and 200 drum machines \footnote{http://www.hexawe.net/mess/200.Drum.Machines/}. In our preliminary experiments, these two sets of templates exhibit capabilities of capturing different types of drums sounds, which bring diversity into this learning paradigm. The construction of drum dictionary involves the concatenation of all the spectra and the extraction of the median spectrum for each individual instrument. It should be noted that since the ENST drum dataset is the main dataset for evaluation, the single drum hits from ENST is not used for template extraction in order to ensure the generality of the proposed approach.
+
+% deep learning toolboxes
+% optimizer parameters = default
+The implementation of the DNN is done in Python using Keras\footnote{https://keras.io} with Tensorflow\footnote{https://www.tensorflow.org} backend. The parameter of the optimizers are set to default. 
+
+% peak picking 
+To get the final transcription results for evaluation, a standard peak picking method with a signal adaptive median threshold is used \cite{Lerch2012}. The median threshold $t(n)$ can be computed using Eq.~\ref{eq:medianThres}, in which $\lambda$ is the offset coefficient relative to the maximum value, $p$ is the order (size) of the median filter, and the $n$ is the block index. All systems are using the same peak picking parameters of $p = 8$ and $\lambda = 0.12$ as described in \cite{Wu2015a}. No grid search is performed.  
+
+\begin{equation}\label{eq:medianThres}
+t(n) = \lambda * max(x) + median(x(n), p)
+\end{equation} 
 
 \section{Experiments}\label{sec:experiments}
 
 \subsection{Dataset Description}
 % unlabeled data
 % criteria 
+With the goal of finding a learning process for ADT systems to benefit from unlabeled data, building a good collection is a crucial step. Generally speaking, the unlabeled dataset should have following attributes: (i)~the collection should contain drums whenever possible (ii)~the collection should be diverse in terms of music genres or playing styles (iii)~the collection should contain no duplicates (iv)~the collection should be as consistent as possible in terms of audio quality. To build a collection that meets the above mentioned criteria, we compile a list from the Billboard Charts\footnote{http://www.billboard.com/charts Last accessed: 2017/04/25}. In particular, we start with an uniform distribution across a set of genres featuring the strong drum beats or rhythmic patterns, namely R\&B$\slash$HipHop, Pop, Rock, and Latin. In this preliminary study, 200 songs from each genre has been selected. All the songs are cross-checked for duplications, and a final list of 800 songs has been compiled and retrieved from Youtube\footnote{https://www.youtube.com Last accessed: 2017/04/25} using open source Python library pafy\footnote{https://pypi.python.org/pypi/pafy Last accessed: 2017/04/25}. All the songs are converted into mp3 files with a sampling rate of \unit[44.1]{kHz} using ffmepg\footnote{https://ffmpeg.org/download.html Last accessed: 2017/04/25}. The source code for constructing the unlabeled music dataset can be found in the Github repository\footnote{http:dummy.link}. To speed up the process while retaining the diversity, only 30 seconds from each song is used for training. Since the same unlabeled data is trained twice with two different sets of soft targets generated from two different teachers, the total duration of the training materials is \unit[800]{mins} (approximately \unit[13.5]{hours}), which is significantly larger than any of the existing drum labeled dataset. 
 
-
-
-%The experiments have been conducted on two different datasets. The first one is the \textit{minus one} subset from the ENST drum dataset \cite{gillet_enst-drums:_2006}. This dataset consists of recordings from three different drummers performing on their own drum kits. The set for each drummer contains individual hits, short phrases of drum beats, drum solos, and short excerpts played with accompaniments. The minus one subset has 64 tracks of polyphonic music, and the sampling rate of every track is \unit[44.1]{kHz}. Each track in this subset has a length of approximately \unit[70]{s} with varying style. More specifically, the subset contains various drum playing techniques such as ghost notes, flam, and drag; these techniques are considered difficult to identify with existing drum transcription systems\cite{gillet_transcription_2008}. The accompaniments are mixed with their corresponding drum tracks using a scaling factor of 1/3 and 2/3 in order to reproduce the evaluation settings as used in \cite{Paulus2009a}.
-
-
+For evaluation, the most popular lableled drum dataset, ENST drum\cite{Gillet2006}, is used as the testing set. This dataset consists of recordings from three different drummers performing on their own drum kits. The recordings from each drummer contain individual hits, short phrases of drum beats, drum solos, and short excerpts played with accompaniments. Since this paper focuses on ADT in polyphonic mixtures of music, only the minus one subset is used for evaluation. This subset has 64 tracks of polyphonic music with a sampling rate of \unit[44.1]{kHz}. Each track in this subset has a length of approximately \unit[70]{s} with a variety of playing styles. More specifically, the subset contains various drum playing techniques such as ghost notes, flam, and drag, which is closer the real-world setting. The accompaniments are mixed with their corresponding drum tracks using a scaling factor of 1/3 and 2/3 in order to be consistent with prior studies \cite{Paulus2009a, Wu2015a, Southall2016}.
 
 \subsection{Experiment Setup}
+In our experiments, the performances of the following systems are evaluated and compared: 
+
+
+1) PFNMF (SMT) 2) PFNMF (200 Drums) 
+
+
+
 
 \subsection{Metrics}
-%The evaluation metrics follow the standard calculation of the precision (P), recall (R), and F-measure (F). To be consistent with \cite{gillet_transcription_2008}, an onset is considered to be a match with the ground truth if the time deviation in between is less or equal to \unit[50]{ms}. It should be noted that some authors use more restrictive settings, compare e.g.\ the \unit[30]{ms} as used in \cite{Paulus2009a}. 
-
+The evaluation metrics follow the standard calculation of the precision (P), recall (R), and F-measure (F). To be consistent with \cite{Gillet2008, Wu2015a, Southall2016}, an onset is considered to be a match with the ground truth if the time deviation in between is less or equal to \unit[50]{ms}. It should be noted that some authors use more restrictive settings, compare e.g.\ the \unit[30]{ms} and \unit[20]{ms} as used in \cite{Paulus2009a} and \cite{Vogl2017}, respectively.  
 
 \subsection{Experiment Results}
 % the system has no prior knowledge about the testing data
 
 
 
+ 
+
+
+% ========== over all results
+\begin{table*}[]
+\centering
+\begin{tabular}{cccccccc}
+\hline
+\multicolumn{5}{c}{Experiments}                                                & \multicolumn{3}{c}{Averaged F-measure}           \\ \hline
+\multicolumn{2}{c}{Role} & Method                  & Genres & \# Training Data & HH             & BD             & SD             \\ \hline
+Teacher    & Baseline    & PFNMF (SMT)             & N/A    & N/A              & 0.685          & 0.8            & \textbf{0.501} \\
+Teacher    & Baseline    & PFNMF (200 DRUMS)       & N/A    & N/A              & 0.676          & 0.848          & 0.473          \\
+           & Baseline    & PFNMF (SMT + 200 DRUMS) & N/A    & N/A              & 0.686          & 0.828          & 0.474          \\
+Student    & Baseline    & Linear SGD Regressor    & All    & 200 * 4 = 800    & 0.421          & 0.69           & 0.424          \\
+Student    & Proposed    & DNN                     & All    & 200 * 4 = 800    & \textbf{0.772} & \textbf{0.851} & 0.443          \\ \hline
+\end{tabular}
+\caption{A comparison of the averaged F-measures between the proposed method and the baseline methods}
+\label{tab:all_results}
+\end{table*}
+
+
+
+
+
+
+% ========= influence of genre
+\begin{table*}[]
+\centering
+\begin{tabular}{cccccccc}
+\hline
+\multicolumn{5}{c}{Experiments}                               & \multicolumn{3}{c}{Averaged F-measure}           \\ \hline
+\multicolumn{2}{c}{Role} & Method & Genres & \# Training Data & HH             & BD             & SD             \\ \hline
+Student    &             & DNN    & Rock   & 200 * 1 = 200    & 0.755          & 0.828          & 0.432          \\
+Student    &             & DNN    & Pop    & 200 * 1 = 200    & 0.771          & \textbf{0.846} & 0.446          \\
+Student    &             & DNN    & RnB    & 200 * 1 = 200    & 0.733          & 0.830          & \textbf{0.474} \\
+Student    &             & DNN    & Latin  & 200 * 1 = 200    & \textbf{0.772} & 0.828          & 0.439          \\
+Student    & Proposed    & DNN    & All    & 50 * 4 = 200     & 0.765          & 0.841          & 0.441          \\ \hline
+\end{tabular}
+\caption{A comparison of different student models trained with unlabeled music data of different genres}
+\label{tab:genre_results}
+\end{table*}
+
+
+
+% what is being improved? precision? use a closer examination into the results
 
 
 \section{Conclusion}\label{sec:conclusion}
+
+% reiterate the contribution. The proposed could potentially be applied to improve other ADT systems by swapping out the teacher models. However, needs further investigation
 
 % future directions: more teachers, different input representations, different student architectures, looking into other methods to use unlabeled data and compare their effectiveness
 
