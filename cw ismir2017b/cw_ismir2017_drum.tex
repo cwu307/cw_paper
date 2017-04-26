@@ -151,13 +151,15 @@ t(n) = \lambda * max(x) + median(x(n), p)
 \end{equation} 
 
 \section{Experiments}\label{sec:experiments}
-
 \subsection{Dataset Description}
 % unlabeled data
 % criteria 
 With the goal of finding a learning process for ADT systems to benefit from unlabeled data, building a good collection is a crucial step. Generally speaking, the unlabeled dataset should have following attributes: (i)~the collection should contain drums whenever possible (ii)~the collection should be diverse in terms of music genres or playing styles (iii)~the collection should contain no duplicates (iv)~the collection should be as consistent as possible in terms of audio quality. To build a collection that meets the above mentioned criteria, we compile a list from the Billboard Charts\footnote{http://www.billboard.com/charts Last accessed: 2017/04/25}. In particular, we start with an uniform distribution across a set of 4 genres featuring the strong drum beats or rhythmic patterns, namely R\&B$\slash$HipHop, Pop, Rock, and Latin. In this preliminary study, 200 songs from each genre has been selected. All the songs are cross-checked for duplications, and a final list of 800 songs has been compiled and retrieved from Youtube\footnote{https://www.youtube.com Last accessed: 2017/04/25} using open source Python library pafy\footnote{https://pypi.python.org/pypi/pafy Last accessed: 2017/04/25}. All the songs are converted into mp3 files with a sampling rate of \unit[44.1]{kHz} using ffmepg\footnote{https://ffmpeg.org/download.html Last accessed: 2017/04/25}. The source code for constructing the unlabeled music dataset will be available in the Github repository\footnote{http:dummy.link}. To speed up the process while retaining the diversity, only 30 seconds from each song is used for training. Since the same unlabeled data is trained twice with two different sets of soft targets generated from two different teachers, the total duration of the training materials is \unit[800]{mins} (approximately \unit[13.5]{hours}), which is significantly larger than any of the existing drum labeled dataset. 
 
 For evaluation, the most popular lableled drum dataset, ENST drum\cite{Gillet2006}, is used as the testing set. This dataset consists of recordings from three different drummers performing on their own drum kits. The recordings from each drummer contain individual hits, short phrases of drum beats, drum solos, and short excerpts played with accompaniments. Since this paper focuses on ADT in polyphonic mixtures of music, only the minus one subset is used for evaluation. This subset has 64 tracks of polyphonic music with a sampling rate of \unit[44.1]{kHz}. Each track in this subset has a length of approximately \unit[70]{s} with a variety of playing styles. More specifically, the subset contains various drum playing techniques such as ghost notes, flam, and drag, which is closer the real-world setting. The accompaniments are mixed with their corresponding drum tracks using a scaling factor of 1/3 and 2/3 in order to be consistent with prior studies \cite{Paulus2009a, Wu2015a, Southall2016}.
+
+
+
 
 \subsection{Experiment Setup}
 In our experiments, the performances of the following systems are evaluated and compared: 
@@ -169,12 +171,14 @@ In our experiments, the performances of the following systems are evaluated and 
 \item[(v)] DNN: the proposed student model using DNN
 \end{itemize}
 
+
 \subsection{Metrics}
 The evaluation metrics follow the standard calculation of the precision (P), recall (R), and F-measure (F). To be consistent with \cite{Gillet2008, Wu2015a, Southall2016}, an onset is considered to be a match with the ground truth if the time deviation in between is less or equal to \unit[50]{ms}. It should be noted that some authors use more restrictive settings, compare e.g.\ the \unit[30]{ms} and \unit[20]{ms} as used in \cite{Paulus2009a} and \cite{Vogl2017}, respectively.  
 
 \subsection{Experiment Results}
 % the system has no prior knowledge about the testing data
 % state the facts 
+
 % ========== over all results
 \begin{table*}[]
 \centering
@@ -234,27 +238,14 @@ The evaluation results show that both teacher systems PFNMF (SMT) and PFNMF (200
 
 Based on these results, another interesting question may arise: does music genre play a role in the preparation of unlabeled data? To answer this question, another follow-up experiment has been conducted by training the proposed DNN model with unlabeled data of each individual genre. The experiment results are shown in Table~\ref{tab:genre_results}. In this experiment, the number of training samples is fixed at 200 in order to eliminate the influence of datasize. Interestingly, the best performance of different instruments, as highlighted in the table, belongs to different genres. This implies the advantage of having various genres in the training data, for they could potentially complement each other and boost the performance of the student model. Although the model trained on the equally distributed data does not achieve the highest accuracy in each individual instrument, it is still better than majority of the single-genre models and generally well-balanced. The system trained on only Pop music seems to perform better than the model trained on all genres, however, the differences are marginal. Overall, maintaining a diverse unlabeled data in terms of music genre seems to be beneficial in this learning paradigm.
 
-From all of the above experiment results, HH shows a consistent improvement over the teacher models. This observation leads to another question: where do these improvements come from? A closer look at the experiment results reveals the strength of the student DNN model. As shown in Table~\ref{tab:pr_comp}, the DNN student model 
- 
- 
+From all of the above experiment results, HH shows a consistent improvement over the teacher models. This observation leads to another question: where do these improvements come from? A closer look at the experiment results reveals the strength of the DNN student model. As shown in Table~\ref{tab:pr_comp}, the DNN student model outperforms the teacher models on both precision and recall for HH. As for BD, the DNN student model also achieves the highest precision among all. Since these improvements in precision are achieved without sacrificing recall, they might imply the reduction in false positives from the student model output. One possible explanation is that, the HH sounds in the unlabeled data has a higher agreement than the other instruments, and the student model is able to acquire a consistent internal representation of HH that leads to a more accurate estimation of the HH activation function during testing.
 
-
-
-
-
+It is noticeable that the DNN student model seems to constantly struggle on SD. Since the SD tends to have larger spectral overlap with the other instruments, it is conceivable that DNN student model will have a hard-time learning a robust internal representation for SD. A collection of unlabeled data with a stronger presence of snare drum might be able to allieviate the problem, however, it requires further investigation before any conclusion can be drawn. In general, this deficiency in SD is also consistent with the previous studies \cite{Paulus2009a, Wu2015a, Southall2016, Vogl2016}, where the detection of snare drum in polyphonic mixtures has been reported as the most difficult task in ADT. 
 
 \section{Conclusion}\label{sec:conclusion}
-In this paper, an ADT system based on teacher-student learning paradigm has been presented. The proposed method integrates NMF based ADT systems with the DNN based model by knowledge transferring using unlabeled music data, and the evaluation results indicate the potential of obtaining a superior student model using this scheme.  
+To summarize, this paper presents an ADT system based on the teacher-student learning paradigm with the unlabeled music data. The proposed method integrates two NMF based ADT systems with a DNN based model by transferring knowledge using unlabeled music data, and the evaluation results indicate the possibility of obtaining a student model that outperforms the teacher model based on this approach. The experiment results also imply the benefit of having relevant music genres in the unlabeled dataset, which could lead to the construction of a better unlabeled dataset in the future studies. The proposed method has the following advantages: first, the system has no prior knowledge about the testing data, which avoids over-fitting and suggests the generality of this approach. Second, the proposed method is able to support the data-driven approaches with a sufficient amount of training data. Third, the proposed method could be easily applied to other ADT systems and potentially lead to performance improvements.
 
-This proposed method has no prior knowledge about the testing data
-
-% reiterate the contribution. The proposed could potentially be applied to improve other ADT systems by swapping out the teacher models. However, needs further investigation
-
-% future directions: more teachers, different input representations, different student architectures, looking into other methods to use unlabeled data and compare their effectiveness
-
-
-
-
+The possible future directions of this work are: (i) More teacher systems. Since the proposed training scheme does not tie to any particular ADT approach, the teacher models can be easily swapped with other ADT expert systems. Intuitively, more teacher models should lead to a more versatile student model. However, the influence of having a more diverse pool of teacher systems still requires further investigation. (ii) Different student models. In addition to DNNs, other neural networks architecture may have great potential of achieving better student performance as well. For instance, the RNN based model that incorporates the temporal information could be a good fit in the context of ADT tasks. (iii) Different input representations. As reported by Cui et al.~\cite{Cui2017}, the student model can actually outperform the teacher model when it is trained on the same soft targets but with a stronger input representation. Following this observation, one possible future direction of this work is to investigate the effectiveness of other input representations such as CQT, Cepstrum, or Wavelet transforms. (iv) Other usage of unlabeled data. To fully benefit from the unlabeled data, it is also worth comparing the proposed method with other approaches such as unsupervised feature learning \cite{Raina2007a} in order to find the most effective strategy. 
 
 % For bibtex users:
 \bibliography{cw_ismir2017_drum}
