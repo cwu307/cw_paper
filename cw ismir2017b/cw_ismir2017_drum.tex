@@ -17,6 +17,7 @@
 \usepackage{microtype}
 \usepackage{units}
 \usepackage{graphicx}
+\usepackage{multirow}
 
 % Title.
 % ------
@@ -87,7 +88,7 @@ Automatic Drum Transcription (ADT), another sub-task in AMT that involves the ex
 
 To address this challenge without introducing the additional cost of manual annotations, one potential solution is to explore the usefulness of the vast collection of unlabeled music data; this can be formulated as a \textit{Semi-supervised Learning} \cite{Chapelle2006} problem as defined in the field of machine learning. The general goal of this type of problem is to find the optimal solution given both labeled and unlabeled examples, and it has been applied successfully to different applications such as music genre classification \cite{Raina2007a}, music genre tagging \cite{Jao2015}, and music emotion recognition \cite{Wu2013a}.
 
-Inspired by the above mentioned approaches, this paper aims to address the issue of data availability in ADT systems by harnessing the information from the unlabeled music data. Specifically, this paper focuses on improving the ADT performances in polyphonic mixtures. The contributions of this paper include: 1) the insights into the viability of using unlabeled music data in ADT tasks 2) a general scheme for integrating unlabeled data to ADT systems 3) the demonstration of the potential improvements of ADT systems using the proposed method. This rest of the paper is structured as follows: Sect.~\ref{sec:related works} provides an overview of ADT research and student-teacher learning paradigm. In Sect.~\ref{sec:method} we introduce our approach; Sect.~\ref{sec:experiments} presents experiment results and discussions. Sect.~\ref{sec:conclusion} provides a summary, conclusion, and directions of future work.
+Inspired by the above mentioned approaches, this paper aims to address the issue of data availability in ADT systems by harnessing the information from the unlabeled music data. Specifically, this paper focuses on improving the ADT performances in polyphonic mixtures. The contributions of this paper include: (i) the insights into the viability of using unlabeled music data in ADT tasks (ii) a general scheme for integrating unlabeled data to ADT systems (iii) the demonstration of the potential improvements of ADT systems using the proposed method. The remainder of the paper is structured as follows: Sect.~\ref{sec:related works} provides an overview of ADT research and student-teacher learning paradigm. In Sect.~\ref{sec:method} we introduce our approach; Sect.~\ref{sec:experiments} presents experiment results and discussions. Sect.~\ref{sec:conclusion} provides a summary, conclusion, and directions of future work.
 
 \section{Related Work}\label{sec:related works}
 In the broadest definition of ADT, it can be described as the process of converting drum related audio events, such as drum onset times and playing techniques, into musical representations such as scores or sheet music. To simplify this task while still capturing the essence, most of the existing systems mainly focus on detecting the onset times of HiHat (HH), Snare Drum (SD) and Bass Drum (BD). In many of the early systems, as summarized by FitzGerald and Paulus \cite{FitzGerald2006}, the focus was on transcribing signals containing only drum sounds. In most practical applications, however, an ADT system is expected to work on mixtures of percussive and harmonic sound sources. 
@@ -140,10 +141,10 @@ For PFNMF, the open source Matlab implementation\footnote{https://github.com/cwu
 
 % deep learning toolboxes
 % optimizer parameters = default
-The implementation of the DNN is done in Python using Keras\footnote{https://keras.io} with Tensorflow\footnote{https://www.tensorflow.org} backend. The parameter of the optimizers are set to default. 
+The implementation of the DNN is done in Python using Keras\footnote{https://keras.io} with Tensorflow\footnote{https://www.tensorflow.org} backend. The parameters of the optimizer are set to default. 
 
 % peak picking 
-To get the final transcription results for evaluation, a standard peak picking method with a signal adaptive median threshold is used \cite{Lerch2012}. The median threshold $t(n)$ can be computed using Eq.~\ref{eq:medianThres}, in which $\lambda$ is the offset coefficient relative to the maximum value, $p$ is the order (size) of the median filter, and the $n$ is the block index. All systems are using the same peak picking parameters of $p = 8$ and $\lambda = 0.12$ as described in \cite{Wu2015a}. No grid search is performed.  
+To get the final transcription results for evaluation, a standard peak picking method with a signal adaptive median threshold is used \cite{Lerch2012}. The median threshold $t(n)$ can be computed using Eq.~\ref{eq:medianThres}, in which $\lambda$ is the offset coefficient relative to the maximum value, $p$ is the order (length) of the median filter, and the $n$ is the block index. All systems are using the same peak picking parameters of $p = $\unit[0.1]{s} and $\lambda = 0.12$ as described in \cite{Wu2015a}. No grid search is performed.  
 
 \begin{equation}\label{eq:medianThres}
 t(n) = \lambda * max(x) + median(x(n), p)
@@ -154,30 +155,26 @@ t(n) = \lambda * max(x) + median(x(n), p)
 \subsection{Dataset Description}
 % unlabeled data
 % criteria 
-With the goal of finding a learning process for ADT systems to benefit from unlabeled data, building a good collection is a crucial step. Generally speaking, the unlabeled dataset should have following attributes: (i)~the collection should contain drums whenever possible (ii)~the collection should be diverse in terms of music genres or playing styles (iii)~the collection should contain no duplicates (iv)~the collection should be as consistent as possible in terms of audio quality. To build a collection that meets the above mentioned criteria, we compile a list from the Billboard Charts\footnote{http://www.billboard.com/charts Last accessed: 2017/04/25}. In particular, we start with an uniform distribution across a set of genres featuring the strong drum beats or rhythmic patterns, namely R\&B$\slash$HipHop, Pop, Rock, and Latin. In this preliminary study, 200 songs from each genre has been selected. All the songs are cross-checked for duplications, and a final list of 800 songs has been compiled and retrieved from Youtube\footnote{https://www.youtube.com Last accessed: 2017/04/25} using open source Python library pafy\footnote{https://pypi.python.org/pypi/pafy Last accessed: 2017/04/25}. All the songs are converted into mp3 files with a sampling rate of \unit[44.1]{kHz} using ffmepg\footnote{https://ffmpeg.org/download.html Last accessed: 2017/04/25}. The source code for constructing the unlabeled music dataset can be found in the Github repository\footnote{http:dummy.link}. To speed up the process while retaining the diversity, only 30 seconds from each song is used for training. Since the same unlabeled data is trained twice with two different sets of soft targets generated from two different teachers, the total duration of the training materials is \unit[800]{mins} (approximately \unit[13.5]{hours}), which is significantly larger than any of the existing drum labeled dataset. 
+With the goal of finding a learning process for ADT systems to benefit from unlabeled data, building a good collection is a crucial step. Generally speaking, the unlabeled dataset should have following attributes: (i)~the collection should contain drums whenever possible (ii)~the collection should be diverse in terms of music genres or playing styles (iii)~the collection should contain no duplicates (iv)~the collection should be as consistent as possible in terms of audio quality. To build a collection that meets the above mentioned criteria, we compile a list from the Billboard Charts\footnote{http://www.billboard.com/charts Last accessed: 2017/04/25}. In particular, we start with an uniform distribution across a set of 4 genres featuring the strong drum beats or rhythmic patterns, namely R\&B$\slash$HipHop, Pop, Rock, and Latin. In this preliminary study, 200 songs from each genre has been selected. All the songs are cross-checked for duplications, and a final list of 800 songs has been compiled and retrieved from Youtube\footnote{https://www.youtube.com Last accessed: 2017/04/25} using open source Python library pafy\footnote{https://pypi.python.org/pypi/pafy Last accessed: 2017/04/25}. All the songs are converted into mp3 files with a sampling rate of \unit[44.1]{kHz} using ffmepg\footnote{https://ffmpeg.org/download.html Last accessed: 2017/04/25}. The source code for constructing the unlabeled music dataset will be available in the Github repository\footnote{http:dummy.link}. To speed up the process while retaining the diversity, only 30 seconds from each song is used for training. Since the same unlabeled data is trained twice with two different sets of soft targets generated from two different teachers, the total duration of the training materials is \unit[800]{mins} (approximately \unit[13.5]{hours}), which is significantly larger than any of the existing drum labeled dataset. 
 
 For evaluation, the most popular lableled drum dataset, ENST drum\cite{Gillet2006}, is used as the testing set. This dataset consists of recordings from three different drummers performing on their own drum kits. The recordings from each drummer contain individual hits, short phrases of drum beats, drum solos, and short excerpts played with accompaniments. Since this paper focuses on ADT in polyphonic mixtures of music, only the minus one subset is used for evaluation. This subset has 64 tracks of polyphonic music with a sampling rate of \unit[44.1]{kHz}. Each track in this subset has a length of approximately \unit[70]{s} with a variety of playing styles. More specifically, the subset contains various drum playing techniques such as ghost notes, flam, and drag, which is closer the real-world setting. The accompaniments are mixed with their corresponding drum tracks using a scaling factor of 1/3 and 2/3 in order to be consistent with prior studies \cite{Paulus2009a, Wu2015a, Southall2016}.
 
 \subsection{Experiment Setup}
 In our experiments, the performances of the following systems are evaluated and compared: 
-
-
-1) PFNMF (SMT) 2) PFNMF (200 Drums) 
-
-
-
+\begin{itemize}
+\item[(i)] PFNMF (SMT): a PFNMF system initialized with a drum dictionary matrix extracted from SMT-DRUM dataset. This baseline system is used as a teacher model to generate the soft targets
+\item[(ii)] PFNMF (200D): a PFNMF system initialized with a drum dictionary matrix extracted from 200 drum machines dataset. This baseline system is another teacher model for generating the soft targets
+\item[(iii)] PFNMF (SMT + 200D): another baseline system by simply taking the averaged activation functions of the above systems as the prediction output
+\item[(iv)] Linear SGD Regressor: a baseline student model using a simple linear regression with stochastic gradient descent optimization. A Python implementation of this method from the open source library, scikit-learn\footnote{http://scikit-learn.org Last accessed: 2017/04/25}, is used. All of the parameters are set to default
+\item[(v)] DNN: the proposed student model using DNN
+\end{itemize}
 
 \subsection{Metrics}
 The evaluation metrics follow the standard calculation of the precision (P), recall (R), and F-measure (F). To be consistent with \cite{Gillet2008, Wu2015a, Southall2016}, an onset is considered to be a match with the ground truth if the time deviation in between is less or equal to \unit[50]{ms}. It should be noted that some authors use more restrictive settings, compare e.g.\ the \unit[30]{ms} and \unit[20]{ms} as used in \cite{Paulus2009a} and \cite{Vogl2017}, respectively.  
 
 \subsection{Experiment Results}
 % the system has no prior knowledge about the testing data
-
-
-
- 
-
-
+% state the facts 
 % ========== over all results
 \begin{table*}[]
 \centering
@@ -186,19 +183,14 @@ The evaluation metrics follow the standard calculation of the precision (P), rec
 \multicolumn{5}{c}{Experiments}                                                & \multicolumn{3}{c}{Averaged F-measure}           \\ \hline
 \multicolumn{2}{c}{Role} & Method                  & Genres & \# Training Data & HH             & BD             & SD             \\ \hline
 Teacher    & Baseline    & PFNMF (SMT)             & N/A    & N/A              & 0.685          & 0.8            & \textbf{0.501} \\
-Teacher    & Baseline    & PFNMF (200 DRUMS)       & N/A    & N/A              & 0.676          & 0.848          & 0.473          \\
-           & Baseline    & PFNMF (SMT + 200 DRUMS) & N/A    & N/A              & 0.686          & 0.828          & 0.474          \\
+Teacher    & Baseline    & PFNMF (200D)       & N/A    & N/A              & 0.676          & 0.848          & 0.473          \\
+           & Baseline    & PFNMF (SMT + 200D) & N/A    & N/A              & 0.686          & 0.828          & 0.474          \\
 Student    & Baseline    & Linear SGD Regressor    & All    & 200 * 4 = 800    & 0.421          & 0.69           & 0.424          \\
 Student    & Proposed    & DNN                     & All    & 200 * 4 = 800    & \textbf{0.772} & \textbf{0.851} & 0.443          \\ \hline
 \end{tabular}
 \caption{A comparison of the averaged F-measures between the proposed method and the baseline methods}
 \label{tab:all_results}
 \end{table*}
-
-
-
-
-
 
 % ========= influence of genre
 \begin{table*}[]
@@ -218,11 +210,43 @@ Student    & Proposed    & DNN    & All    & 50 * 4 = 200     & 0.765          &
 \end{table*}
 
 
+%==== PRECISION OVER RECALL
+\begin{table}[]
+\begin{footnotesize}
+\centering
+\begin{tabular}{ccccccc}
+\hline
+\multirow{2}{*}{Method} & \multicolumn{2}{c}{HH}          & \multicolumn{2}{c}{BD}          & \multicolumn{2}{c}{SD}          \\ \cline{2-7} 
+                        & P              & R              & P              & R              & P              & R              \\ \hline
+PFNMF (SMT)             & 0.768          & 0.681          & 0.733          & \textbf{0.902} & \textbf{0.660} & \textbf{0.487} \\
+PFNMF (200D)            & 0.748          & 0.676          & 0.818          & 0.893          & 0.591          & 0.486          \\
+DNN                     & \textbf{0.868} & \textbf{0.718} & \textbf{0.827} & 0.888          & 0.592          & 0.434          \\ \hline
+\end{tabular}
+\caption{A comparison of precision (P) and recall (R) between student and teacher models}
+\label{tab:pr_comp}
+\end{footnotesize}
+\end{table}
 
-% what is being improved? precision? use a closer examination into the results
+
+The experiment results are shown in Table~\ref{tab:all_results}. The reported acurracies here are the averaged F-measures across all 64 tracks from the ENST minus-one subset. Since the proposed method does not require ENST drum dataset for training purposes, a three-fold cross validation scheme as reported in \cite{Paulus2009a, Wu2015a, Vogl2016, Vogl2017, Southall2016} is not necessary; this ensures the generality of the proposed method, but the comparison of the results with other systems might not be directly applicable. 
+
+The evaluation results show that both teacher systems PFNMF (SMT) and PFNMF (200D) perform similarly except for BD. This could be due to the discrepancy of the pre-defined drum dictionaries. A simple baseline by averaging the teacher outputs as in PFNMF (SMT+200D) gives almost identical performance as the teacher systems. This result indicates the need for a more sophisticated method than simply combining the output from the teachers. Another baseline system is a simple linear regression model trained using the same teacher-student learning paradigm as described in Sect.~\ref{sec:method}. This baseline serves as a sanity check for the necessity of a complex model such as DNN. As shown in the results, the performance of the linear regression model is the worst among all the evaluated systems, indicating the need of deploying a non-linear model in order to benefit from this training scheme. Finally, the proposed DNN based student model achieves the highest accuracies on both HH and BD, with a comparable accuracy on SD. This result is generally encouraging and demonstrates the great potential of using unlabeled music data in ADT tasks. 
+
+Based on these results, another interesting question may arise: does music genre play a role in the preparation of unlabeled data? To answer this question, another follow-up experiment has been conducted by training the proposed DNN model with unlabeled data of each individual genre. The experiment results are shown in Table~\ref{tab:genre_results}. In this experiment, the number of training samples is fixed at 200 in order to eliminate the influence of datasize. Interestingly, the best performance of different instruments, as highlighted in the table, belongs to different genres. This implies the advantage of having various genres in the training data, for they could potentially complement each other and boost the performance of the student model. Although the model trained on the equally distributed data does not achieve the highest accuracy in each individual instrument, it is still better than majority of the single-genre models and generally well-balanced. The system trained on only Pop music seems to perform better than the model trained on all genres, however, the differences are marginal. Overall, maintaining a diverse unlabeled data in terms of music genre seems to be beneficial in this learning paradigm.
+
+From all of the above experiment results, HH shows a consistent improvement over the teacher models. This observation leads to another question: where do these improvements come from? A closer look at the experiment results reveals the strength of the student DNN model. As shown in Table~\ref{tab:pr_comp}, the DNN student model 
+ 
+ 
+
+
+
+
 
 
 \section{Conclusion}\label{sec:conclusion}
+In this paper, an ADT system based on teacher-student learning paradigm has been presented. The proposed method integrates NMF based ADT systems with the DNN based model by knowledge transferring using unlabeled music data, and the evaluation results indicate the potential of obtaining a superior student model using this scheme.  
+
+This proposed method has no prior knowledge about the testing data
 
 % reiterate the contribution. The proposed could potentially be applied to improve other ADT systems by swapping out the teacher models. However, needs further investigation
 
@@ -231,7 +255,6 @@ Student    & Proposed    & DNN    & All    & 50 * 4 = 200     & 0.765          &
 
 
 
-\section{References}
 
 % For bibtex users:
 \bibliography{cw_ismir2017_drum}
