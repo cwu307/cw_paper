@@ -272,22 +272,14 @@ Another commonality that can be summarized from both Experiment 1 and Experiment
 % conclude from both experiments: musicality is easier to model
 \section{Conclusion}\label{sec:conclusion}
 % we show the importance of input representation prior to feature learning. The experiment results show that a good intermediate feature representation is important
+This paper presents an unsupervised feature learning approach to derive features for assessing percussive instrument performances. Specifically, we propose to use LHM as the input representation to SC that will better capture the temporal information and lead to better results. The advantage of this work include: first, it provides insights to the selection of input representation for SC in the context of snare drum performance assessment. Second, the proposed SC features achieve comparable results with the designed features, demonstrate the viability of deriving competitive features with minimum effort in feature designing. Finally, combining the designed features with the SC features, the highest performance can be achieved. This result suggests that SC features might be able to provide complementary information to the features designed with domain knowledge, further optimizing the performance of a given task. 
 
-% advantage of this work:
-% highlight the need to prepare input representation that will can better capture the information needed for the task
-
-% once a good input representation is selected, the proposed sc features is able to achieve comparable results the designed results. 
-
-% finally, combined with designed reach the highest performance, even higher than designed + baseline
-% indicating feature learning might be able to provide complementary information to the hand crafted feature and further optimize the performance of the task
-
-% future directions of this work:
-% 1) different feature learning algorithms, such as DBN, Autoencoder
-
-% 2) adapt the proposed method to other types of instruments such as brass or woodwind
-
-% 3) more data to further investigate the robustness and generality of this approach 
-
+The possible future directions of this work include: 
+\begin{inparaenum}[(i)]
+    \item   Evaluate and compare the efficiency of different feature learning algorithms. Methods such as DBN\cite{Hamel2010} and denoising autoencoders \cite{Vincent2008} may provide new insights into the finding of the best feature learning strategy for automatic performance assessment.
+    \item   Adapt the proposed method to other types of instruments such as Brass or Woodwind instruments. The evaluation results on the melodic instruments should lead to the refinement of the proposed feature learning scheme. 
+    \item   More data. To further investigate the robustness and generality of this approach, more data is needed. Additionally, the increase in sample pool can also help the investigation into the relationship between dictionary size $k$ and the number of samples. This might lead to a better strategy for selecting the best performing $k$. 
+\end{inparaenum}
 
 % For bibtex users:
 \bibliography{cw_ismir2017_fba}
