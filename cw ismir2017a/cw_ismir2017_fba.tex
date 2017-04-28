@@ -19,6 +19,8 @@
 \usepackage{graphicx}
 \usepackage{multirow}
 \usepackage{paralist}
+\usepackage{flushend}
+
 
 % Title.
 % ------
@@ -209,10 +211,10 @@ In this paper, the focus is on assessing percussion performance. For percussion 
 \end{table}
 
 \subsection{Experiment Setup}
-This paper presents two experiments that highlight different characteristics of the proposed feature learning method in the context of assessing student snare drum performances.
+This paper presents two experiments that highlight different characteristics of the proposed feature learning method in the context of assessing student snare drum performances. {\color{red}would it be better if we stated the goal of these experiments right here?}
 
 % Experiment 1: feature learning from two different input representations
-In Experiment 1, the effectiveness of two different input representations (See Sect.~\ref{subsec:input}) for SC is compared. The tested configurations are listed as follows:
+In Experiment 1, the effectiveness of two different input representations (see Sect.~\ref{subsec:input}) for SC is compared. The tested configurations are listed as follows: {\color{red} are you sure you want to use the ``+'' for this? Because here it is more a specifier while below it's the combination of different feature sets}
 \begin{enumerate}[(i)]
 \item \textbf{SC + STFT}: Sparse coding features using STFT as input representations
 \item \textbf{SC + LHM}: Sparse coding features using LHM as input representations 
@@ -220,12 +222,12 @@ In Experiment 1, the effectiveness of two different input representations (See S
 Both configurations are tested using $k = \{32, 64, 128\}$.\\
 
 % Experiment 2: comparison between different combination of feature sets
-In Experiment 2, the regression model trained on the SC learned features using the proposed LHM with $k = 32$ is compared to two different sets of features proposed by Wu et al.\ \cite{Wu2016}, namely the baseline and designed features. The regression performances of the following feature combinations are tested:
+In Experiment 2, the regression model trained on the SC learned features using the proposed LHM with $k = 32$ is compared to two different sets of features proposed for performance assessment by Wu et al.\ \cite{Wu2016}, referred to as \textit{baseline} and \textit{designed} features. The regression performances of the following feature set combinations are tested:
 \begin{enumerate}[(i)]
 \item \textbf{Baseline}: the standard spectral and temporal features such as spectral centroid, spectral rolloff, spectral flux, zero-crossing rate, and 13 MFCCs (See \cite{Wu2016} for more details). $d_{baseline} = 68$
-\item \textbf{Designed}: the desgined rhythmic and dynamic features derived from the IOI and amplitude histograms (See \cite{Wu2016} for more details). $d_{designed} = 18$
-\item \textbf{SC (Proposed)}: the SC learned features as described in Sect.~\ref{subsec:feat_learn}
-\item \textbf{Baseline + Designed}: a combined feature set consists of both baseline and designed features 
+\item \textbf{Designed}: the designed rhythmic and dynamic features derived from the IOI and amplitude histograms (See \cite{Wu2016} for more details). $d_{designed} = 18$ {\color{red} we could add more description here. Maybe it's a bit annoying to look this all up?}
+\item \textbf{SC (Proposed)}: the SC learned features as described in Sect.~\ref{subsec:feat_learn} {\color{red}why is this ``proposed'' and not lhm?}
+\item \textbf{Designed + Baseline}: a combined feature set consists of both baseline and designed features {\color{red}I changed the naming order --- I just like it better that way. Could you adapt the plot?} 
 \item \textbf{SC + Baseline}:  a combined feature set consists of both SC and baseline features 
 \item \textbf{SC + Designed}:  a combined feature set consists of both SC and designed features 
 \item \textbf{All}: a combination of all three sets of features
@@ -255,37 +257,48 @@ The performance of the models is investigated using the following standard stati
 % LHM outperform STFT overall. STFT can't capture the temporal information 
 % when k is large, both perform poorly (274 samples, when k = 128, the feature has a d = 2*k = 256) which could bring a lot of noise
 % when k = 32, the improvement is the largest. 
-In this section, the evaluation results of Experiment 1 and Experiment 2 are presented and discussed. It should be noted that since all of the correlation results are significant ($p << 0.05$), their p-values are not reported.  
+In this section, the evaluation results of both experiments are presented and discussed. Since all of the correlation results are significant ($p\ll 0.05$), their p-values are not reported.  
 
-The evaluation results of Experiment 1 is shown in Table\ref{tab:exp1}. The following trends can be observed: first, LHM almost outperform STFT in every case. This result clearly indicates that LHM is a more effective input representation for SC compared with STFT. One possible explanation for this discrepancy could originate from the their capabilities of capturing the temporal information. Since STFT only represents the spectral shapes at various instances, it does not encapsulate any temporal dependencies between meaningful audio events such as consecutive drums hits. These temporal information, while being likely to reside in the sparse matrix $\alpha$, will be destroyed after the feature aggregation. This absence of temporal information poses a problem for SC to learn higher level music concept such as rhythm. LHM, on the other hand, captures the temporal dependencies between the audio events with the IOI histograms. This ensures the rhythmic information to be translated into the SC dictionary and reflect on the final features, leading towards a better performance. Second, when the dictionary size $k = 128$, both STFT and LHM perform poorly. The reason behind this degradation for both representations might be due to the limited size of the sample pool. When $k = 128$, the resulting feature dimensionality, as described in Sect.~\ref{subsec:feat_learn}, would be $k \times 2 = 256$. This will result in a feature matrix of $274 (students) \times 256 (features)$, and the model could suffer from the curse of dimensionality. Potential solution to this problem is through dimensionality reduction methods such as Principle Component Analysis (PCA) or feature selections, however, it is currently out of the scope of this study. Third, when $k = 32$, the LHM has the largest improvement over STFT in both L1 and L2. This result might suggest a relationship between the best performing $k$ and the number of samples in the dataset, but this would require further investigations. 
+The evaluation results of Experiment 1 are shown in \tabref{tab:exp1}. The following trends can be observed: first, the LHM input representation outperform STFT representation in almost every case ({\color{red}why is there nothing bold in the last two rows?}). This result clearly shows that for this task, LHM is a more effective input representation than STFT. A likely explanation is that this discrepancy originates from the representations' capabilities of capturing temporal information. Since the STFT only represents the spectral content at various single instances, it does not encapsulate any temporal dependencies between meaningful audio events such as consecutive drums hits. This temporal information, while being likely to reside in the sparse matrix $\alpha$ {\color{red}you mean if you approximate the STFT unshuffled?}, will be lost after the feature aggregation {\color{red}just a quick question then: why not change feature aggregation to reflect this? (just playing the reviewer here}. The absence of temporal information apparently poses a problem for SC to learn higher level music concepts such as rhythm. LHM, on the other hand, captures some temporal dependencies between the audio events with the IOI histograms. This allows for the rhythmic information to be translated into the SC dictionary and reflect on the final features, leading to a better performance. 
+Second, both STFT and LHM perform poorly for a dictionary size of $k = 128$. The reason behind this degradation for both representations might be due to the limited size of the sample pool. When $k = 128$, the resulting feature dimensionality, as described in Sect.~\ref{subsec:feat_learn} {\color{red}wait: when did you talk about feature dimensionality before?}, would be $k \times 2 = 256$. This will result in a feature matrix of $274 (students) \times 256 (features)$, and the model could suffer from the curse of dimensionality. One potential solution to this problem would be to apply dimensionality reduction methods such as Principle Component Analysis (PCA) or feature selection, however, this is out of the scope of this study. 
+Third, when $k = 32$, the LHM has the largest improvement over STFT in both L1 and L2. This result might indicate a relationship between the best performing $k$ and the number of samples in the dataset, but this would require further investigations. 
 
 % Experiment 2
 
 \begin{figure*}
 \centering
 \includegraphics[width = 17.2 cm]{./figs/exp2.pdf}
-\caption{Evaluation results for Experiment 2}
+\caption{Evaluation results for Experiment 2 {\color{red}I somehow don't like this interleaved plot with r and R2. Maybe split in two plots or group them differently?}}
 \label{fig:exp2}
 \end{figure*}
 % Short summary
 
 % first thing to 
-The evaluation results of Experiment 2 is shown in Fig.~\ref{fig:exp2}. The first thing to notice is that, the proposed SC features achieve comparable performances with the designed features, and they both outperform the baseline features. Since the baseline features are only instantaneous features that are not optimized to the task, their inferior performances are conceivable. The fact that SC features perform similarly to the designed features is encouraging, suggesting the possibility of deriving viable features with minimum effort in feature crafting. Next, when combined with baseline features, both designed and SC features exhibit almost no improvements. This issue could be similar to the situation when having a large $k$ as discussed in Experiment 1, for baseline features might facilitate the curse of dimensionality by introducing too many features in the current size of sample pool. Among all the tests in Experiment 2, the highest performance is achieved with the combination of designed and SC features. The result implies the effectiveness of SC features in bringing non-redundant information to the designed features and is generally promising. This demonstrates the potential of using feature learning method to further optimize the human designed features by exploring the internal structure of the data.   
+The evaluation results of Experiment 2 are shown in Fig.~\ref{fig:exp2}. The first observation we can make is that both the designed and the SC features outperform the baseline features. This is in line with our expectations, as the baseline features are low-level instantaneous features that are not optimized to the task. It is interesting to note, though, that the baseline features in this experiment still outperform the STFT SC features in Experiment 1. {\color{red}is there a reason for this? aggregation again? Or should we remove this comment?}
+Second, the proposed SC features achieve comparable performance to the designed features. The fact that SC features perform similarly to the designed features is encouraging, suggesting the possibility of deriving viable features through feature learning with minimum effort in feature crafting. 
+Third, when combined with baseline features, both designed and SC features exhibit almost no improvements. There exist two possible explanations for this. On the one hand, it could be that these features do not add any information that is not already in the other features. On the other hand, this issue could be similar to the situation in Experiment~1 when having a large $k$, as adding baseline features might facilitate {\color{red}is facilitate the right word?} the curse of dimensionality by introducing too many features to the current size of sample pool. 
+Four, among all the tests in Experiment 2, the highest performance is achieved with the combination of designed and SC features. The result implies the effectiveness of SC features in adding non-redundant information to the designed features and is generally promising. This demonstrates the potential of using feature learning methods to complement designed features due to the learned features' ability to capture relevant information not or incompletely modeled by features designed with expert knowledge.
 
-Another commonality that can be summarized from both Experiment 1 and Experiment 2 is the superior performances of modeling L1 over L2. As discussed in \cite{Wu2016}, musicality is an abstract but holistic measure of the performance, and it is therefore more likely to be consistently graded. 
+A general observation that can be made from both experiment results is the superior model performance for L1 over L2. As discussed in \cite{Wu2016}, musicality is an abstract but holistic measure of the performance, and it is therefore more likely to be consistently graded. {\color{red}I think this could be extended if you wanted to. Both here and in the data section, possibly referring to the correlations between labels as well. Did you intentionally omit this? Also, I am really not sure if we can just say it's more consistently graded...}
 
 % conclude from both experiments: musicality is easier to model
 \section{Conclusion}\label{sec:conclusion}
 % we show the importance of input representation prior to feature learning. The experiment results show that a good intermediate feature representation is important
-This paper presents an unsupervised feature learning approach to derive features for assessing percussive instrument performances. Specifically, we propose to use LHM as the input representation to SC that will better capture the temporal information and lead to better results. The advantage of this work include: first, it provides insights to the selection of input representation for SC in the context of snare drum performance assessment. Second, the proposed SC features achieve comparable results with the designed features, demonstrate the viability of deriving competitive features with minimum effort in feature designing. Finally, combining the designed features with the SC features, the highest performance can be achieved. This result suggests that SC features might be able to provide complementary information to the features designed with domain knowledge, further optimizing the performance of a given task. 
+This paper presents an unsupervised feature learning approach to derive features for assessing percussive instrument performances. Specifically, we propose to use a histogram-based input representation to SC in order to allow the sparse coding to take advantage of temporal rhythmic information. We could show that~---~for the task of performance assessment~---~this input representation outperforms an STFT-based input representation that is frequently used for feature learning approaches. The learned features perform comparable to expert-designed features for this task, and are able to capture task-relevant information that is not represented in the designed features, indicating the suitability of combining ``traditional'' feature design methods with feature learning approaches for optimal performance.
 
-The possible future directions of this work include: 
+In summary, the contributions of this work are: 
+first, it provides insights into the selection of input representation for SC in the context of snare drum performance assessment. 
+Second, the proposed SC features achieve comparable results with the designed features, demonstrating the viability of deriving competitive features with minimum effort in feature design. 
+Finally, combining the designed features with the SC features, the highest performance can be achieved. This result suggests that SC features might be able to provide complementary information to the features designed with domain knowledge, further optimizing the performance of a given task. 
+
+Possible future directions of this work include: 
 \begin{inparaenum}[(i)]
     \item   Evaluate and compare the efficiency of different feature learning algorithms. Methods such as DBN\cite{Hamel2010} and denoising autoencoders \cite{Vincent2008} may provide new insights into the finding of the best feature learning strategy for automatic performance assessment.
-    \item   Adapt the proposed method to other types of instruments such as Brass or Woodwind instruments. The evaluation results on the melodic instruments should lead to the refinement of the proposed feature learning scheme. 
-    \item   More data. To further investigate the robustness and generality of this approach, more data is needed. Additionally, the increase in sample pool can also help the investigation into the relationship between dictionary size $k$ and the number of samples. This might lead to a better strategy for selecting the best performing $k$. 
+    \item   Adapt the proposed method to other types of instruments such as Brass or Woodwind instruments. The evaluation results on melodic instruments could lead to the refinement of the proposed feature learning scheme. 
+    \item   Try to allocate more data. To further investigate the robustness and generality of this approach, more data is needed. Additionally, the increase in sample pool can also help the investigation into topics like the relationship between dictionary size $k$ and the number of samples. This might lead to a better strategy for selecting the best performing $k$. 
 \end{inparaenum}
 
+{\color{red}I think what is missing here is to span the topic back to music performance assessment itself. Some concluding remarks about that would be necessary. Let me know what you think.}
 % For bibtex users:
 \bibliography{cw_ismir2017_fba}
 
