@@ -140,7 +140,7 @@ The Local Histogram Matrix (LHM) is our proposed input representation to the fea
 
     \item   \textbf{Amplitude histogram vector ($\mathbf{v}_{amp}$)}: following a procedure similar to the one described above, $\mathbf{v}_{amp}$ is calculated by estimating the histogram of the amplitude values within the local segment. The range of the histogram is from -1 to 1 with a resolution of 0.05 between the consecutive bins. The $\mathbf{v}_{amp}$ is normalized by the total number of samples in the entire recording, which results in a column vector of dimension $d_{amp} = 41$.  
 
-    \item   \textbf{Averaged MFCCs vector ($\mathbf{v}_{mfcc}$)}: given a local segment, the block-wise 13 Mel Frequency Cepstral Coefficients (MFCCs) are first computed using the same block size and overlap as defined in Sect.~\ref{subsec:stft}, which lead to a $13 \times s$ matrix where $s$ is the number of blocks within the segment. Next, the $\mathbf{v}_{mfcc}$ is calculated by averaging the MFCC matrix across $s$ blocks, resulting in a column vector of dimension $d_{mfcc} = 13$. 
+    \item   \textbf{Averaged MFCC vector ($\mathbf{v}_{mfcc}$)}: given a local segment, the block-wise 13 Mel Frequency Cepstral Coefficients (MFCCs) are first computed using the same block size and overlap as defined in Sect.~\ref{subsec:stft}, which lead to a $13 \times s$ matrix where $s$ is the number of blocks within the segment. Next, the $\mathbf{v}_{mfcc}$ is calculated by averaging the MFCC matrix across $s$ blocks, resulting in a column vector of dimension $d_{mfcc} = 13$. 
 \end{enumerate} 
 
 The same procedure will repeat for each 10-second local segment, and the final product of the $M_{lhm}$ is a $m' \times n'$ matrix,  in which $m' = d_{ioi} + d_{amp} + d_{mfcc} = 85$ and $n'$ represents the number of local segments.
@@ -148,28 +148,28 @@ The same procedure will repeat for each 10-second local segment, and the final p
 
 \subsection{Feature Learning}\label{subsec:feat_learn}
 % sparse coding
-The feature learning algorithm used in this paper is Sparse Coding, which can be expressed as Eq.~\ref{eq:lasso}
+The feature learning algorithm used in this paper is Sparse Coding, which can be expressed as %Eq.~\ref{eq:lasso}
 \begin{equation}\label{eq:lasso}
-\hat{\alpha} = \mathop{\mathrm{argmin}}_\alpha \frac{1}{2} \| X - D\alpha \|_{2}^{2} + \lambda \| \alpha \|_{1}
+\hat{\alpha} = \mathop{\mathrm{argmin}}_\alpha \frac{1}{2} \| X - D\alpha \|_{2}^{2} + \lambda \| \alpha \|_{1}, 
 \end{equation}
+%
+with $X \in R^{ m \times n}$ as the input matrix, i.e., $M_{stft}$ or $M_{lhm}$; $D$ is the $m \times k$ dictionary matrix, $\alpha$ is the $k \times n$ sparse matrix, $\lambda$ is the sparsity coefficient, $n$ is the number of local segments, and $k$ is the user-defined dictionary size. 
 
-in which the $X \in R^{ m \times n}$ is the matrix  such as $M_{stft}$ or $M_{lhm}$; $D$ is the $m \times k$ dictionary matrix, $\alpha$ is the $k \times n$ sparse matrix, $\lambda$ is the sparsity coefficient, $n$ is the number of local segments, and $k$ is the user-defined dictionary size. 
-
-This $l1$ regularized Least Absolute Shrinkage and Selection Operator (LASSO) problem can be solved by Least Angle Regression (LARS)\cite{Efron2004} algorithm efficiently, in which the dictionary $D$ and the sparse matrix $\alpha$ can be learned by iteratively minimizing the reconstruction loss. Finally, the resulting dictionary $D$ can be considered as the feature extractor, where the corresponding sparse representation $\alpha$ can be used to compute the features. 
+This $\ell_1$ regularized Least Absolute Shrinkage and Selection Operator (LASSO) problem can be solved by the Least Angle Regression (LARS) algorithm efficiently\cite{Efron2004}, in which the dictionary $D$ and the sparse matrix $\alpha$ can be learned by iteratively minimizing the reconstruction loss. Finally, the resulting dictionary $D$ can be considered as the feature extractor, where the corresponding sparse representation $\alpha$ can be used to compute the features. 
 
 To compute the final feature vector that represents each audio recording, our system first learns an universal dictionary $D_{all}$ from the entire dataset. This can be done by concatenating the $M_{stft}$ or $M_{lhm}$ across all the training files, and solve the LASSO optimization problem on the concatenated matrix $X_{all}$. Next, the $\alpha_{individual}$ is estimated from each recording by substituting the $X$ in Eq.~\ref{eq:lasso} with the input representation of an individual file $X_{individual}$ while keeping the $D = D_{all}$ fixed throughout the optimization process. The resulting $\alpha_{individual}$ is a $k \times n$ sparse matrix. Finally, $\alpha_{individual}$ is aggregated using mean and standard deviation across $n$ segments, producing a feature vector $\mathbf{\alpha_{final}} = [mean(\alpha_{individual}); std(\alpha_{individual})]$ with a dimensionality of $d_{final} = 2 \times k$.  
 
-In our experiment, the Matlab implementation of the SC from the open source library SPAMS\footnote{http://spams-devel.gforge.inria.fr Last accessed: 2017/04/26}\cite{Mairal2009a} is used. For parameterization, $k = \{32, 64, 128\}$ has been tested, and the sparsity coefficient $\lambda = \frac{1}{\sqrt{block size}}$ is applied. 
+In our experiment, the Matlab implementation for SC from the open source library SPAMS\footnote{http://spams-devel.gforge.inria.fr Last accessed: 2017/04/26}\cite{Mairal2009a} is used. For parametrization, $k = \{32, 64, 128\}$ has been tested, and the sparsity coefficient $\lambda = \nicefrac{1}{\sqrt{block size}}$ is applied. 
 
 \subsection{Regression Model}
 % SVR training and outlier removal
-The regression model used in this paper is the Support Vector Regression (SVR) with a linear kernel. The Matlab implementation of this algorithm from open source library, libsvm \cite{Chang2011}, is used with default settings. Due to the limited size of sample pool (See Sect.~\ref{subsec:dataset} for more details), a Leave One Out (LOO) cross-validation scheme is applied to our evaluation process. The main idea of LOO is to sequential select one sample from the pool as testing data and use the rest of the pool as training data until all the samples have been tested. Additionally, an outlier removal process is implemented by iteratively removing the sample with the largest residual between the prediction and the actual label until 5\% of the entire data is eliminated. This process potentially helps the regressor to better capture the underlying patterns of the data.  
+The regression model used in this paper is the Support Vector Regression (SVR) with a linear kernel. The Matlab implementation of this algorithm from open source library, libsvm \cite{Chang2011}, is used with default settings. Due to the limited size of sample pool (See Sect.~\ref{subsec:dataset} for more details), a Leave One Out (LOO) cross-validation scheme is applied to our evaluation process. The main idea of LOO is to sequentially select one sample from the pool as testing data and use the rest of the pool as training data until all the samples have been tested. Additionally, an outlier removal process is implemented by iteratively removing the sample with the largest residual between the prediction and the actual label until 5\% of the entire data is eliminated. This process potentially helps the regressor to better capture the underlying patterns of the data.  
 
 \section{Experiments}\label{sec:experiments}
 \subsection{Dataset}\label{subsec:dataset}
 
 % ===== OVERVIEW OF FBA DATASET
-\begin{table}[]
+\begin{table}
 \centering
 \begin{tabular}{ccccc}
 \hline
@@ -184,22 +184,22 @@ The regression model used in this paper is the Support Vector Regression (SVR) w
 \caption{An overview of numbers of student recordings in FBA dataset from 2013 to 2015}
 \label{tab:fba_all}
 \end{table}
-
+{\color{red}my suggestion is to make all tables column width, it just looks nicer}
 % information about the overall dataset
 The dataset used for this study is provided by the Florida Bandmasters Association (FBA). This dataset contains audio recordings from the Florida all-state auditions of three groups of students: middle school (7th and 8th graders), concert band (9th and 10th graders), and symphonic band (11th and 12th graders) for three consecutive years (2013 to 2015). A total number of 19 types of instruments are included in the auditions. As a result, this dataset can be split into different subsets of recordings by their year, group, and instrument (e.g., 2013, middle school, clarinet). Each subset contains up to 180 recordings of student performances.  
 
-In each recording, a student is required to perform several exercises, such as technical etude, lyrical etude, chormatic scale, 12 major scales, and sight-reading. Each exercise is graded by the judges using assessment categories such as musicality, note accuracy, rhythmic accuracy, tone quality, artistry, and articulation. The maximum score of these categories vary from 5 to 40. In our experiments, all of the ratings are normalized to a range between 0 and 1 by dividing the score with the maximum allowed value of the corresponding category. An overview of the FBA dataset is shown in Table \ref{tab:fba_all}. More information and implementations related to this paper can be found in the Github repository\footnote{http://dummy.link}.  
+In each recording, a student is required to perform several exercises, such as technical etude, lyrical etude, chromatic scale, 12 major scales, and sight-reading. Each exercise is graded by expert judges using assessment categories such as musicality, note accuracy, rhythmic accuracy, tone quality, artistry, and articulation. The maximum score of these categories vary from 5 to 40. In our experiments, all of the ratings are normalized to a range between 0 and 1 by dividing the score with the maximum allowed value of the corresponding category. An overview of the FBA dataset is shown in Table \ref{tab:fba_all}. More information on the dataset and source code related to this paper can be found in the Github repository.\footnote{http://dummy.link}  
 
-In this paper, the focus is on assessing percussion instrument. For percussion instruments, the audition session includes 5 different exercises, which are mallet etude, snare etude, chromatic scale (xylophone), 12 major scales (xylophone), and sight-reading (snare). To further narrow down the scope of this study, we use only the subset of middle school snare etude from all three years. This particular combination is selected for containing a comparably high number of students. As shown in Table \ref{tab:fba_snare}, a total number of 274 recordings of snare etude with an averaged duration of 51.3 seconds is available for analysis. For this particular exercise, the assessment categories include musicality (L1) and rhythmic accuracy (L2).
+In this paper, the focus is on assessing percussion performance. For percussion instruments, the audition session includes 5 different exercises, which are mallet etude, snare etude, chromatic scale (xylophone), 12 major scales (xylophone), and sight-reading (snare). To further narrow down the scope of this study, we use only the subset of middle school snare etude from all three years. This particular combination is selected for containing a comparably high number of students. As shown in Table \ref{tab:fba_snare}, a total number of 274 recordings of snare etude with an averaged duration of 51.3 seconds is available for analysis. For this particular exercise, the assessment categories are musicality (L1) and rhythmic accuracy (L2).
 
 
 %===== details of snare etude recordings
-\begin{table}[]
+\begin{table}
 \centering
 \begin{tabular}{cccc}
 \hline
 \multicolumn{4}{c}{\textbf{Middle school/ Percussion/ Snare Etude}}                                                                                                               \\ \hline
-\textbf{Year} & \textbf{\#Students} & \textbf{\begin{tabular}[c]{@{}c@{}}Total Dur \\ (sec)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Averaged Dur\\ (sec)\end{tabular}} \\ \hline
+\textbf{Year} & \textbf{\#Students} & \textbf{\begin{tabular}[c]{@{}c@{}}Total Dur \\ (sec)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Average Dur\\ (sec)\end{tabular}} \\ \hline
 2013          & 98                  & 4953                                                                & 50                                                                    \\
 2014          & 90                  & 4595                                                                & 51                                                                    \\
 2015          & 86                  & 4608                                                                & 53                                                                    \\ \hline
@@ -235,7 +235,7 @@ In Experiment 2, the regression model trained on the SC learned features using t
 The performance of the models is investigated using the following standard statistical metrics: the Pearson correlation coefficient $r$ and the coefficient of determination (i.e., $R^{2}$). These metrics are commonly used to evaluate the strength of the relationship between the regression predictions and ground truth. Details of the mathematical formulations can be found in \cite{McClave2003}. 
 
 \subsection{Experiment Results}
-\begin{table}[]
+\begin{table}
 \centering
 \begin{tabular}{cccccc}
 \hline
