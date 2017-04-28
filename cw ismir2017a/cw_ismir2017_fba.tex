@@ -122,7 +122,7 @@ In the input preparation step, audio recordings in mp3 format are first down-mix
 For STFT, it is computed using a block of 512 samples with 50 \% overlapping blocks; a Hann window is applied to each block. In our experiments, only the magnitude spectrogram is used, and the phase information is discarded. The resulting magnitude spectrogram $M_{stft}$ is a $m \times n$ matrix, in which $m = 257$ and $n = $ the number of blocks. This input representation has been used extensively in SC related literature as a baseline input \cite{Su2014Guitar, Su2014Violin}. 
 
 \subsubsection{Local Histogram Matrix}
-The Local Histogram Matrix (LHM) is our proposed input representation to the feature learner that aims to capture the essence of the percussive instrument performances. The extraction process of the local histogram matrix is shown in Fig.~\ref{fig:hist_mat}. To begin with, the input time-domain audio signal is partitioned into 10-second non-overlapping local segments. Within each segment, $\mathbf{v}_{ioi}$, $\mathbf{v}_{amp}$, and $\mathbf{v}_{mfcc}$ are calculated locally, in which $\mathbf{v}_{ioi}$ is the Inter-Onset-Interval (IOI) histogram vector, $\mathbf{v}_{amp}$ is the amplitude histogram vector, and $\mathbf{v}_{mfcc}$ is the averaged MFCCs vector. Concatenating these vectors will result in local histogram matrix $M_{lhm}$ that represents each individual recording. The definitions of these vectors are explained as follows:
+The Local Histogram Matrix (LHM) is our proposed input representation to the feature learner that aims to capture the essence of the percussive instrument performances. The extraction process of the local histogram matrix is shown in Fig.~\ref{fig:hist_mat}. To begin with, the input time-domain audio signal is partitioned into 10-second non-overlapping local segments. This number is chosen in order to capture higher level structure such as music paragraphs. Within each segment, $\mathbf{v}_{ioi}$, $\mathbf{v}_{amp}$, and $\mathbf{v}_{mfcc}$ are calculated locally, in which $\mathbf{v}_{ioi}$ is the Inter-Onset-Interval (IOI) histogram vector, $\mathbf{v}_{amp}$ is the amplitude histogram vector, and $\mathbf{v}_{mfcc}$ is the averaged MFCCs vector. Concatenating these vectors will result in local histogram matrix $M_{lhm}$ that represents each individual recording. The definitions of these vectors are explained as follows:
 
 \begin{itemize}
 \item[(i)] \textbf{IOI histogram vector ($\mathbf{v}_{ioi}$)}: first, the onset times within the local segment are estimated using a standard spectral flux novelty function and an adaptive median threshold for peak picking, resulting in a vector $onset(i)$ in which $i$ is the onset index; the implementation follows the descriptions in \cite{Lerch2012}. The IOI sequence is calculated by $IOI = diff(onset(i))$, followed by a non-linear transformation $IOI_{ln} = ln(IOI)$. Next, the $V_{ioi}$ is computed by estimating the histogram from the $IOI_{ln}$ with a pre-defined range and resolution, which are both determined through data observation in our preliminary experiments. Finally, the $\mathbf{v}_{ioi}$ is normalized by dividing the total number of onsets in the entire recording. The resulting $\mathbf{v}_{ioi}$ is a column vector with dimensionality $d_{ioi} = 31$.
@@ -185,7 +185,7 @@ The dataset used for this study is provided by the Florida Bandmasters Associati
 
 In each recording, a student is required to perform several exercises, such as technical etude, lyrical etude, chormatic scale, 12 major scales, and sight-reading. Each exercise is graded by the judges using assessment categories such as musicality, note accuracy, rhythmic accuracy, tone quality, artistry, and articulation. The maximum score of these categories vary from 5 to 40. In our experiments, all of the ratings are normalized to a range between 0 and 1 by dividing the score with the maximum allowed value of the corresponding category. An overview of the FBA dataset is shown in Table \ref{tab:fba_all}. More information and implementations related to this paper can be found in the Github repository\footnote{http://dummy.link}.  
 
-In this paper, the focus is on assessing percussion instrument. For percussion instruments, the audition session includes 5 different exercises, which are mallet etude, snare etude, chromatic scale (xylophone), 12 major scales (xylophone), and sight-reading (snare). To further narrow down the scope of this study, we use only the subset of middle school snare etude from all three years. This particular combination is selected for containing a comparably high number of students. As shown in Table \ref{tab:fba_snare}, a total number of 274 recordings of snare etude with an averaged duration of 51.3 seconds is available for analysis. For this particular exercise, the assessment categories include musicality and rhythmic accuracy.
+In this paper, the focus is on assessing percussion instrument. For percussion instruments, the audition session includes 5 different exercises, which are mallet etude, snare etude, chromatic scale (xylophone), 12 major scales (xylophone), and sight-reading (snare). To further narrow down the scope of this study, we use only the subset of middle school snare etude from all three years. This particular combination is selected for containing a comparably high number of students. As shown in Table \ref{tab:fba_snare}, a total number of 274 recordings of snare etude with an averaged duration of 51.3 seconds is available for analysis. For this particular exercise, the assessment categories include musicality (L1) and rhythmic accuracy (L2).
 
 
 %===== details of snare etude recordings
@@ -204,7 +204,7 @@ In this paper, the focus is on assessing percussion instrument. For percussion i
 \end{table}
 
 \subsection{Experiment Setup}
-This paper presents two experiments that highlight different characteristics of the proposed feature learning method in the context of assessing student snare drum performances. 
+This paper presents two experiments that highlight different characteristics of the proposed feature learning method in the context of assessing student snare drum performances.
 
 % Experiment 1: feature learning from two different input representations
 In Experiment 1, the effectiveness of two different input representations (See Sect.~\ref{subsec:input}) for SC is compared. The tested configurations are listed as follows:
@@ -217,8 +217,8 @@ Both configurations are tested using $k = \{32, 64, 128\}$.\\
 % Experiment 2: comparison between different combination of feature sets
 In Experiment 2, the regression model trained on the SC learned features using the proposed LHM with $k = 32$ is compared to two different sets of features proposed by Wu et al.~\cite{Wu2016}, namely the baseline and designed features. The regression performances of the following feature combinations are tested:
 \begin{enumerate}[(i)]
-\item \textbf{Baseline}: the standard spectral and temporal features such as spectral centroid, spectral rolloff, spectral flux, zero-crossing rate, and 13 MFCCs (See \cite{Wu2016} for more details)
-\item \textbf{Designed}: the statistics measures, such as crest, skewness, flatness, etc., derived from the IOI and amplitude histogram (See \cite{Wu2016} for more details)
+\item \textbf{Baseline}: the standard spectral and temporal features such as spectral centroid, spectral rolloff, spectral flux, zero-crossing rate, and 13 MFCCs (See \cite{Wu2016} for more details). $d_{baseline} = 68$
+\item \textbf{Designed}: the desgined rhythmic and dynamic features derived from the IOI and amplitude histograms (See \cite{Wu2016} for more details). $d_{designed} = 18$
 \item \textbf{SC (Proposed)}: the SC learned features as described in Sect.~\ref{subsec:feat_learn}
 \item \textbf{Baseline + Designed}: a combined feature set consists of both baseline and designed features 
 \item \textbf{SC + Baseline}:  a combined feature set consists of both SC and baseline features 
@@ -227,26 +227,66 @@ In Experiment 2, the regression model trained on the SC learned features using t
 \end{enumerate}
 
 \subsection{Metrics}
-The performance of the models is investigated using the following standard statistical metrics: the Pearson correlation coefficient $r$ and the coefficient of determination (i.e., $R^{2}$). These metrics are commonly used to evaluate the strength of the relationship between the regression predictions and ground truth. Details of the mathematical formulations can be found in \cite{McClave2003}.
+The performance of the models is investigated using the following standard statistical metrics: the Pearson correlation coefficient $r$ and the coefficient of determination (i.e., $R^{2}$). These metrics are commonly used to evaluate the strength of the relationship between the regression predictions and ground truth. Details of the mathematical formulations can be found in \cite{McClave2003}. 
 
 \subsection{Experiment Results}
-% Experiment 1
+\begin{table}[]
+\centering
+\begin{tabular}{cccccc}
+\hline
+\multicolumn{2}{c}{Input Representation}                                             & \multicolumn{2}{c}{STFT} & \multicolumn{2}{c}{LHM}       \\ \hline
+\begin{tabular}[c]{@{}c@{}}Dictionary \\ Size\end{tabular} & Metrics                 & L1         & L2          & L1            & L2            \\ \hline
+\multirow{2}{*}{k = 32}                                    & r                       & 0.34       & 0.19        & 0.65          & \textbf{0.57} \\
+                                                           & $R^{2}$ & 0.08       & -0.02       & 0.41          & \textbf{0.29} \\ \hline
+\multirow{2}{*}{k = 64}                                    & r                       & 0.41       & 0.26        & \textbf{0.70} & 0.50          \\
+                                                           & $R^{2}$ & 0.11       & -0.00       & \textbf{0.45} & 0.06          \\ \hline
+\multirow{2}{*}{k = 128}                                   & r                       & 0.41       & 0.28        & 0.33          & 0.34          \\
+                                                           & $R^{2}$ & 0.08       & -0.07       & -0.08         & -0.78         \\ \hline
+\end{tabular}
+\caption{Evaluation results for Experiment 1: L1 represents musicality, and L2 represents rhythmic accuracy}
+\label{tab:exp1}
+\end{table}
 
+% LHM outperform STFT overall. STFT can't capture the temporal information 
+% when k is large, both perform poorly (274 samples, when k = 128, the feature has a d = 2*k = 256) which could bring a lot of noise
+% when k = 32, the improvement is the largest. 
+In this section, the evaluation results of Experiment 1 and Experiment 2 are presented and discussed. It should be noted that since all of the correlation results are significant ($p << 0.05$), their p-values are not reported.  
 
+The evaluation results of Experiment 1 is shown in Table\ref{tab:exp1}. The following trends can be observed: first, LHM almost outperform STFT in every case. This result clearly indicates that LHM is a more effective input representation for SC compared with STFT. One possible explanation for this discrepancy could originate from the their capabilities of capturing the temporal information. Since STFT only represents the spectral shapes at various instances, it does not encapsulate any temporal dependencies between meaningful audio events such as consecutive drums hits. These temporal information, while being likely to reside in the sparse matrix $\alpha$, will be destroyed after the feature aggregation. This absence of temporal information poses a problem for SC to learn higher level music concept such as rhythm. LHM, on the other hand, captures the temporal dependencies between the audio events with the IOI histograms. This ensures the rhythmic information to be translated into the SC dictionary and reflect on the final features, leading towards a better performance. Second, when the dictionary size $k = 128$, both STFT and LHM perform poorly. The reason behind this degradation for both representations might be due to the limited size of the sample pool. When $k = 128$, the resulting feature dimensionality, as described in Sect.~\ref{subsec:feat_learn}, would be $k \times 2 = 256$. This will result in a feature matrix of $274 (students) \times 256 (features)$, and the model could suffer from the curse of dimensionality. Potential solution to this problem is through dimensionality reduction methods such as Principle Component Analysis (PCA) or feature selections, however, it is currently out of the scope of this study. Third, when $k = 32$, the LHM has the largest improvement over STFT in both L1 and L2. This result might suggest a relationship between the best performing $k$ and the number of samples in the dataset, but this would require further investigations. 
 
 % Experiment 2
 
-
-
+\begin{figure*}
+\centering
+\includegraphics[width = 17.2 cm]{./figs/exp2.pdf}
+\caption{Evaluation results for Experiment 2}
+\label{fig:exp2}
+\end{figure*}
 % Short summary
 
+% first thing to 
+The evaluation results of Experiment 2 is shown in Fig.~\ref{fig:exp2}. The first thing to notice is that, the proposed SC features achieve comparable performances with the designed features, and they both outperform the baseline features. Since the baseline features are only instantaneous features that are not optimized to the task, their inferior performances are conceivable. The fact that SC features perform similarly to the designed features is encouraging, suggesting the possibility of deriving viable features with minimum effort in feature crafting. Next, when combined with baseline features, both designed and SC features exhibit almost no improvements. This issue could be similar to the situation when having a large $k$ as discussed in Experiment 1, for baseline features might facilitate the curse of dimensionality by introducing too many features in the current size of sample pool. Among all the tests in Experiment 2, the highest performance is achieved with the combination of designed and SC features. The result implies the effectiveness of SC features in bringing non-redundant information to the designed features and is generally promising. This demonstrates the potential of using feature learning method to further optimize the human designed features by exploring the internal structure of the data.   
 
+Another commonality that can be summarized from both Experiment 1 and Experiment 2 is the superior performances of modeling L1 over L2. As discussed in \cite{Wu2016}, musicality is an abstract but holistic measure of the performance, and it is therefore more likely to be consistently graded. 
 
+% conclude from both experiments: musicality is easier to model
 \section{Conclusion}\label{sec:conclusion}
 % we show the importance of input representation prior to feature learning. The experiment results show that a good intermediate feature representation is important
 
 % advantage of this work:
-% no score required, minimum prior knowledge
+% highlight the need to prepare input representation that will can better capture the information needed for the task
+
+% once a good input representation is selected, the proposed sc features is able to achieve comparable results the designed results. 
+
+% finally, combined with designed reach the highest performance, even higher than designed + baseline
+% indicating feature learning might be able to provide complementary information to the hand crafted feature and further optimize the performance of the task
+
+% future directions of this work:
+% 1) different feature learning algorithms, such as DBN, Autoencoder
+
+% 2) adapt the proposed method to other types of instruments such as brass or woodwind
+
+% 3) more data to further investigate the robustness and generality of this approach 
 
 
 % For bibtex users:
