@@ -20,8 +20,9 @@
 \usepackage{multirow}
 \usepackage{paralist}
 \usepackage{flushend}
-
-
+\usepackage{tabularx}
+\usepackage{mwe}
+\usepackage{subfig}
 % Title.
 % ------
 \title{Automatic assessment of percussive instrument performances with sparse coding}
@@ -93,7 +94,7 @@ In this paper, we explore the possibility of applying unsupervised feature learn
 	\item   new insights into the viability of applying feature learning to the problem of automatic music performance assessment, 
     \item   a new input representation that characterizes percussive instrument performances for feature learning purposes, and 
     \item   the demonstration of potential improvements in predicting judges' ratings using the proposed method.
-    \item   {\color{red}what about the whole domain knowledge argument?}
+    %\item   {\color{red}what about the whole domain knowledge argument?}
 \end{inparaenum} 
 
 The remainder of this paper is structured as follows: Sect.~\ref{sec:relatedwork} presents the related work in automatic music performance assessment and feature learning. In Sect.~\ref{sec:method}, we introduce our proposed method. The experiment setup and results are described in Sect.~\ref{sec:experiments}. Finally, the conclusion and future directions are presented in Sect.~\ref{sec:conclusion}.
@@ -102,10 +103,13 @@ The remainder of this paper is structured as follows: Sect.~\ref{sec:relatedwork
 % MPA with designed features
 Music Performance Analysis (MPA) is a research field that concerns the study of the acoustic rendition of music \cite{lerch_software-based_2009}. To automate this process, a system must handle the extraction and interpretation of the important parameters of music performances. In the early research, most of the analysis was performed on symbolic data extracted from external sensors or MIDI devices. Recently, the focus has gradually shifted to the analysis of audio recordings. The basic approach to this problem usually involves the careful design of audio features that are capable of extracting the most relevant information in different contexts. For instance, Nakano presented an automatic system that evaluates the singing skill of the users \cite{Nakano2006a}; by characterizing the performances through pitch interval accuracy and vibrato features, the system has shown to be able to classify the performance into two classes (good or poor) with high accuracy. 
 Barbancho et al.\  present a system that identifies violin techniques such as pizzicato and vibrato, using both temporal and spectral features\cite{Barbancho2009}. With a hierarchical decision flow, the system achieves high accuracy in differentiating 7 playing techniques. 
-Abe{\ss}er et al.\ propose a system that automatically assesses the quality of vocal and instrumental performances of 9th and 10th graders \cite{Abeßer2013}. Features that measure the pitch, intonation and rhythmic correctness are created to quantify the students' performances. They report that the system is able to predict four different performance qualities with occasional confusions between the adjacent classes. In a system that identifies the common mistakes by the flute beginners, Han and Lee propose to use dedicated features for detecting events such as poor blowing and misfingering\cite{Han2014}.{\color{red}what kind of features?} 
+Abe{\ss}er et al.\ propose a system that automatically assesses the quality of vocal and instrumental performances of 9th and 10th graders \cite{Abeßer2013}. Features that measure the pitch, intonation and rhythmic correctness are created to quantify the students' performances. They report that the system is able to predict four different performance qualities with occasional confusions between the adjacent classes. In a system that identifies the common mistakes by the flute beginners, Han and Lee propose to use features such as MFCCs with sparse filtering for detecting events such as poor blowing and misfingering\cite{Han2014}.%{\color{red}what kind of features?} 
 More recently, Wu et al.\  propose to assess students' instrumental performances using a set of features derived from pitch, amplitude, and inter-onset interval histograms\cite{Wu2016}. The evaluation results show reasonable correlation between the model predictions and expert judges' ratings. 
 
-All of the above mentioned systems use custom-designed features in the analysis pipeline. This approach, while translating existing music domain knowledge into machine operations, does not take advantage of the internal structure of the data. {\color{red}this is a bit too fuzzy to me. what do you mean exactly? I would probably just write that you might strip away important information...} Feature learning, on the other hand, allows the algorithm to find the most fitting features based on the given input representations. Several feature learning methods have been found successful in music related applications. For example, Lee et al.\  applied Convolutional Deep Belief Networks (CDBNs) to magnitude spectrograms to learn features \cite{Lee2009a}; the evaluation results show that the learned features outperform conventional audio features on a music genre classification task. Following a similar direction, Hamel and Eck demonstrate that a Deep Belief Network (DBN) is able to derive features that achieve state-of-the-art performance in genre classification \cite{Hamel2010}. Working on the same task, Henaff et al.\  apply Sparse Coding (SC) to the log spectrogram and use the learned features to train a SVM classifier. The evaluation results also indicate the effectiveness of the learned features in the context of genre classification. Nam et al.\  further introduce a pre-processing pipeline that improves the SC feature learning \cite{Nam2012}; the evaluation results on a music tagging dataset compare favorably against the commonly used audio features.  {\color{red}what's with all the pipelines in this paper?}
+All of the above mentioned systems use custom-designed features in the analysis pipeline. This approach, while translating existing music domain knowledge into machine operations, might also strip away the important information that resides in the data. Feature learning, on the other hand, allows the algorithm to find the most fitting features based on the given input representations. Several feature learning methods have been found successful in music related applications, especially for Music Genre Recognition (MGR) task. For example, Lee et al.\  applied Convolutional Deep Belief Networks (CDBNs) to magnitude spectrograms to learn features \cite{Lee2009a}; the evaluation results show that the learned features outperform conventional audio features on in MGR tasks. Following a similar direction, Hamel and Eck demonstrate that a Deep Belief Network (DBN) is able to derive features that achieve state-of-the-art performance in MGR \cite{Hamel2010}. Henaff et al.\  apply Sparse Coding (SC) to the log spectrogram and use the learned features to train a SVM classifier. The evaluation results also indicate the effectiveness of the learned features for MGR. Nam et al.\  further introduce a pre-processing pipeline that improves the SC feature learning \cite{Nam2012}; the evaluation results on a music tagging dataset compare favorably against the commonly used audio features.  
+
+%{\color{red}what's with all the pipelines in this paper?}
+%{\color{red}this is a bit too fuzzy to me. what do you mean exactly? I would probably just write that you might strip away important information...}
 
 \section{Method}\label{sec:method}
 \subsection{System Overview}
@@ -123,13 +127,14 @@ In the testing phase, a similar procedure is followed for each recording to prep
 \subsection{Input Preparation}\label{subsec:input}
 % talk about two different inpu representations I tried
 % STFT & IOI hist
-In the input preparation step, audio recordings in MP3 format are first down-mixed to mono and resampled to a sampling rate of \unit[22.05]{kHz} after decoding. All the files are normalized to a numerical range between -1 and 1. Next, two different matrix representations are computed, namely the Short-Time Fourier Transform (STFT) and a local histogram matrix. 
+In the input preparation step, audio recordings in MP3 format are first down-mixed to mono and resampled to a sampling rate of \unit[22.05]{kHz} after decoding. All the files are normalized to a numerical range between -1 and 1. Next, two different matrix representations are computed, namely the Short-Time Fourier Transform (STFT) and a Local Histogram Matrix (LHM). 
 
 \subsubsection{STFT}\label{subsec:stft}
 The STFT is computed using a block size of 512 samples with 50 \% overlapping blocks; a Hann window is applied to each block. In our experiments, only the magnitude spectrogram is used and the phase information is discarded. The resulting spectrogram $M_{stft}$ is a $m \times n$ matrix, in which $m = 257$ and $n = $ the number of blocks. This input representation has been used extensively in literature related to SC as a baseline input \cite{Su2014Guitar, Su2014Violin}. 
 
 \subsubsection{Local Histogram Matrix}
-The Local Histogram Matrix (LHM) is our proposed input representation to the feature learner that aims to capture the most important overall characteristics of the percussive instrument performances. The extraction process of the local histogram matrix is shown in Fig.~\ref{fig:hist_mat}. To begin with, the input time-domain audio signal is partitioned into 10-second non-overlapping local segments. This number is chosen in order to capture higher level structure such as music paragraphs. Within each segment, $\mathbf{v}_{ioi}$, $\mathbf{v}_{amp}$, and $\mathbf{v}_{mfcc}$ are calculated locally, in which $\mathbf{v}_{ioi}$ is the Inter-Onset-Interval (IOI) histogram vector, $\mathbf{v}_{amp}$ is the amplitude histogram vector, and $\mathbf{v}_{mfcc}$ is the averaged MFCCs vector {\color{red}now that I read it it sorta reminds of Thanos' paper (maybe not the one you co-authored)?}. Concatenating these vectors will result in local histogram matrix $M_{lhm}$ that represents each individual recording. The definitions of these vectors are explained as follows:
+The LHM is our proposed input representation to the feature learner that aims to capture the most important overall characteristics of the percussive instrument performances. The extraction process of the local histogram matrix is shown in Fig.~\ref{fig:hist_mat}. To begin with, the input time-domain audio signal is partitioned into 10-second non-overlapping local segments. This number is chosen in order to capture higher level structure such as music paragraphs. Within each segment, $\mathbf{v}_{ioi}$, $\mathbf{v}_{amp}$, and $\mathbf{v}_{mfcc}$ are calculated locally, in which $\mathbf{v}_{ioi}$ is the Inter-Onset-Interval (IOI) histogram vector, $\mathbf{v}_{amp}$ is the amplitude histogram vector, and $\mathbf{v}_{mfcc}$ is the averaged MFCCs vector. Concatenating these vectors will result in local histogram matrix $M_{lhm}$ that represents each individual recording. The definitions of these vectors are explained as follows:
+%{\color{red}now that I read it it sorta reminds of Thanos' paper (maybe not the one you co-authored)?}
 \begin{figure}
     \centering
     \includegraphics[width = 8 cm]{./figs/hist_mat.pdf}
@@ -138,11 +143,11 @@ The Local Histogram Matrix (LHM) is our proposed input representation to the fea
 \end{figure}
 
 \begin{enumerate}[(i)]
-    \item   \textbf{IOI histogram vector ($\mathbf{v}_{ioi}$)}: first, the onset times within the local segment are estimated using a standard spectral flux novelty function and an adaptive median threshold for peak picking, resulting in a vector $onset(i)$ in which $i$ is the onset index; the implementation follows the description in \cite{Lerch2012}. The IOI sequence is calculated by $IOI = diff(onset(i))$, followed by a non-linear transformation $IOI_{ln} = ln(IOI)$. Next, the $V_{ioi}$ is computed by estimating the histogram from the $IOI_{ln}$ with a pre-defined range and resolution, which are both determined through data observation in preliminary experiments. Finally, the $\mathbf{v}_{ioi}$ is normalized by dividing the total number of onsets in the entire recording. The resulting $\mathbf{v}_{ioi}$ is a column vector with dimensionality $d_{ioi} = 31$.
+    \item   \textbf{IOI histogram vector ($\mathbf{v}_{ioi}$)}: first, the onset times within the local segment are estimated using a standard spectral flux novelty function and an adaptive median threshold for peak picking, resulting in a vector $onset(i)$ in which $i$ is the onset index; the implementation follows the description in \cite{Lerch2012}. The IOI sequence is calculated by $IOI = diff(onset(i))$, followed by a non-linear transformation $IOI_{ln} = ln(IOI)$. Next, the $\mathbf{v}_{ioi}$ is computed by estimating the histogram from the $IOI_{ln}$ with a pre-defined range and resolution, which are both determined through data observation in preliminary experiments. Finally, the $\mathbf{v}_{ioi}$ is normalized by dividing the total number of onsets in the entire recording. The resulting $\mathbf{v}_{ioi}$ is a column vector with dimensionality $d_{ioi} = 31$.
 
-    \item   \textbf{Amplitude histogram vector ($\mathbf{v}_{amp}$)}: following a procedure similar to the one described above, $\mathbf{v}_{amp}$ is calculated by estimating the histogram of the amplitude values within the local segment. The range of the histogram is from -1 to 1 with a resolution of 0.05 between the consecutive bins. The $\mathbf{v}_{amp}$ is normalized by the total number of samples in the entire recording, which results in a column vector of dimension $d_{amp} = 41$.  
+    \item   \textbf{Amplitude histogram vector ($\mathbf{v}_{amp}$)}: following a procedure similar to the one described above, $\mathbf{v}_{amp}$ is calculated by estimating the histogram of the amplitude values within the local segment. The range of the histogram is from -1 to 1 with a resolution of 0.05 between the consecutive bins. The $\mathbf{v}_{amp}$ is normalized by the total number of samples in the entire recording, which results in a column vector of dimensionality $d_{amp} = 41$.  
 
-    \item   \textbf{Averaged MFCC vector ($\mathbf{v}_{mfcc}$)}: given a local segment, the block-wise 13 Mel Frequency Cepstral Coefficients (MFCCs) are first computed using the same block size and overlap as defined in Sect.~\ref{subsec:stft}, which lead to a $13 \times s$ matrix where $s$ is the number of blocks within the segment. Next, the $\mathbf{v}_{mfcc}$ is calculated by averaging the MFCC matrix across $s$ blocks, resulting in a column vector of dimension $d_{mfcc} = 13$. 
+    \item   \textbf{Averaged MFCC vector ($\mathbf{v}_{mfcc}$)}: given a local segment, the block-wise 13 Mel Frequency Cepstral Coefficients (MFCCs) are first computed using the same block size and overlap as defined in Sect.~\ref{subsec:stft}, which lead to a $13 \times s$ matrix where $s$ is the number of blocks within the segment. Next, the $\mathbf{v}_{mfcc}$ is calculated by averaging the MFCC matrix across $s$ blocks, resulting in a column vector of dimensionality $d_{mfcc} = 13$. 
 \end{enumerate} 
 
 The same procedure will repeat for each 10-second local segment, and the final product of the $M_{lhm}$ is a $m' \times n'$ matrix,  in which $m' = d_{ioi} + d_{amp} + d_{mfcc} = 85$ and $n'$ represents the number of local segments.
@@ -173,7 +178,8 @@ The regression model used in this paper is the Support Vector Regression (SVR) w
 % ===== OVERVIEW OF FBA DATASET
 \begin{table}
 \centering
-\begin{tabular}{ccccc}
+\begin{tabularx}{.48 \textwidth}{ccccc}
+%\begin{tabular}{ccccc}
 \hline
 \multirow{2}{*}{\textbf{Year}}       & \multicolumn{3}{c}{\textbf{Group}}                                                                                                                                                                                       & \multirow{2}{*}{\textbf{Total}}      \\ \cline{2-4}
                                      & \textbf{\begin{tabular}[c]{@{}c@{}}Middle\\ School\end{tabular}}       & \textbf{\begin{tabular}[c]{@{}c@{}}Concert\\ Band\end{tabular}}       & \textbf{\begin{tabular}[c]{@{}c@{}}Symphonic\\ Band\end{tabular}}       &                                      \\ \hline
@@ -182,11 +188,13 @@ The regression model used in this paper is the Support Vector Regression (SVR) w
 2015                                 & 1106                                                                   & 1102                                                                  & 1378                                                                    & 3586                                 \\ \hline
 \multicolumn{5}{c}{\textbf{List of all instruments}}                                                                                                                                                                                                                                                   \\ \hline
 \multicolumn{5}{c}{\begin{tabular}[c]{@{}c@{}}Alto Sax, Baritone Sax, Bass Clarinet, \\ Bass Trombone, Bassoon, Bb Clarinet, \\ Bb Contrabass Clarinet, Eb Clarinet, English Horn, \\ Euphonium, Flute, French Horn, Oboe, \\ Percussion, Piccolo, Tenor Sax,\\  Trombone, Trumpet, Tuba\end{tabular}} \\ \hline
-\end{tabular}
+\end{tabularx}
 \caption{An overview of numbers of student recordings in FBA dataset from 2013 to 2015}
 \label{tab:fba_all}
 \end{table}
-{\color{red}my suggestion is to make all tables column width, it just looks nicer}
+%{\color{red}my suggestion is to make all tables column width, it just looks nicer}
+
+
 % information about the overall dataset
 The dataset used for this study is provided by the Florida Bandmasters Association (FBA). This dataset contains audio recordings from the Florida all-state auditions of three groups of students: middle school (7th and 8th graders), concert band (9th and 10th graders), and symphonic band (11th and 12th graders) for three consecutive years (2013 to 2015). A total number of 19 types of instruments are included in the auditions. As a result, this dataset can be split into different subsets of recordings by their year, group, and instrument (e.g., 2013, middle school, clarinet). Each subset contains up to 180 recordings of student performances.  
 
@@ -198,26 +206,29 @@ In this paper, the focus is on assessing percussion performance. For percussion 
 %===== details of snare etude recordings
 \begin{table}
 \centering
-\begin{tabular}{cccc}
+\begin{tabularx}{0.48 \textwidth}{cccc}
+%\begin{tabular}{cccc}
 \hline
 \multicolumn{4}{c}{\textbf{Middle school/ Percussion/ Snare Etude}}                                                                                                               \\ \hline
 \textbf{Year} & \textbf{\#Students} & \textbf{\begin{tabular}[c]{@{}c@{}}Total Dur \\ (sec)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Average Dur\\ (sec)\end{tabular}} \\ \hline
 2013          & 98                  & 4953                                                                & 50                                                                    \\
 2014          & 90                  & 4595                                                                & 51                                                                    \\
 2015          & 86                  & 4608                                                                & 53                                                                    \\ \hline
-\end{tabular}
+\end{tabularx}
 \caption{Statics of the middle school snare etude from 2013 to 2015}
 \label{tab:fba_snare}
 \end{table}
 
 \subsection{Experiment Setup}
-This paper presents two experiments that highlight different characteristics of the proposed feature learning method in the context of assessing student snare drum performances. {\color{red}would it be better if we stated the goal of these experiments right here?}
+This paper presents two experiments that highlight different characteristics of the proposed feature learning method in the context of assessing student snare drum performances. The goal of Experiment 1 is to compare the effectiveness of two different input representations (see Sect.~\ref{subsec:input}) for SC. For Experiment 2, the goal is to find the best combination of feature sets in order to achieve the highest performance. 
+
+%{\color{red}would it be better if we stated the goal of these experiments right here?}
 
 % Experiment 1: feature learning from two different input representations
-In Experiment 1, the effectiveness of two different input representations (see Sect.~\ref{subsec:input}) for SC is compared. The tested configurations are listed as follows: {\color{red} are you sure you want to use the ``+'' for this? Because here it is more a specifier while below it's the combination of different feature sets}
+In Experiment 1, the tested configurations are listed as follows: %{\color{red} are you sure you want to use the ``+'' for this? Because here it is more a specifier while below it's the combination of different feature sets}
 \begin{enumerate}[(i)]
-\item \textbf{SC + STFT}: Sparse coding features using STFT as input representations
-\item \textbf{SC + LHM}: Sparse coding features using LHM as input representations 
+\item \textbf{SC (STFT)}: Sparse coding features using STFT as input representations
+\item \textbf{SC (LHM)}: Sparse coding features using LHM as input representations 
 \end{enumerate}
 Both configurations are tested using $k = \{32, 64, 128\}$.\\
 
@@ -225,12 +236,14 @@ Both configurations are tested using $k = \{32, 64, 128\}$.\\
 In Experiment 2, the regression model trained on the SC learned features using the proposed LHM with $k = 32$ is compared to two different sets of features proposed for performance assessment by Wu et al.\ \cite{Wu2016}, referred to as \textit{baseline} and \textit{designed} features. The regression performances of the following feature set combinations are tested:
 \begin{enumerate}[(i)]
 \item \textbf{Baseline}: the standard spectral and temporal features such as spectral centroid, spectral rolloff, spectral flux, zero-crossing rate, and 13 MFCCs (See \cite{Wu2016} for more details). $d_{baseline} = 68$
-\item \textbf{Designed}: the designed rhythmic and dynamic features derived from the IOI and amplitude histograms (See \cite{Wu2016} for more details). $d_{designed} = 18$ {\color{red} we could add more description here. Maybe it's a bit annoying to look this all up?}
-\item \textbf{SC (Proposed)}: the SC learned features as described in Sect.~\ref{subsec:feat_learn} {\color{red}why is this ``proposed'' and not lhm?}
-\item \textbf{Designed + Baseline}: a combined feature set consists of both baseline and designed features {\color{red}I changed the naming order --- I just like it better that way. Could you adapt the plot?} 
+\item \textbf{Designed}: the designed rhythmic and dynamic features derived from the IOI and amplitude histograms. These features involves the calculation of various statistics, such as crest, skewness, flatness, kurtosis, etc., directly from the histograms of the entire recording (See \cite{Wu2016} for more details). $d_{designed} = 18$ 
+%{\color{red} we could add more description here. Maybe it's a bit annoying to look this all up?}
+
+\item \textbf{SC (LHM)}: the SC learned features as described in Sect.~\ref{subsec:feat_learn} %{\color{red}why is this ``proposed'' and not lhm?}
+\item \textbf{Designed + Baseline}: a combined feature set consists of both baseline and designed features %{\color{red}I changed the naming order --- I just like it better that way. Could you adapt the plot?} 
 \item \textbf{SC + Baseline}:  a combined feature set consists of both SC and baseline features 
 \item \textbf{SC + Designed}:  a combined feature set consists of both SC and designed features 
-\item \textbf{All}: a combination of all three sets of features
+%\item \textbf{All}: a combination of all three sets of features
 \end{enumerate}
 
 \subsection{Metrics}
@@ -239,17 +252,18 @@ The performance of the models is investigated using the following standard stati
 \subsection{Experiment Results}
 \begin{table}
 \centering
-\begin{tabular}{cccccc}
+\begin{tabularx}{0.48 \textwidth}{cccccc}
+%\begin{tabular}{cccccc}
 \hline
 \multicolumn{2}{c}{Input Representation}                                             & \multicolumn{2}{c}{STFT} & \multicolumn{2}{c}{LHM}       \\ \hline
 \begin{tabular}[c]{@{}c@{}}Dictionary \\ Size\end{tabular} & Metrics                 & L1         & L2          & L1            & L2            \\ \hline
-\multirow{2}{*}{k = 32}                                    & r                       & 0.34       & 0.19        & 0.65          & \textbf{0.57} \\
-                                                           & $R^{2}$ & 0.08       & -0.02       & 0.41          & \textbf{0.29} \\ \hline
+\multirow{2}{*}{k = 32}                                    & r                       & 0.34       & 0.19        & \textbf{0.65}          & 0.57 \\
+                                                           & $R^{2}$ & 0.08       & -0.02       & \textbf{0.41}          & 0.29 \\ \hline
 \multirow{2}{*}{k = 64}                                    & r                       & 0.41       & 0.26        & \textbf{0.70} & 0.50          \\
                                                            & $R^{2}$ & 0.11       & -0.00       & \textbf{0.45} & 0.06          \\ \hline
-\multirow{2}{*}{k = 128}                                   & r                       & 0.41       & 0.28        & 0.33          & 0.34          \\
-                                                           & $R^{2}$ & 0.08       & -0.07       & -0.08         & -0.78         \\ \hline
-\end{tabular}
+\multirow{2}{*}{k = 128}                                   & r                       & \textbf{0.41}       & 0.28        & 0.33          & 0.34          \\
+                                                           & $R^{2}$ & \textbf{0.08}       & -0.07       & -0.08         & -0.78         \\ \hline
+\end{tabularx}
 \caption{Evaluation results for Experiment 1: L1 represents musicality, and L2 represents rhythmic accuracy}
 \label{tab:exp1}
 \end{table}
@@ -259,27 +273,34 @@ The performance of the models is investigated using the following standard stati
 % when k = 32, the improvement is the largest. 
 In this section, the evaluation results of both experiments are presented and discussed. Since all of the correlation results are significant ($p\ll 0.05$), their p-values are not reported.  
 
-The evaluation results of Experiment 1 are shown in \tabref{tab:exp1}. The following trends can be observed: first, the LHM input representation outperform STFT representation in almost every case ({\color{red}why is there nothing bold in the last two rows?}). This result clearly shows that for this task, LHM is a more effective input representation than STFT. A likely explanation is that this discrepancy originates from the representations' capabilities of capturing temporal information. Since the STFT only represents the spectral content at various single instances, it does not encapsulate any temporal dependencies between meaningful audio events such as consecutive drums hits. This temporal information, while being likely to reside in the sparse matrix $\alpha$ {\color{red}you mean if you approximate the STFT unshuffled?}, will be lost after the feature aggregation {\color{red}just a quick question then: why not change feature aggregation to reflect this? (just playing the reviewer here}. The absence of temporal information apparently poses a problem for SC to learn higher level music concepts such as rhythm. LHM, on the other hand, captures some temporal dependencies between the audio events with the IOI histograms. This allows for the rhythmic information to be translated into the SC dictionary and reflect on the final features, leading to a better performance. 
-Second, both STFT and LHM perform poorly for a dictionary size of $k = 128$. The reason behind this degradation for both representations might be due to the limited size of the sample pool. When $k = 128$, the resulting feature dimensionality, as described in Sect.~\ref{subsec:feat_learn} {\color{red}wait: when did you talk about feature dimensionality before?}, would be $k \times 2 = 256$. This will result in a feature matrix of $274 (students) \times 256 (features)$, and the model could suffer from the curse of dimensionality. One potential solution to this problem would be to apply dimensionality reduction methods such as Principle Component Analysis (PCA) or feature selection, however, this is out of the scope of this study. 
+%{\color{red}why is there nothing bold in the last two rows?})
+%{\color{red}you mean if you approximate the STFT unshuffled?}
+%{\color{red}just a quick question then: why not change feature aggregation to reflect this? (just playing the reviewer here}
+%{\color{red}wait: when did you talk about feature dimensionality before?}
+The evaluation results of Experiment 1 are shown in \tabref{tab:exp1}. The following trends can be observed: first, the LHM input representation outperform STFT representation in almost every case. This result clearly shows that for this task, LHM is a more effective input representation than STFT. A likely explanation is that this discrepancy originates from the representations' capabilities of capturing temporal information. Since the STFT only represents the spectral content at various single instances, it does not encapsulate any temporal dependencies between meaningful audio events such as consecutive drums hits. This temporal information, while being likely to reside in the sparse matrix $\alpha$, will be lost after the feature aggregation. The absence of temporal information apparently poses a problem for SC to learn higher level music concepts such as rhythm. LHM, on the other hand, captures some temporal dependencies between the audio events with the IOI histograms. This allows for the rhythmic information to be translated into the SC dictionary and reflect on the final features, leading towards a better performance. 
+Second, both STFT and LHM perform poorly for a dictionary size of $k = 128$. The reason behind this degradation for both representations might be due to the limited size of the sample pool. When $k = 128$, the resulting feature dimensionality, as described in Sect.~\ref{subsec:feat_learn}, would be $k \times 2 = 256$. This will result in a feature matrix of $274 (students) \times 256 (features)$, and the model could suffer from the curse of dimensionality. One potential solution to this problem would be to apply dimensionality reduction methods such as Principle Component Analysis (PCA) or feature selection, however, this is out of the scope of this study. 
 Third, when $k = 32$, the LHM has the largest improvement over STFT in both L1 and L2. This result might indicate a relationship between the best performing $k$ and the number of samples in the dataset, but this would require further investigations. 
 
 % Experiment 2
 
 \begin{figure*}
 \centering
-\includegraphics[width = 17.2 cm]{./figs/exp2.pdf}
-\caption{Evaluation results for Experiment 2 {\color{red}I somehow don't like this interleaved plot with r and R2. Maybe split in two plots or group them differently?}}
+\includegraphics[width = 17.2 cm]{./figs/exp2_remake.pdf}
+\caption{Evaluation results for Experiment 2 (top) $r$ (bottom) $R^{2}$}
 \label{fig:exp2}
 \end{figure*}
+
+
+
 % Short summary
 
 % first thing to 
-The evaluation results of Experiment 2 are shown in Fig.~\ref{fig:exp2}. The first observation we can make is that both the designed and the SC features outperform the baseline features. This is in line with our expectations, as the baseline features are low-level instantaneous features that are not optimized to the task. It is interesting to note, though, that the baseline features in this experiment still outperform the STFT SC features in Experiment 1. {\color{red}is there a reason for this? aggregation again? Or should we remove this comment?}
+The evaluation results of Experiment 2 are shown in Fig.~\ref{fig:exp2}. The first observation we can make is that both the designed and the SC features outperform the baseline features. This is in line with our expectations, as the baseline features are low-level instantaneous features that are not optimized to the task. %It is interesting to note, though, that the baseline features in this experiment still outperform the STFT SC features in Experiment 1. {\color{red}is there a reason for this? aggregation again? Or should we remove this comment?}
 Second, the proposed SC features achieve comparable performance to the designed features. The fact that SC features perform similarly to the designed features is encouraging, suggesting the possibility of deriving viable features through feature learning with minimum effort in feature crafting. 
-Third, when combined with baseline features, both designed and SC features exhibit almost no improvements. There exist two possible explanations for this. On the one hand, it could be that these features do not add any information that is not already in the other features. On the other hand, this issue could be similar to the situation in Experiment~1 when having a large $k$, as adding baseline features might facilitate {\color{red}is facilitate the right word?} the curse of dimensionality by introducing too many features to the current size of sample pool. 
+Third, when combined with baseline features, both designed and SC features exhibit almost no improvements. There exist two possible explanations for this. On the one hand, it could be that these features do not add any information that is not already in the other features. On the other hand, this issue could be similar to the situation in Experiment~1 when having a large $k$, as adding baseline features might induce the curse of dimensionality by introducing too many features to the current size of sample pool. %{\color{red}is facilitate the right word?}
 Four, among all the tests in Experiment 2, the highest performance is achieved with the combination of designed and SC features. The result implies the effectiveness of SC features in adding non-redundant information to the designed features and is generally promising. This demonstrates the potential of using feature learning methods to complement designed features due to the learned features' ability to capture relevant information not or incompletely modeled by features designed with expert knowledge.
 
-A general observation that can be made from both experiment results is the superior model performance for L1 over L2. As discussed in \cite{Wu2016}, musicality is an abstract but holistic measure of the performance, and it is therefore more likely to be consistently graded. {\color{red}I think this could be extended if you wanted to. Both here and in the data section, possibly referring to the correlations between labels as well. Did you intentionally omit this? Also, I am really not sure if we can just say it's more consistently graded...}
+A general observation that can be made from both experiment results is the superior model performance for L1 over L2. As discussed in \cite{Wu2016}, musicality is an abstract but holistic measure of the performance, and it is therefore more likely to reflect the overall perception of the judges and is easier to model. %{\color{red}I think this could be extended if you wanted to. Both here and in the data section, possibly referring to the correlations between labels as well. Did you intentionally omit this? Also, I am really not sure if we can just say it's more consistently graded...}
 
 % conclude from both experiments: musicality is easier to model
 \section{Conclusion}\label{sec:conclusion}
@@ -298,7 +319,7 @@ Possible future directions of this work include:
     \item   Try to allocate more data. To further investigate the robustness and generality of this approach, more data is needed. Additionally, the increase in sample pool can also help the investigation into topics like the relationship between dictionary size $k$ and the number of samples. This might lead to a better strategy for selecting the best performing $k$. 
 \end{inparaenum}
 
-{\color{red}I think what is missing here is to span the topic back to music performance assessment itself. Some concluding remarks about that would be necessary. Let me know what you think.}
+%{\color{red}I think what is missing here is to span the topic back to music performance assessment itself. Some concluding remarks about that would be necessary. Let me know what you think.}
 % For bibtex users:
 \bibliography{cw_ismir2017_fba}
 
