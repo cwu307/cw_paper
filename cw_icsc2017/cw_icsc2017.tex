@@ -204,14 +204,24 @@ Concatenating these vectors will result in local histogram matrix $M_\mathrm{lhm
 \begin{figure}
     \centering
     \includegraphics[width = 8 cm]{./figs/hist_mat.pdf}
-    \caption{Illustration of the construction process of local histogram matrix; $\mathbf{v}_{ioi}$ is the IOI histogram vector, $\mathbf{v}_{amp}$ is the amplitude histogram vector, $\mathbf{v}_{mfcc}$ is the averaged MFCCs vector, and $M_{lhm}$ is the local histogram matrix.}
+    \caption{Illustration of the construction process of local histogram matrix; $\mathbf{v}_\mathrm{ioi}$ is the IOI histogram vector, $\mathbf{v}_\mathrm{amp}$ is the amplitude histogram vector, $\mathbf{v}_\mathrm{mfcc}$ is the averaged MFCCs vector, and $M_{lhm}$ is the local histogram matrix.}
     \label{fig:hist_mat}
 \end{figure}
 
-\begin{enumerate}[(i)]
-    \item   \textbf{IOI histogram vector ($\mathbf{v}_\mathrm{ioi}$)}: first, the onset times within the local segment are estimated using a standard spectral flux novelty function and an adaptive median threshold for peak picking, resulting in a vector $onset(i)$ in which $i$ is the onset index; the implementation follows the description in \cite{Lerch2012}. The IOI sequence is calculated by $IOI = diff(onset(i))$, followed by a non-linear transformation $IOI_\mathrm{ln} = ln(IOI)$. Since the ratios between onset intervals are generally power of 2 (e.g., an 8th note is twice as long as a 16th note), this transformation helps to characterize the rhythmic patterns with a more consistent numerical range. Next, the $\mathbf{v}_\mathrm{ioi}$ is computed by estimating the histogram from the $IOI_\mathrm{ln}$ with a pre-defined range and resolution, which are both determined through data observation in preliminary experiments. Finally, the $\mathbf{v}_\mathrm{ioi}$ is normalized by dividing the total number of onsets in the entire recording. The resulting $\mathbf{v}_\mathrm{ioi}$ is a column vector with dimensionality $d_\mathrm{ioi} = 31$.
+\begin{figure}
+    \centering
+    \includegraphics[width = 8 cm]{./figs/ioi_hist_examples.eps}
+    \caption{An example of (a) IOI histogram vector $\mathbf{v}_\mathrm{ioi}$ (b) amplitude histogram vector $\mathbf{v}_\mathrm{amp}$. Both histograms are normalized by the maximum value and can be treated as probability distributions.} 
+    \label{fig:ioi_hist_example}
+\end{figure}
 
-    \item   \textbf{Amplitude histogram vector ($\mathbf{v}_\mathrm{amp}$)}: following a procedure similar to the one described above, $\mathbf{v}_\mathrm{amp}$ is calculated by estimating the histogram of the amplitude values within the local segment. The range of the histogram is from -1 to 1 with a resolution of 0.05 between the consecutive bins. The $\mathbf{v}_\mathrm{amp}$ is normalized by the total number of samples in the entire recording. This is represented as a column vector of dimensionality $d_\mathrm{amp} = 41$.  
+
+
+
+\begin{enumerate}[(i)]
+    \item   \textbf{IOI histogram vector ($\mathbf{v}_\mathrm{ioi}$)}: first, the onset times within the local segment are estimated using a standard spectral flux novelty function and an adaptive median threshold for peak picking, resulting in a vector $onset(i)$ in which $i$ is the onset index; the implementation follows the description in \cite{Lerch2012}. The IOI sequence is calculated by $IOI = diff(onset(i))$, followed by a non-linear transformation $IOI_\mathrm{ln} = ln(IOI)$. Since the ratios between onset intervals are generally power of 2 (e.g., an 8th note is twice as long as a 16th note), this transformation helps to characterize the rhythmic patterns with a musically more meaningful numerical range. Next, the $\mathbf{v}_\mathrm{ioi}$ is computed by estimating the histogram from the $IOI_\mathrm{ln}$ with a pre-defined range and resolution, which are both determined through data observation in preliminary experiments. Finally, the $\mathbf{v}_\mathrm{ioi}$ is normalized by dividing the total number of onsets in the entire recording. The resulting $\mathbf{v}_\mathrm{ioi}$ is a column vector with dimensionality $d_\mathrm{ioi} = 31$. An example of  $\mathbf{v}_\mathrm{ioi}$ is shown in Fig.~\ref{fig:ioi_hist_example}(a).
+
+    \item   \textbf{Amplitude histogram vector ($\mathbf{v}_\mathrm{amp}$)}: following a procedure similar to the one described above, $\mathbf{v}_\mathrm{amp}$ is calculated by estimating the histogram of the amplitude values within the local segment. The range of the histogram is from -1 to 1 with a resolution of 0.05 between the consecutive bins. The $\mathbf{v}_\mathrm{amp}$ is normalized by the total number of samples in the entire recording. This is represented as a column vector of dimensionality $d_\mathrm{amp} = 41$. An example of  $\mathbf{v}_\mathrm{amp}$ is shown in Fig.~\ref{fig:ioi_hist_example}(b).
 
     \item   \textbf{Averaged MFCC vector ($\mathbf{v}_\mathrm{mfcc}$)}: given a local segment, the block-wise 13 Mel Frequency Cepstral Coefficients (MFCCs) are first computed using the same block size and overlap as defined in Sect.~\ref{subsec:stft}, which leads to a $13 \times s$ matrix where $s$ is the number of blocks within the segment. Next, the $\mathbf{v}_\mathrm{mfcc}$ is calculated by averaging the MFCC matrix across $s$ blocks, resulting in a column vector of dimensionality $d_\mathrm{mfcc} = 13$. 
 \end{enumerate} 
@@ -373,7 +383,7 @@ A general observation that can be made from all experiment results is the superi
 % conclude from both experiments: musicality is easier to model
 \section{Conclusion}\label{sec:conclusion}
 % we show the importance of input representation prior to feature learning. The experiment results show that a good intermediate feature representation is important
-This paper presents an unsupervised feature learning approach to derive features for assessing percussive instrument performances. Specifically, we propose to use a histogram-based input representation to SC in order to allow the sparse coding to take advantage of temporal rhythmic information. We could show that~---~for the task of performance assessment~---~this input representation outperforms an STFT-based input representation that is frequently used for feature learning approaches. The learned features perform comparable to expert-designed features for this task, and are able to capture task-relevant information that is not represented in the designed features, indicating the suitability of combining ``traditional'' feature design methods with feature learning approaches for optimal performance.
+This paper presents an unsupervised feature learning approach to derive features for assessing percussive instrument performances. Specifically, we propose to use a histogram-based input representation to SC in order to allow the sparse coding to take advantage of temporal rhythmic information. We could show that~---~for the task of performance assessment~---~this input representation outperforms an STFT-based input representation that is frequently used for feature learning approaches. The learned features perform comparable to expert-designed features for this task, and are able to capture task-relevant information that is not represented in the designed features, indicating the suitability of combining "traditional'' feature design methods with feature learning approaches for optimal performance.
 
 In summary, the contributions of this work are: 
 first, it provides insights into the selection of input representations for SC in the context of snare drum performance assessment. 
