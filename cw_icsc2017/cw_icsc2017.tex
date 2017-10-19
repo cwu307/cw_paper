@@ -88,7 +88,7 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Learned Features for the Assessment of Percussive Music Performances}
+\title{Learned Features for the Assessment of\\ Percussive Music Performances}
 
 % author names and affiliations
 % use a multiple column layout for up to three different
@@ -167,10 +167,10 @@ The remainder of this paper is structured as follows: Sect.~\ref{sec:relatedwork
 Music performance analysis is a research field that concerns the study of the acoustic rendition of music \cite{lerch_software-based_2009}. To automate this process, a system must handle the extraction and interpretation of the important parameters of music performances. In the early research, most of the analysis was performed on symbolic data extracted from external sensors or MIDI devices. Recently, the focus has gradually shifted to the analysis of audio recordings. The basic approach to this problem usually involves the careful design of audio features that are capable of extracting the most relevant information in different contexts. For instance, Nakano presented an automatic system that evaluates the singing skill of the users \cite{Nakano2006a}; by characterizing the performances through pitch interval accuracy and vibrato features, the system was able to classify the performance into two classes (good or poor). 
 Barbancho et al.\  present a system that identifies violin techniques such as pizzicato and vibrato, using both time-domain and spectral features\cite{Barbancho2009}. With a hierarchical decision flow, the system differentiates seven playing techniques. 
 Abe{\ss}er et al.\ propose a system that automatically assesses the quality of vocal and instrumental performances of 9th and 10th graders \cite{Abeßer2013}. Features that measure the pitch, intonation and rhythmic correctness are created to quantify the students' performances. They report that the system is able to predict four different performance qualities with occasional confusions between the adjacent classes. In a system that identifies the common mistakes by the flute beginners, Han and Lee propose to use features such as MFCCs with sparse filtering for detecting events such as poor blowing and misfingering\cite{Han2014}. %{\color{red}what kind of features?} 
-More recently, Wu et al.\  propose to assess students' instrumental performances using a set of features derived from pitch, amplitude, and inter-onset interval histograms\cite{Wu2016, Vidwans2017}. The evaluation results show reasonable correlation between the model predictions and expert judges' ratings. 
+More recently, Wu et al.\  and Vidwans et al.\ propose to assess students' instrumental performances using a set of features derived from pitch, amplitude, and inter-onset interval histograms\cite{Wu2016, Vidwans2017}. The evaluation results show reasonable correlation between the model predictions and expert judges' ratings. 
 
-All of the above mentioned systems use custom-designed features in the analysis pipeline. This approach, while translating existing music domain knowledge into machine operations, might also strip away important information that resides in the data. Feature learning, on the other hand, allows an algorithm to find the most fitting features based on the given input representations. Several feature learning methods have been found successful in music related applications, especially for the music genre recognition task. For example, Lee et al.\  applied convolutional deep belief networks to magnitude spectrograms to learn features \cite{Lee2009a}; the evaluation results show that the learned features outperform conventional audio features on muisc genre recognition tasks. Following a similar direction, Hamel and Eck demonstrate that a Deep Belief Network (DBN) is able to derive features that achieve state-of-the-art performance in music genre recognition \cite{Hamel2010}. 
-Henaff et al.\  apply Sparse Coding (SC) to the log spectrogram and use the learned features to train a SVM classifier. The evaluation results also indicate the effectiveness of the learned features for recognizing music genres \cite{Henaff2011}. Nam et al.\  further introduce a pre-processing pipeline that improves the SC feature learning \cite{Nam2012}; the evaluation results on a music tagging dataset compare favorably against the commonly used audio features. More recently, SC derived features have also been shown effective for music genre recognition \cite{Hsu2016} and music emotion recogntion \cite{OBrien2015}. 
+All of the above mentioned systems use custom-designed features in the analysis pipeline. This approach, while translating existing music domain knowledge into machine operations, might also strip away important information that resides in the data. Feature learning, on the other hand, allows an algorithm to find the most fitting features based on the given input representations. Several feature learning methods have been found successful in music related applications, especially for the music genre recognition task. For example, Lee et al.\  applied convolutional deep belief networks to magnitude spectrograms to learn features \cite{Lee2009a}; the evaluation results show that the learned features outperform conventional audio features on music genre recognition tasks. Following a similar direction, Hamel and Eck demonstrate that a Deep Belief Network (DBN) is able to derive features that achieve state-of-the-art performance in music genre recognition \cite{Hamel2010}. 
+Henaff et al.\  apply Sparse Coding (SC) to the log spectrogram and use the learned features to train a SVM classifier. The evaluation results also indicate the effectiveness of the learned features for recognizing music genres \cite{Henaff2011}. Nam et al.\  further introduce a pre-processing pipeline that improves the SC feature learning \cite{Nam2012}; the evaluation results on a music tagging dataset compare favorably against the commonly used audio features. More recently, SC derived features have also been shown effective for music genre recognition \cite{Hsu2016} and music emotion recognition \cite{OBrien2015}. 
 
 Based on the findings in the previous work, both DBNs and SC seem to be useful for feature learning in music related tasks. Compared with DBNs, however, SC seems to have a broader range of applications in addition to the MGR task. Therefore, in this study, we propose to explore the viability of applying sparse coding for music performance assessment.
 %{\color{red}what's with all the pipelines in this paper?}
@@ -304,8 +304,8 @@ This paper presents two experiments that highlight different characteristics of 
 % Experiment 1: feature learning from two different input representations
 In Experiment 1, the tested configurations are listed as follows: %{\color{red} are you sure you want to use the ``+'' for this? Because here it is more a specifier while below it's the combination of different feature sets}
 \begin{enumerate}[(i)]
-\item \textbf{SC (STFT)}: Sparse coding features using STFT as input representations
-\item \textbf{SC (LHM)}: Sparse coding features using LHM as input representations 
+\item \textbf{SC (STFT)}: sparse coding features using STFT as input representations
+\item \textbf{SC (LHM)}: sparse coding features using LHM as input representations 
 \end{enumerate}
 Both configurations are tested using $k = \{32, 64, 128\}$.\\
 
@@ -313,7 +313,7 @@ Both configurations are tested using $k = \{32, 64, 128\}$.\\
 In Experiment 2, the regression model trained on the SC learned features using the proposed LHM with $k = 32$ is compared to two different sets of features proposed for performance assessment by Wu et al.\ \cite{Wu2016}, referred to as \textit{baseline} and \textit{designed} features. The regression performance of the following feature set combinations is tested:
 \begin{enumerate}[(i)]
 \item \textbf{Baseline}: the standard spectral and temporal features such as spectral centroid, spectral rolloff, spectral flux, zero-crossing rate, and 13 MFCCs (See \cite{Wu2016} for more details). $d_\mathrm{baseline} = 68$
-\item \textbf{Designed}: the designed rhythmic and dynamic features derived from the IOI and amplitude histograms. These features involve the calculation of various statistics, such as crest, skewness, flatness, kurtosis, etc., directly from the histograms of the entire recording (Compare \cite{Wu2016} for more details). $d_\mathrm{designed} = 18$ 
+\item \textbf{Designed}: the designed rhythmic and dynamic features derived from the IOI and amplitude histograms. These features involve the calculation of various statistics, such as crest, skewness, flatness, kurtosis, etc., directly from the histograms of the entire recording (compare \cite{Wu2016} for more details). $d_\mathrm{designed} = 18$ 
 %{\color{red} we could add more description here. Maybe it's a bit annoying to look this all up?}
 
 \item \textbf{SC (LHM)}: the SC learned features as described in Sect.~\ref{subsec:feat_learn} %{\color{red}why is this ``proposed'' and not lhm?}
@@ -431,7 +431,7 @@ The authors would like to thank the Florida Bandmasters Association for providin
 % (used to reserve space for the reference number labels box)
 
 \bibliographystyle{./IEEEtran}
-\bibliography{cw_icsc2017.bib}
+\bibliography{cw_icsc2017}
 
 % that's all folks
 \end{document}
