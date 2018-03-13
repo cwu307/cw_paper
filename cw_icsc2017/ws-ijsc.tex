@@ -66,7 +66,7 @@ Music performance is a sequence of actions that integrates both cognitive and mo
 
 \begin{figure}
 \centering
-\includegraphics[width = 8 cm]{./figs/basic_idea.pdf}
+\includegraphics[width = \linewidth]{./figs/basic_idea.pdf}
 \caption{The concept of automatic music performance assessment systems.}
 \label{fig:basic_idea}
 \end{figure}
@@ -77,7 +77,7 @@ With recent advances in the field of Music Information Retrieval (MIR) for tasks
 In this paper, we explore the possibility of applying unsupervised feature learning in the context of music performance assessment. In particular, we compare the effectiveness of a set of baseline features, designed features, and learned features in assessing students' snare drum performances from a large set of recordings of the Florida all-state auditions. 
 %{\textcolor{red} {maybe some comment here about how this can help understanding music, music performance, and music cognition, just to make it more 'semantic'}} 
 {{A successful set of features would clearly describe the acoustic events rendered by the performers, providing a good foundation for studying the connection between music performance and its corresponding assessment given by the human judges.}}
-Therefore, the goal of this paper is to find optimal features for characterizing percussive instrument performances.
+Therefore, the goal of this paper is to identify optimal features for characterizing percussive instrument performances.
 
 The contributions of this paper include:
 \begin{enumerate}[(i)]
@@ -90,12 +90,18 @@ The contributions of this paper include:
 The remainder of this paper is structured as follows: Section~\ref{sec:relatedwork} presents the related work in automatic music performance assessment and feature learning. In Sect.~\ref{sec:method}, we introduce our proposed method. The experiment setup and results are described in Sect.~\ref{sec:experiments}. Finally, the conclusion and future directions are presented in Sect.~\ref{sec:conclusion}.
 
 \section{Related Work}\label{sec:relatedwork}
-% MPA with designed features
-Music Performance Analysis (MPA) is a research field that concerns the study of the acoustic rendition of a musical score or idea \cite{lerch_software-based_2009}. 
-%{\textcolor{red}{We have space, so why don't we fill it a bit with more info about music performance, such as how two performances of the same piece of music are not the same, what the parameters/dimensions are in which they are different etc.}} 
-{{Instead of analyzing the intentions of the composer from the symbolic representation of a music composition, MPA focuses on interpreting the artistic decisions made by the performers during their music performance. For example, the same score can be played in different tempi or with different dynamics, resulting in performances with various levels of expressiveness. One of the main challenges of MPA, therefore, is to associate these expressions with human perception in a musically meaningful way.}}
+Music, as a performing art, requires the rendition of a musical score or idea into a physical acoustical realization \cite{lerch_software-based_2009}. The score can be understood as a blueprint for a performance \cite{clarke_understanding_2002} that contains implicit and ambiguous information that can be difficult to describe and quantify \cite{dorian_history_1942,meyer_emotion_1956,Palmer1997,beran_analyzing_1999}. This ambiguity leads to often significant differences between performances of the same piece. These differences can fall into the categories pitch (vibrato, intonation, etc.), rhythm (tempo, micro-timing, etc.), dynamics (accents, loudness, etc.), and sound quality (playing technique, articulation, etc.) \cite{Lerch2012}.
 
-To automate the process of MPA, a system must handle the extraction and interpretation of the important parameters of music performances. In the early research, most of the analysis was performed on symbolic data extracted from external sensors or MIDI devices. Recently, the focus has gradually shifted to the analysis of audio recordings. The basic approach to this problem usually involves the careful design of audio features that are capable of extracting the most relevant information in different contexts. For instance, Nakano presented an automatic system that evaluates the singing skill of the users \cite{Nakano2006a}; by characterizing the performances through pitch interval accuracy and vibrato features, the system was able to classify the performance into the two classes \textit{good} and \textit{poor}. 
+% MPA with designed features
+Music Performance Analysis (MPA) is a research field that focuses on the study of the performance parameters in the acoustic rendition rather than the musical score itself \cite{lerch_software-based_2009}. 
+%{\textcolor{red}{We have space, so why don't we fill it a bit with more info about music performance, such as how two performances of the same piece of music are not the same, what the parameters/dimensions are in which they are different etc.}} 
+Instead of analyzing the intentions of the composer from the symbolic representation of a music composition, MPA focuses on interpreting the artistic decisions made by the performers during their music performance. For example, by playing the same score at different tempi or with different dynamics, the performer makes choices that result in performances which convey different information with various levels of expressiveness. One of the main challenges of MPA, therefore, is to associate these expressions with human perception in a musically meaningful way.
+
+To automate the process of MPA, a system must handle the extraction and interpretation of the important parameters of music performances. In the early research, most of the analysis was performed on symbolic data extracted from external sensors or MIDI devices. For example, electronic keyboards have been utilized to investigate timing \cite{desain_does_1994}, or pianos with sensors have been used to study dynamic variations \cite{repp_dynamics_1996} or asynchronies between pianists' hands \cite{goebl_melody_2001}.
+More recently, the focus has gradually shifted to the analysis of audio recordings, often focusing on intonation (compare, e.g., \cite{walker_instrumental_2004}) or tempo \cite{dixon_automatic_2001}.
+
+Most of the studies presented above take a descriptive approach to investigating music performance: they describe parameter variations and discuss differences and commonalities of multiple performances. For certain applications such as music education, however, an overall assessment of quality is helpful.
+The basic approach to this problem usually involves the careful design of audio features that are capable of extracting the most relevant information in different contexts. For instance, Nakano presented an automatic system that evaluates the singing skill of the users \cite{Nakano2006a}; by characterizing the performances through pitch interval accuracy and vibrato features, the system was able to classify the performance into the two classes \textit{good} and \textit{poor}. 
 %Barbancho et al.\  present a system that identifies violin techniques such as pizzicato and vibrato, using both time-domain and spectral features\cite{Barbancho2009}. With a hierarchical decision flow, the system differentiates seven playing techniques. {\textcolor{red} {hmm. why is the barbancho reference relevant?}}
 Abe{\ss}er et al.\ propose a system that automatically assesses the quality of vocal and instrumental performances of 9th and 10th graders \cite{Abeßer2013}. Features representing the pitch, intonation, and rhythmic correctness are designed to quantify the students' performances. They report that the system is able to predict four different performance qualities with occasional confusions between the adjacent classes. 
 In a system that identifies the common mistakes by the flute beginners, Han and Lee propose to use features such as MFCCs with sparse filtering for detecting events such as poor blowing and misfingering\cite{Han2014}. %{\color{red}what kind of features?} 
@@ -116,7 +122,7 @@ The proposed system comprises both a training and a testing phase. As shown in F
 
 \begin{figure}
 \centering
-\includegraphics[width = 8 cm]{./figs/flowchart.pdf}
+\includegraphics[width = \linewidth]{./figs/flowchart.pdf}
 \caption{The flowchart of the proposed method.}
 \label{fig:flowchart}
 \end{figure}
@@ -144,7 +150,7 @@ Concatenating these vectors will result in local histogram matrix $M_\mathrm{lhm
 
 \begin{figure}
     \centering
-    \includegraphics[width = 8 cm]{./figs/ioi_hist_examples.eps}
+    \includegraphics[width = \linewidth]{./figs/ioi_hist_examples.eps}
     \caption{An example of (a) an IOI histogram vector $\mathbf{v}_\mathrm{ioi}$ and (b) an amplitude histogram vector $\mathbf{v}_\mathrm{amp}$. All histograms are normalized by the total number of counts and can be interpreted as probability distributions.} 
     \label{fig:ioi_hist_example}
 \end{figure}
@@ -153,7 +159,7 @@ Concatenating these vectors will result in local histogram matrix $M_\mathrm{lhm
 
 
 \begin{enumerate}[(i)]
-    \item   \textbf{IOI histogram vector ($\mathbf{v}_\mathrm{ioi}$)}: the onset times, i.e., the start times of individual drum events are estimated within the local segment using a standard spectral flux novelty function and an adaptive median threshold for peak picking; the implementation follows the description in \cite{Lerch2012} and results in a vector $onset(i)$ in which $i$ is the onset index. The IOI sequence is calculated by $IOI = diff(onset(i))$, followed by a non-linear transformation $IOI_\mathrm{ln} = ln(IOI)$. Since the ratios between onset intervals are frequently powers of 2 (e.g., an 8th note is twice as long as a 16th note), this transformation helps to characterize the rhythmic patterns within a musically more meaningful numerical range. Next, the $\mathbf{v}_\mathrm{ioi}$ is computed by estimating the histogram from the $IOI_\mathrm{ln}$ with a pre-defined range and resolution, determined through data observation in pilot experiments. Finally, the $\mathbf{v}_\mathrm{ioi}$ is normalized by dividing the total number of onsets in the entire recording. The resulting $\mathbf{v}_\mathrm{ioi}$ is a column vector with dimensionality $d_\mathrm{ioi} = 31$. An example of  $\mathbf{v}_\mathrm{ioi}$ is shown in Fig.~\ref{fig:ioi_hist_example}(a).
+    \item   \textbf{IOI histogram vector ($\mathbf{v}_\mathrm{ioi}$)}: the onset times, i.e., the start times of individual drum events are estimated within the local segment using a standard spectral flux novelty function and an adaptive median threshold for peak picking; the implementation follows the description in \cite{Lerch2012} and results in a vector $onset(i)$ in which $i$ is the onset index. The IOI sequence is calculated by $IOI = diff(onset(i))$, followed by a non-linear transformation $IOI_\mathrm{ln} = ln(IOI)$. Since the ratios between onset intervals are frequently powers of 2 (for example, an 8th note is twice as long as a 16th note), this transformation helps to characterize the rhythmic patterns within a musically more meaningful numerical range. Next, the $\mathbf{v}_\mathrm{ioi}$ is computed by estimating the histogram from the $IOI_\mathrm{ln}$ with a pre-defined range and resolution, determined through data observation in pilot experiments. Finally, the $\mathbf{v}_\mathrm{ioi}$ is normalized by dividing the total number of onsets in the entire recording. The resulting $\mathbf{v}_\mathrm{ioi}$ is a column vector with dimensionality $d_\mathrm{ioi} = 31$. An example of  $\mathbf{v}_\mathrm{ioi}$ is shown in Fig.~\ref{fig:ioi_hist_example}(a).
 
     \item   \textbf{Amplitude histogram vector ($\mathbf{v}_\mathrm{amp}$)}: following a procedure similar to the one described above, $\mathbf{v}_\mathrm{amp}$ is calculated by estimating the histogram of the amplitude values within the local segment. The range of the histogram is from -1 to 1 with a resolution of 0.05 between the consecutive bins. The $\mathbf{v}_\mathrm{amp}$ is normalized by the total number of samples in the entire recording. This is represented as a column vector of dimensionality $d_\mathrm{amp} = 41$. An example of  $\mathbf{v}_\mathrm{amp}$ is shown in Fig.~\ref{fig:ioi_hist_example}(b).
 
@@ -211,7 +217,7 @@ The regression model used is Support Vector Regression (SVR) with a linear kerne
 
 
 % information about the overall dataset
-The dataset used for this study is provided by the Florida Bandmasters Association (FBA). This dataset contains audio recordings from the Florida all-state auditions of three groups of students: middle school (7th and 8th graders), concert band (9th and 10th graders), and symphonic band (11th and 12th graders) for three consecutive years (2013 to 2015). A total number of 19 types of instruments are included in the auditions. As a result, this dataset can be split into different subsets of recordings by their year, group, and instrument (e.g., 2013, middle school, clarinet). Each subset contains up to 180 recordings of student performances.  
+The dataset used for this study is provided by the Florida Bandmasters Association (FBA). This dataset contains audio recordings from the Florida all-state auditions of three groups of students: middle school (7th and 8th graders), concert band (9th and 10th graders), and symphonic band (11th and 12th graders) for three consecutive years (2013 to 2015). A total number of 19 types of instruments are included in the auditions. As a result, this dataset can be split into different subsets of recordings by their year, group, and instrument (for instance, 2013, middle school, clarinet). Each subset contains up to 180 recordings of student performances.  
 
 In each recording, a student is required to perform several exercises, such as technical etude, lyrical etude, chromatic scale, 12 major scales, and sight-reading. Each exercise is graded by expert judges using assessment categories such as \textit{musicality}, \textit{note accuracy}, \textit{rhythmic accuracy}, \textit{tone quality}, \textit{artistry}, and \textit{articulation}. The number of judges and the grading criteria are not available. The maximum score of these categories vary from 5 to 40. In our experiments, all of the ratings are normalized to a range between 0 and 1 by dividing the score with the maximum allowed value of the corresponding category. %An overview of the FBA dataset is shown in Table \ref{tab:fba_all}. 
 More information on the dataset can be found in our Github repository.\footnote{https://github.com/GTCMT/FBA2013, Last access: 2017/10/15}%\footnote{http://dummy.link}  
@@ -301,7 +307,7 @@ Third, when $k = 32$, the LHM has the largest improvement over STFT in both L1 a
 
 \begin{figure*}
 \centering
-\includegraphics[width = 17.2 cm]{./figs/exp2_remake.pdf}
+\includegraphics[width = \linewidth]{./figs/exp2_remake.pdf}
 \caption{Evaluation results for Experiment 2 (top) $r$ (bottom) $R^{2}$}
 \label{fig:exp2}
 \end{figure*}
