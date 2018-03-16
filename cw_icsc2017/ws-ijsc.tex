@@ -167,7 +167,7 @@ Concatenating these vectors will result in local histogram matrix $M_\mathrm{lhm
     \item   \textbf{Averaged MFCC vector ($\mathbf{v}_\mathrm{mfcc}$)}: Given a local segment, the first 13 Mel Frequency Cepstral Coefficients (MFCCs) \cite{davis_comparison_1980}, a compact and widely used description of the shape of the spectral envelope of the signal are computed. The used STFT parametrization equals the one defined in Sect.~\ref{subsec:stft}. This leads to a $13 \times n_\mathrm{b}$ MFCC matrix where $n_\mathrm{b}$ is the number of blocks within the segment. This matrix $\mathbf{v}_\mathrm{mfcc}$ is aggregated  across the $n_\mathrm{b}$ blocks, resulting in an output column vector of dimensionality $d_\mathrm{mfcc} = 13$. 
 \end{enumerate} 
 
-The same procedure will repeat for each 10-second local segment, resulting in the final matrix $M_\mathrm{lhm}$ is a $m' \times n_\mathrm{s}$ matrix,  in which 
+The same procedure will repeated for each 10-second local segment, resulting in the final matrix $M_\mathrm{lhm}$ is a $m' \times n_\mathrm{s}$ matrix,  in which 
 \begin{equation}
     m' = d_\mathrm{ioi} + d_\mathrm{amp} + d_\mathrm{mfcc} = 85
 \end{equation}%
@@ -188,7 +188,7 @@ This $\ell_1$ regularized Least Absolute Shrinkage and Selection Operator (LASSO
 To compute the final feature vector that represents each audio recording, our system first learns an universal dictionary $D_\mathrm{all}$ from the entire dataset. This can be done by concatenating the $M_\mathrm{stft}$ or $M_\mathrm{lhm}$ across all the training files, and solve the LASSO optimization problem on the concatenated matrix $X_\mathrm{all}$. %{\textcolor{red}{should we maybe just rename X to M?}} 
 Next, the $\alpha_\mathrm{individual}$ is estimated from each recording by substituting the $X$ in Eq.~\ref{eq:lasso} with the input representation of an individual file $X_\mathrm{individual}$ while keeping the $D = D_\mathrm{all}$ fixed throughout the optimization process. The resulting $\alpha_{individual}$ is a $k \times n$ sparse matrix. Finally, $\alpha_\mathrm{individual}$ is aggregated using mean and standard deviation across $n$ segments, producing a feature vector $\mathbf{\alpha_\mathrm{final}} = [mean(\alpha_\mathrm{individual}); std(\alpha_\mathrm{individual})]$ with a dimensionality of $d_\mathrm{final} = 2 \times k$. $[ ; ]$ is a vector concatenation operator.
 
-In our experiment, the Matlab implementation for SC from the open source library SPAMS\footnote{http://spams-devel.gforge.inria.fr Last accessed: 2017/10/15}\cite{Mairal2009a} is used. For parametrization, $k = \{32, 64, 128\}$ has been tested, and the sparsity coefficient $\lambda = \nicefrac{1}{\sqrt{block\, size}}$ is applied. 
+In our experiment, the Matlab implementation for SC from the open source library SPAMS\footnote{http://spams-devel.gforge.inria.fr Last accessed: 2017/10/15} \cite{Mairal2009a} is used. The parametrizations $k = \{32, 64, 128\}$ are tested, and a sparsity coefficient $\lambda = \nicefrac{1}{\sqrt{block\, size}}$ is applied. 
 
 %TODO talk about the additional baseline: convolutional autoencoder for feature learning
 
