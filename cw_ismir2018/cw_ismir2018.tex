@@ -67,6 +67,7 @@
 %}
 %\def\authorname{First author, Second author, Third author, Fourth author, Fifth author, Sixth author}
 
+\newcommand{\comment}[1]{{\textcolor{blue}{#1}}}
 
 \sloppy % please retain sloppy command for improved formatting
 
@@ -76,7 +77,7 @@
 \maketitle
 %
 \begin{abstract}
-Automatic Drum Transcription (ADT), like many other music information retrieval tasks, has made progress in the past years through the integration of machine learning and audio signal processing techniques. However, with the increasing popularity of data-hungry approaches such as deep learning, the insufficiency of data is usually an open challenge that concerns the generality of the resulting models and the validity of the evaluation. To address this challenge in ADT, this paper first examines the existing labeled datasets and their representativeness of the problem. Next, this paper explores the possibilities of using unlabeled data to improve general ADT systems. Specifically, two paradigms that harness information from unlabeled data, namely feature learning and student-teacher learning, are applied to two major types of ADT systems. All systems are evaluated on four different labeled drum datasets. The results highlight the necessity of having more labeled datasets and indicate the feasibility of exploiting unlabeled data for improving ADT systems.\\
+Automatic Drum Transcription (ADT), like many other music information retrieval tasks, has made progress in the past years through the integration of machine learning and audio signal processing techniques. However, with the increasing popularity of data-hungry approaches such as deep learning, the insufficient amount of data becomes more and more a challenge that concerns the generality of the resulting models and the validity of the evaluation. To address this challenge in ADT, this paper first examines the existing labeled datasets and how representative they are of the general problem. Next, the possibilities of using unlabeled data to improve general ADT systems are explored. Specifically, two paradigms that harness information from unlabeled data, namely feature learning and student-teacher learning, are applied to two major types of ADT systems. All systems are evaluated on four different drum datasets. The results highlight the necessity of more and larger annotated datasets and indicate the feasibility of exploiting unlabeled data for improving ADT systems.
 \end{abstract}
 
 %
@@ -88,24 +89,23 @@ Automatic Drum Transcription (ADT), like many other music information retrieval 
 % MIREX 2017, performance of the systems varies quite a lot across different datasets, indicating the potential problem of generality
 % attempts to do data-augmentation
 % we need more data 
-Recently, automatic drum transcription, a sub-task of Automatic Music Transcription (AMT) \cite{Benetos2013} that concerns the extraction of drum events from music signals, witnesses a growth in data-driven approaches such as deep learning \cite{Vogl2016, Southall2016, Vogl2017_icassp, Southall2017, Vogl2017_ismir}. To the best of our knowledge, the majority of these ADT studies that focus on polyphonic mixtures mainly use the popular ENST-Drums dataset \cite{Gillet2006_enst} for development; this is usually done by splitting the dataset into different subsets for training, validation, and testing purposes. Nevertheless, the limited amount of labeled data and its potential impact in the context of ADT are rarely discussed. 
-The heavy reliance on one dataset could lead to two major concerns: 
+Automatic drum transcription (ADT), a sub-task of Automatic Music Transcription (AMT) \cite{Benetos2013} that concerns the extraction of drum events from music signals, witnesses a growth in data-driven approaches such as deep learning in recent years \cite{Vogl2016, Southall2016, Vogl2017_icassp, Southall2017, Vogl2017_ismir}. The majority of these ADT studies that focus on polyphonic mixtures use the popular ENST-Drums dataset \cite{Gillet2006_enst} for development by splitting the dataset into different subsets for training, validation, and testing purposes. Nevertheless, the limited amount of labeled data and its potential impact in the context of ADT are rarely discussed. 
+The heavy reliance on one dataset leads to two major concerns: 
 \begin{inparaenum}[(i)]
-	\item   the model could easily overfit the data, which makes its generality questionable, and
-    \item   the evaluation results could be overly-optimistic due to the small sample size of the split. 
+	\item   the model could easily overfit the data, which questions its generality, and
+    \item   the evaluation results could be overly optimistic due to the small sample size of the split. 
 \end{inparaenum} 
-To avoid these pitfalls, therefore, it is worth thinking about the adequacy of the existing labeled data for ADT.
-With the latest introduction of the new labeled data such as MDB-Drums \cite{Southall2017_mdb} and RBMA \cite{Vogl2017_ismir}, it is possible to re-examine the representativeness of the ENST-Drums dataset through a unified comparison. However, such examination has not yet been presented.
+To avoid these pitfalls, larger datasets and cross-dataset evaluation are necessary. This need has been identified by researchers and has been addressed with newly released annotated datasets such as MDB-Drums \cite{Southall2017_mdb} and RBMA \cite{Vogl2017_ismir}. These new data enables us to revisit ENST-Drums and re-examine the representativeness of this widely-used dataset through a unified comparison. 
 
 % the challenge leads to the question: 
 % to answer this question 
-Motivated by the above mentioned issues concerning the data in ADT, this paper aims to address the challenge from two different angles:
+Motivated by the above mentioned issues concerning the data in ADT, this paper aims to address the challenge from two different angles,
 \begin{inparaenum}[(i)]
-	\item examining the effectiveness of the existing labeled datasets and
-	\item seeking additional resources (e.g., unlabeled data) and techniques for supporting general ADT systems.
+	\item examining the effectiveness of the existing datasets and
+	\item investigating additional resources (e.g., unlabeled data) and techniques for supporting the development of general ADT systems.
 \end{inparaenum} 
 % the contribution and structure of the paper
-The contributions of this work include: first, the examination and evaluation of four different labeled datasets, which highlight the importance of data diversity. Second, the evaluation of two paradigms for integrating unlabeled data to two major types of ADT systems. Third, the demonstration of potential improvements of both types of ADT systems on different instruments using unlabeled data.
+The contributions of this work include: first, the examination of four different datasets, highlighting the importance of data diversity. Second, the evaluation of two paradigms for integrating unlabeled data to two major types of ADT systems. Third, the demonstration of potential improvements of both types of ADT systems on different instruments using unlabeled data.\comment{Don't you think these are a bit vague? Especially the last}
 
 %The rest of the paper is structured as follows: in Sect.~\ref{sec:relatedwork}, the related work is presented. Sect.~\ref{sec:method} introduces the technical details of the proposed methods, followed by the description of the datasets, experiment setup, and the evaluation results in Sect.~\ref{sec:experiment}. Finally, the conclusion and future directions are given in Sect.~\ref{sec:conc}.\\ 
 
@@ -119,37 +119,26 @@ The contributions of this work include: first, the examination and evaluation of
 % the focus on HH BD SD
 % polyphonic mixtures
 
-Automatic drum transcription is a task that involves the conversion of drum related audio events into music notation. 
+The task of automatic drum transcription can be described as converting drum related audio events into music notation. 
 %Similar to melody extraction \cite{Salamon2014}, which finds the dominant pitch values and provides information about the melodic content, ADT extracts the drum sequences and contributes to the understanding of rhythmic aspect of music. 
 Most of the early ADT systems, as summarized by FitzGerald and Paulus \cite{FitzGerald2006}, detect onsets of HiHat (HH), Bass Drum (BD), and Snare Drum (SD) in drum only recordings. 
-Recently, this focus has shifted towards polyphonic mixtures that contain both drum and melodic instruments. Following these conventions, this paper defines the ADT task as detecting HH, BD, and SD in polyphonic mixtures. 
+Recently, this focus has shifted towards transcribing drums in polyphonic mixtures comprised of both drum and melodic instruments. Following these conventions, this paper defines the ADT task as detecting HH, BD, and SD in polyphonic mixtures. 
 
-Generally speaking, the existing ADT systems can be categorized into four types according to the literature \cite{Gillet2008_taslp, Paulus09_DrumStructure_PhD}. These include:
+Generally speaking, the existing ADT systems can be categorized into four types according to the literature \cite{Gillet2008_taslp, Paulus09_DrumStructure_PhD}. These are
 \begin{inparaenum}[(i)]
-	\item \textit{Segment and Classify}. This type of approaches follows the standard pattern recognition pipeline, which extracts audio features from the drum onset locations and classifies them with pre-trained models. Being one of the most popular approaches, several systems with different combinations of classifiers and features have been presented \cite{SteelantTDBLM05_DrumTransSVM_Chapter, Gillet2008_taslp, SouzaBN15_CymbalClassi_IJCNN, Gajhede2016}. 
-	\item \textit{Separate and Detect}. This type of approaches usually derives activation functions from recordings to represent the activities of each drum and subsequentially performs onset detection on these activation functions to locate drum hits. Many systems use matrix factorization methods such as Non-negative Matrix Factorization (NMF) to derive activation functions \cite{DittmarG14_DrumTranscription_DAFX, Roebel2015, Wu2015_ismir}. Recently, deep-learning-based methods such as Recurrent Neural Networks (RNNs) \cite{Southall2016, Vogl2016, Vogl2017_icassp} and Convolutional Neural Networks (CNNs) \cite{Southall2017, Vogl2017_ismir} are also shown to be successful in generating activation functions.
-	\item \textit{Match and Adapt}. This approach transcribes drum events by comparing the detected instances with a set of pre-defined drum templates, which are iteratively updated during the process \cite{YoshiiGO07_DrumTrans_IEEE-TASLP}. 
-	\item \textit{HMM-based Recognition}. This type of approaches models the temporal connections between drum events using probabilistic models such as Hidden Markov Models (HMMs); the underlying drum sequences can be decoded using the Viterbi algorithm \cite{PaulusK09_DrumTransHMM_JASMP, Dzhambazov14_DrumTransHMM_AES}. 
+	\item \textit{Segment and Classify}: following the standard pattern recognition pipeline, these approaches extract audio features from detected onset locations and classifies them with pre-trained models; this is a popular approach with many proposed systems using different combinations of classifiers and features \cite{SteelantTDBLM05_DrumTransSVM_Chapter, Gillet2008_taslp, SouzaBN15_CymbalClassi_IJCNN, Gajhede2016},
+	\item \textit{Separate and Detect}: deriving activation functions from recordings to represent the activities of each drum, these systems subsequentially perform onset detection on these activation functions to locate drum hits; apporaches include matrix factorization methods such as Non-negative Matrix Factorization (NMF) \cite{DittmarG14_DrumTranscription_DAFX, Roebel2015, Wu2015_ismir} and deep-learning-based methods such as Recurrent Neural Networks (RNNs) \cite{Southall2016, Vogl2016, Vogl2017_icassp} and Convolutional Neural Networks (CNNs) \cite{Southall2017, Vogl2017_ismir},
+	\item \textit{Match and Adapt}: identifying drum events by comparing with a set of pre-defined templates, these systems often iteratively update the templates \cite{YoshiiGO07_DrumTrans_IEEE-TASLP}, and
+	\item \textit{HMM-based Recognition}: modeling the temporal connections between drum events using probabilistic models such as Hidden Markov Models (HMMs), these models try to identify the underlying drum sequence by using the Viterbi algorithm \cite{PaulusK09_DrumTransHMM_JASMP, Dzhambazov14_DrumTransHMM_AES}. 
 \end{inparaenum} 
 
-To date, the majority of the existing ADT systems fall into the category of \textit{Segment and Classify} or \textit{Separate and Detect} approach. These two types of systems, despite having the fundamental differences, both use data-driven methods and could potentially face the same challenge as described in Sect.~\ref{sec:introduction}.
-Therefore, in this paper, we considered both types of systems in our experiments in order to demonstrate the viability of integrating unlabeled data to general ADT systems.
+To date, the majority of the existing ADT systems fall into the categories of \textit{Segment and Classify} and \textit{Separate and Detect}. These two types of systems, despite having the fundamental differences, both use data-driven methods and could potentially face the challenge described in Sect.~\ref{sec:introduction}.
+Therefore, in this paper, we considered both types of systems in our experiments.
 
 \subsection{Learning from Unlabeled Data}
 \label{subsec:learnFromUnlabeledData}
 % talk about learning from unlabeled data
-To address the data challenge in MIR tasks, techniques that build upon the existing labeled data have been proposed. For example, in \textit{transfer learning} \cite{Choi2017a}, a deep neural network trained on a task that has sufficient data can be used to derive features for another task, which has limited data. This method alleviates the data insufficiency by re-using the effective models in the similar domains. \textit{Data augmentation}, a technique to increase diversity of training data through music related deformations (e.g., time-stretching, pitch shifting, or distortion) and synthesis, is also useful in general MIR \cite{Mcfee2015} as well as in ADT related tasks  \cite{Wu2016, Vogl2017_icassp}. However, these techniques require a good labeled dataset as a starting point, which can be difficult in certain scenarios. 
-
-Another direction for addressing the data scarcity is to explore the usage of unlabeled data. Intuitively, a large collection of unlabeled data can be helpful in deriving more generalized features. This is the main concept of unsupervised \textit{feature learning}, and it can be implemented with algorithms such as Sparse Coding \cite{Raina2007a}, Deep Belief Networks \cite{Hamel2010}, and Auto-encoders \cite{Masci2011}. More recently, the \textit{student-teacher learning} paradigm has also emerged as an interesting concept to incorporate unlabeled data. Referred by Hinton et al.~as ``knowledge distillation" \cite{Hinton2015}, this paradigm transfers the knowledge of a teacher model to a student model using the soft-targets generated by the teacher. As oppose to learning from the hard targets (i.e., ground truth), the student learns from the ``dark knowledge" resides in the soft-targets, which can be created using either labeled or unlabeled data \cite{Li2014}. A successful student model can reduce the complexity of the original teacher model without significant performance loss. In some studies, superior performances from the student models have also been reported \cite{Cui2017,Watanabe2017, Wu2017}. Overall, methods that work directly with unlabeled data has less dependency on the existing labeled data and have shown some promises for future growth. 
-
-To connect general ADT systems to the abundant resources of unlabeled data, this paper applies \textit{feature learning} and \textit{student-teacher learning} to \textit{Segment and Classify}-based and \textit{Separate and Detect}-based ADT systems, respectively. More details are provided in the following sections.
-
-%
-\section{Method}
-\label{sec:method}
-% first, start with an overview figure that shows the main idea of this paper on integrating unlabeled data
-\subsection{Overview}
-
+To address the data challenge in MIR tasks, techniques that build upon the existing labeled data have been proposed. For example, in \textit{transfer learning} \cite{Choi2017a}, a deep neural network trained on a task that has sufficient data can be used to derive features for another task with limited data. This method alleviates the data insufficiency by re-using the effective models in the similar domains. \textit{Data augmentation}, a technique to increase diversity of training data through music-related deformations (e.g., time-stretching, pitch shifting, or distortion) and synthesis, has been successfully applied in MIR tasks \cite{Mcfee2015} and in ADT specifically \cite{Wu2016, Vogl2017_icassp}. However, these techniques still require a reasonably sized correctly annotated dataset as a starting point, which can be a challenge in certain scenarios. 
 \begin{figure}
 \centering
 \includegraphics[width = \columnwidth]{./figs/paradigms_overview.pdf}
@@ -157,7 +146,16 @@ To connect general ADT systems to the abundant resources of unlabeled data, this
 \label{fig:overview}
 \end{figure}
 
-As shown in Fig.~\ref{fig:overview}, two paradigms for integrating unlabeled data to ADT systems are evaluated in this paper. The first one is the feature learning paradigm, which is designed for \textit{Segment and Classify}-based ADT systems. In this paradigm, the unlabeled data is used to derive a feature extractor using an unsupervised feature learning algorithm. The resulting feature extractor is then integrated to the generic \textit{Segment and Classify} ADT framework. The second one is the student-teacher learning paradigm, which is suitable for \textit{Separate and Detect}-based ADT systems. This paradigm uses teacher models and unlabeled data to generate soft-targets; these soft-targets play the important role of connecting any \textit{Separate and Detect}-based system with unlabeled data and enables the training of the student model. In the following sections, more details of both paradigms are presented. 
+Another direction for addressing the data scarcity is to use unlabeled data. Intuitively, a large collection of unlabeled data can be helpful in deriving more generalized features. This is the main concept of unsupervised \textit{feature learning}, and it can be implemented with algorithms such as Sparse Coding \cite{Raina2007a}, Deep Belief Networks \cite{Hamel2010}, and Auto-encoders \cite{Masci2011}. More recently, the \textit{student-teacher learning} paradigm has also emerged as an interesting concept to incorporate unlabeled data. Referred by Hinton et al.~as ``knowledge distillation'' \cite{Hinton2015}, this paradigm transfers the knowledge of a teacher model to a student model using the soft-targets generated by the teacher. As opposed to learning from the hard targets (i.e., ground truth), the student learns from the ``dark knowledge'' residing in the soft-targets, which can be created using either labeled or unlabeled data \cite{Li2014}. A successful student model can reduce the complexity of the original teacher model without significant performance loss. Some studies even report superior performance of the student models \cite{Cui2017,Watanabe2017, Wu2017}. Overall, methods that work directly with unlabeled data obviously have less dependency on existing labeled data and have shown promise for future application. 
+
+
+%
+\section{Method}
+\label{sec:method}
+% first, start with an overview figure that shows the main idea of this paper on integrating unlabeled data
+\subsection{Overview}
+
+To connect general ADT systems to the abundant resources of unlabeled data, this paper investigates \textit{feature learning} and \textit{student-teacher learning} to \textit{Segment and Classify}-based and \textit{Separate and Detect}-based ADT systems, respectively. \figref{fig:overview} shows the two paradigms for integrating unlabeled data to ADT systems as investigated in this paper. The feature learning paradigm is designed for \textit{Segment and Classify}-based ADT systems. In this paradigm, the unlabeled data is used to derive a feature extractor using an unsupervised feature learning algorithm. The resulting feature extractor is then integrated into a generic \textit{Segment and Classify} ADT framework. The student-teacher learning paradigm is suitable for \textit{Separate and Detect}-based ADT systems. This paradigm uses teacher models and unlabeled data to generate soft-targets; these soft-targets play the important role of connecting any \textit{Separate and Detect}-based system with unlabeled data and enable the training of the student model. In the following sections, more details of both paradigms are presented. 
 
 \subsection{Feature Learning}
 \label{subsec:featureLearning}
