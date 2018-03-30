@@ -22,6 +22,7 @@
 \usepackage[keeplastbox]{flushend}
 \usepackage{paralist}
 
+
 % Title.
 % ------
 \title{From labeled to unlabeled data -- on the data challenge in automatic drum transcription}
@@ -105,7 +106,10 @@ Motivated by the above mentioned issues concerning the data in ADT, this paper a
 	\item investigating additional resources (e.g., unlabeled data) and techniques for supporting the development of general ADT systems.
 \end{inparaenum} 
 % the contribution and structure of the paper
-The contributions of this work include: first, the examination of four different datasets, highlighting the importance of data diversity. Second, the evaluation of two paradigms for integrating unlabeled data to two major types of ADT systems. Third, the demonstration of potential improvements of both types of ADT systems on different instruments using unlabeled data.\comment{Don't you think these are a bit vague? Especially the last}
+The contributions of this work include: first, the examination of four different datasets, highlighting the importance of data diversity. Second, the evaluation of two paradigms for integrating unlabeled data to two major types of ADT systems. Third, the demonstration of potential improvements of both types of ADT systems on different instruments using unlabeled data.
+
+%\comment{Don't you think these are a bit vague? Especially the last}
+% agree... but i dont' know how to address this either....
 
 %The rest of the paper is structured as follows: in Sect.~\ref{sec:relatedwork}, the related work is presented. Sect.~\ref{sec:method} introduces the technical details of the proposed methods, followed by the description of the datasets, experiment setup, and the evaluation results in Sect.~\ref{sec:experiment}. Finally, the conclusion and future directions are given in Sect.~\ref{sec:conc}.\\ 
 
@@ -185,8 +189,8 @@ The CAE is trained to minimize the Mean Squared Error (MSE) between $X$ and $X'$
 
 % this architecture keeps the temporal resolution intact, allowing the extraction of frame-wise features
 % talk about how we get the features and feature splicing 
-The feature extraction process, as shown in Fig.~\ref{fig:caeStructure}, is inspired by the method proposed by Choi et al.~\cite{Choi2017a}: first, the intermediate outputs from all the layers in the encoder (including the bottleneck layer) are computed. Next, these outputs are aggregated across the Mel-frequency axis through averaging. Finally, the aggregated outputs are stacked into a $64 \times N$ feature matrix, in which $N$ is the number of blocks.
-To derive the final feature vector at each block, the feature vectors from the current block and the two consecutive\comment{you mean neighboring?} blocks are spliced together to capture the temporal variations of the event. This leads to a final feature vector with a dimensionality $d = 3 \times F$, in which $F$ is the number of features (e.g.,\comment{is this e.g., or i.e.?} 64). 
+The feature extraction process, as shown in Fig.~\ref{fig:caeStructure}, is inspired by the method proposed by Choi et al.~\cite{Choi2017a}: first, the intermediate outputs from all the layers in the encoder (including the bottleneck layer) are computed. Next, these outputs are aggregated across the Mel-frequency axis through averaging. Finally, the aggregated outputs are stacked into a $64 \times N$ feature matrix, in which $N$ is the number of blocks. %\comment{you mean neighboring?}
+To derive the final feature vector at each block, the feature vectors from the current block and the two consecutive blocks are spliced together to capture the temporal variations of the event. This leads to a final feature vector with a dimensionality $d = 3 \times F$, in which $F$ is the number of features (i.e., 64). 
 % for each layer, average pooling is applied to summarized the activation map across different channels. The resulting vectors from all layers in the encoder part are stacked and used as the final feature matrix. Splicing 
 
 In addition to the learned features, a set of baseline features consisting of 20 Mel Frequency Cepstral Coefficients (MFCCs) and their first and second derivatives is also included in this paradigm. As a result, the baseline feature vector has a dimensionality $d = 3 \times 60 = 180$ after the feature splicing. 
@@ -220,20 +224,20 @@ The configuration and parametrization of this evaluated paradigm generally follo
 % Nmftoolbox
 % stft librosa
 % all neural networks are 
-The main input representations for both paradigms are derived from the magnitude spectrogram of the Short Time Fourier Transform (STFT), which is computed using a block size of 2048 and a hop size of 512 samples with Hann window. All of the audio signals are down-mixed to mono and resampled to \unit[44.1]{kHz} prior to the computation of STFT. \comment{normalization?}
+The main input representations for both paradigms are derived from the magnitude spectrogram of the Short Time Fourier Transform (STFT), which is computed using a block size of 2048 and a hop size of 512 samples with Hann window. All of the audio signals are normalized to a range between 1 and -1, down-mixed to mono, and resampled to \unit[44.1]{kHz} prior to the computation of STFT. %\comment{normalization?}
 
 For the feature learning paradigm, both the Mel-spectrogram in dB scale with 128 bins and the MFCCs are computed using librosa\footnote{https://librosa.github.io, last access 2018/03/27}, a Python library for audio signal processing. The onset detection is implemented using the \textit{CNNOnsetProcessor} from Madmom\footnote{https://madmom.readthedocs.io/en/latest/, last access 2018/03/27}. Additionally, scikit-learn\footnote{http://scikit-learn.org/stable/, last access 2018/03/27}, a Python library for machine learning, is used to implement  the Linear SVMs. A grid search on the penalty parameter $C$ within \{0.1, 1, 10, 100, 1000\} is performed to optimize the performance of the SVMs. 
 
 For student-teacher learning paradigm, the teacher models are implemented using the PFNMF function from NmfDrumToolbox\footnote{https://github.com/cwu307/NmfDrumToolbox, last access 2018/03/27}. The peak-picking parameters are set to the same as in the original paper \cite{Wu2017}.
 
-The neural networks in both paradigms are implemented using Keras\footnote{https://keras.io, last access 2018/03/27} and the Tensorflow\footnote{https://www.tensorflow.org, last access 2018/03/27} backend. The weights are randomly initialized with normal distributions, and the parameters of the optimizers are set to default. The source code used in this paper, including the implementation of both paradigms and the evaluation, is available on Github \footnote{http://dummy.link}.
+The neural networks in both paradigms are implemented using Keras\footnote{https://keras.io, last access 2018/03/27} and the Tensorflow \cite{Abadi2016} backend. The weights are randomly initialized with normal distributions, and the parameters of the optimizers are set to default. The source code used in this paper is available on Github \footnote{http://dummy.link}.
 
 \section{Experiment}
 \label{sec:experiment}
 
 \subsection{Unlabeled Data}
 
-The unlabeled dataset in this paper is built using the source code provided in \cite{Wu2017}; this tool allows the compilation of a list of songs from the Billboard Chart\footnote{https://www.billboard.com/charts, last access 2018/03/27} and the retrieval of these songs from Youtube. This dataset consists of six musical genres, including R\&B$\slash$HipHop, Pop, Rock, Latin, Alternative, and  Dance$\slash$Electronic. Each genre has 1900 songs, which leads to a collection of 11400 songs. All the songs are cross-checked for duplicates and converted to mp3 format with a sampling rate of \unit[44.1]{kHz}. In our experiments, this dataset is further split into training, validation, and testing set with a percentage of 70\%, 15\%, and 15\%, respectively. To speed up the process while maintaining the diversity, only a \unit[30]{s} segment is extracted from each song for training. The segment starts in the middle of the song to avoid potential inactivity at the beginning. As a result, the entire training set has a total duration of \unit[66.5]{hrs}, which is significantly larger than any existing ADT dataset.\comment{is the list of songs/links accessible?}
+The unlabeled dataset in this paper is built using the source code provided in \cite{Wu2017}; this tool allows the compilation of a list of songs from the Billboard Chart\footnote{https://www.billboard.com/charts, last access 2018/03/27} and the retrieval of these songs from Youtube. This dataset consists of six musical genres, including R\&B$\slash$HipHop, Pop, Rock, Latin, Alternative, and  Dance$\slash$Electronic. Each genre has 1900 songs, which leads to a collection of 11400 songs. All the songs are cross-checked for duplicates and converted to mp3 format with a sampling rate of \unit[44.1]{kHz}. In our experiments, this dataset is further split into training, validation, and testing set with a percentage of 70\%, 15\%, and 15\%, respectively. To speed up the process while maintaining the diversity, only a \unit[30]{s} segment is extracted from each song for training. The segment starts in the middle of the song to avoid potential inactivity at the beginning. As a result, the entire training set has a total duration of \unit[66.5]{hrs}, which is significantly larger than any existing ADT dataset. The list of songs and links are available on Github\footnote{http://dummy.link}. %\comment{is the list of songs/links accessible?}
 
 \subsection{Labeled Data}
 % mention the evaluation is performed using a cross-dataset validation scheme. For feature learning 
@@ -241,7 +245,7 @@ The unlabeled dataset in this paper is built using the source code provided in \
 In this paper, four different labeled datasets featuring polyphonic mixtures are used:
 \begin{inparaenum}[(i)]
     \item   the popular ENST-Drums (referred to as ENST) \cite{Gillet2006_enst},
-    \item   the MIREX 2005 (referred to as m2005)\comment{[REF]},
+    \item   the MIREX 2005 (referred to as m2005)%\comment{[REF]},
     \item   the MDB-Drums (referred to as MDB) \cite{Southall2017_mdb}, and
     \item   the RBMA dataset \cite{Vogl2017_ismir}.
 \end{inparaenum}
@@ -271,7 +275,7 @@ This paper evaluates 9 ADT systems, comprising 4 systems for the feature learnin
 
 For the feature learning paradigm, the 4 systems are differentiated by their features. These features are: 
 \begin{enumerate}[(i)]
-\item MFCC: this set of features has shown its effectiveness in various audio related tasks \comment{[REF?]}. Therefore, it is included as a baseline.   
+\item MFCC: this set of features has shown its effectiveness in previous ADT studies \cite{PaulusK09_DrumTransHMM_JASMP, Thompson2014, SouzaBN15_CymbalClassi_IJCNN}. Therefore, it is included as a baseline.   
 \item CONV-RANDOM: this set of features is extracted using the proposed CAE architecture with all the weights randomly initialized without further training. This is another baseline inspired by \cite{Choi2017a} to serve as a sanity check for the effectiveness of the unsupervised training process.  
 \item CONV-AE: this is the set of features extracted from the proposed CAE after training. During the training, the original input is used as the target for optimization. In other words, the CAE is trained to reconstruct the input. 
 \item CONV-DAE: this set of features is similar to CONV-AE except for the optimization target. In this case, a processed input is used as the target. Specifically, the percussive component from the Harmonic Percussive Source Separation (HPSS) \cite{Fitzgerald2010} algorithm is used, and the CAE is trained to approximate the percussive component. This configuration is inspired by the concept of the Denoising Autoencoder (DAE) \cite{Vincent2008} and is designed to encourage the extraction of drum-related features. 
@@ -286,19 +290,19 @@ The teacher models for student-teacher learning paradigm are described in \cite{
 \item FC-ALL (ALT): a fully connected student DNN trained with all the songs from only the ``Alternative" genre. This particular genre is selected for its superior performance in preliminary tests. 
 \end{enumerate}
 
-Based on these 9 systems, the following experiments are conducted:
-\begin{enumerate}[]
-\item \textbf{Experiment 1 (E1)} aims to examine the variance of the labeled datasets. For each dataset, the averaged F-measures across all 9 systems are reported. 
-\item \textbf{Experiment 2 (E2)} aims to evaluate the usefulness of unlabeled data for \textit{Segment and Classify}-based ADT systems using the feature learning paradigm. For each system, the averaged F-measures across all the datasets are reported. In this experiment, a cross-dataset validation process is performed (e.g., train on three datasets and test on the remaining one). This process is specific for \textit{Segment and Classify} ADT system in order to train the binary classifiers (see Sect.~\ref{subsec:featureLearning} for more details).
-\item \textbf{Experiment 3 (E3)} aims to evaluate the usefulness of unlabeled data for \textit{Separate and Detect}-based ADT systems using the student-teacher learning paradigm. For each system, the averaged F-measures across all the datasets are reported. Since the student model does not need additional labeled data for training, the cross-dataset validation is unnecessary for this experiment. 
-\end{enumerate}
-
 \begin{figure}
 \centering
 \includegraphics[width = \columnwidth]{./figs/avgAcrossDatasets.pdf}
 \caption{The evaluation results of all labeled datasets with averaged F-measure across all systems.}
 \label{fig:resultsAcrossDatasets}
 \end{figure}
+
+Based on these 9 systems, the following experiments are conducted:
+\begin{enumerate}[]
+\item \textbf{Experiment 1 (E1)} aims to examine the variance of the labeled datasets. For each dataset, the averaged F-measures across all 9 systems are reported. 
+\item \textbf{Experiment 2 (E2)} aims to evaluate the usefulness of unlabeled data for \textit{Segment and Classify}-based ADT systems using the feature learning paradigm. For each system, the averaged F-measures across all the datasets are reported. In this experiment, a cross-dataset validation process is performed (e.g., train on three datasets and test on the remaining one). This process is specific for \textit{Segment and Classify} ADT system in order to train the binary classifiers (see Sect.~\ref{subsec:featureLearning} for more details).
+\item \textbf{Experiment 3 (E3)} aims to evaluate the usefulness of unlabeled data for \textit{Separate and Detect}-based ADT systems using the student-teacher learning paradigm. For each system, the averaged F-measures across all the datasets are reported. Since the student model does not need additional labeled data for training, the cross-dataset validation is unnecessary for this experiment. 
+\end{enumerate}
 
 \subsection{Results}
 
@@ -315,26 +319,46 @@ Overall, the results show that the evaluated systems leave much room for optimiz
 % sd always improved
 \begin{table}[]
 \centering
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lllll}
 \hline
 \multicolumn{2}{l}{\textbf{Experiments}}             & \multicolumn{3}{l}{\textbf{Averaged F-measure}} \\ \hline
 \textbf{Role} & \multicolumn{1}{l|}{\textbf{System}} & \textbf{HH}   & \textbf{BD}    & \textbf{SD}    \\ \hline
 Baseline      & \multicolumn{1}{l|}{MFCC}            & 0.61          & \textbf{0.62}  & 0.40           \\
 Baseline      & \multicolumn{1}{l|}{CONV-RANDOM}    & 0.61          & 0.54           & 0.39           \\
-Proposed      & \multicolumn{1}{l|}{CONV-AE}        & 0.61          & \textbf{0.62}  & \textbf{0.42}  \\
-Proposed      & \multicolumn{1}{l|}{CONV-DAE}       & 0.61          & 0.61           & \textbf{0.42}  \\ \hline
+Evaluated      & \multicolumn{1}{l|}{CONV-AE}        & 0.61          & \textbf{0.62}  & \textbf{0.42}  \\
+Evaluated      & \multicolumn{1}{l|}{CONV-DAE}       & 0.61          & 0.61           & \textbf{0.42}  \\ \hline
 \end{tabular}
-\caption{Evaluation results of the feature-learning-paradigm-based systems.\comment{I don't like the ``proposed.'' Maybe just remove the Role? Also, adjust to column width}}
+}
+\caption{Evaluation results of the feature-learning-paradigm-based systems.}%\comment{I don't like the ``proposed.'' Maybe just remove the Role? Also, adjust to column width}}
 \label{tab:e2result}
 \end{table}
 
-The results of \textbf{E2} are shown in Table~\ref{tab:e2result}. The following trends can be observed: first, the unlabeled data seems to be helpful in \textit{Segment and Classify}-based ADT systems. A direct comparison between CONV-AE and MFCC shows that the features learned from unlabeled data seem to slighty improve for SD while achieving equal performance on HH and BD. Second, the unsupervised training process is useful for deriving better features. Compared with CONV-RANDOM, both CONV-AE and CONV-DAE show improvements on nearly all instruments, indicating the advantage of the training process. Third, the DAE-inspired training process does not lead to improvements for ADT. This is shown by the almost equivalent results from CONV-AE and CONV-DAE.\comment{yeah, but why not?}
+\begin{table*}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{cccccccc}
+\hline
+\multicolumn{2}{c}{\textbf{Compared Systems}} & \multirow{2}{*}{\textbf{Instrument}} & \multirow{2}{*}{\textbf{Paradigm}} & \multicolumn{2}{c}{\textbf{Improvement}}    & \multicolumn{2}{c}{\textbf{Deterioration}}  \\ \cline{1-2} \cline{5-8} 
+\textbf{Test}          & \textbf{Ref}         &                                      &                                    & \textbf{\# Files} & \textbf{F-measure Gain} & \textbf{\# Files} & \textbf{F-measure Loss} \\ \hline
+CONV-AE               & MFCC                 & SD                                   & Feature Learning                   & 70/137            & 6.5\%                   & 40/137            & -4.6\%                  \\
+FC-200                & PFNMF (SMT)          & HH                                   & S-T Learning                       & 78/137            & 13.8\%                  & 44/137            & -7.6\%                  \\ \hline
+\end{tabular}%
+}
+\caption{Significance check of the most improved pair from each paradigm.}
+\label{tab:improvCheck}
+\end{table*}
+
+The results of \textbf{E2} are shown in Table~\ref{tab:e2result}. The following trends can be observed: first, the unlabeled data seems to be helpful in \textit{Segment and Classify}-based ADT systems. A direct comparison between CONV-AE and MFCC shows that the features learned from unlabeled data seem to slighty improve for SD while achieving equal performance on HH and BD. Second, the unsupervised training process is useful for deriving better features. Compared with CONV-RANDOM, both CONV-AE and CONV-DAE show improvements on nearly all instruments, indicating the advantage of the training process. Third, the DAE-inspired training process does not lead to improvements for ADT. This is shown by the almost equivalent results from CONV-AE and CONV-DAE. Since HPSS also introduces artifacts, it might not be the most ideal method for this task;  further experimentation with other source separation algorithms might provide more insights. 
+%\comment{yeah, but why not?}
+
 
 % E3: results of the student-teacher systems
 % discuss the varying dataset size vs. results
 % criteria for selecting unlabeled data?
 \begin{table}[]
 \centering
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lllll}
 \hline
 \multicolumn{2}{l}{\textbf{Experiments}}                    & \multicolumn{3}{l}{\textbf{Averaged F-measure}} \\ \hline
@@ -345,25 +369,17 @@ Student       & \multicolumn{1}{l|}{FC-200}                & \textbf{0.56}  & 0.
 Student       & \multicolumn{1}{l|}{FC-ALL}               & 0.53           & 0.59           & 0.42          \\
 Student       & \multicolumn{1}{l|}{FC-ALL (ALT)} & 0.55           & 0.58           & 0.44          \\ \hline
 \end{tabular}
-\caption{Evaluation results of the student-teacher-paradigm-based systems.\comment{Adjust to column width}}
+}
+\caption{Evaluation results of the student-teacher-paradigm-based systems.}%\comment{Adjust to column width}}
 \label{tab:e3result}
 \end{table}
 
-Table~\ref{tab:e3result} shows the results of \textbf{E3}. The general trends can be summarized as follows: first, the student-teacher learning seems to be useful for \textit{Separate and Detect}-based ADT systems as all students show a noticeable improvement on HH over the teacher models. This observation consolidates the preliminary finding reported in \cite{Wu2017}. Second, more unlabeled data do not necessarily lead to better results. For example, FC-200 and FC-ALL (ALT) both outperform FC-ALL on HH and SD. While this result seems somewhat counter-intuitive, it may suggest that the noisy nature of the unlabeled data increases with the increasing amount of data.\comment{Hm. Why is that?} Third, the student models seem to struggle on BD. A detailed examination on the individual results from each dataset shows that teachers and students are mostly comparable on BD except for \textit{RBMA}. This is possibly due to the challenging nature of \textit{RBMA} as discussed in \textbf{E1}. However, further investigation might be needed before drawing conclusions. \comment{do the results like much nicer when you remove rbma?}
+
+Table~\ref{tab:e3result} shows the results of \textbf{E3}. The general trends can be summarized as follows: first, the student-teacher learning seems to be useful for \textit{Separate and Detect}-based ADT systems as all students show a noticeable improvement on HH over the teacher models. This observation consolidates the preliminary finding reported in \cite{Wu2017}. Second, more unlabeled data do not necessarily lead to better results. For example, FC-200 and FC-ALL (ALT) both outperform FC-ALL on HH and SD. While this result seems somewhat counter-intuitive, it may suggest that the noisy nature of the unlabeled data increases with the increasing amount of data. Third, the student models seem to struggle on BD. A detailed examination on the individual results from each dataset shows that teachers and students are mostly comparable on BD except for \textit{RBMA}. This is possibly due to the challenging nature of \textit{RBMA} as discussed in \textbf{E1}. However, further investigation might be needed before drawing conclusions. %\comment{do the results like much nicer when you remove rbma?}
 
 % additional analysis goes here
-\begin{table*}[]
-\centering
-\begin{tabular}{cccccccc}
-\hline
-\multicolumn{2}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Compared Systems\end{tabular}}} & \multirow{2}{*}{\textbf{Instrument}} & \multirow{2}{*}{\textbf{Paradigm}} & \multicolumn{2}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Improvement\end{tabular}}}     & \multicolumn{2}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Deterioration\end{tabular}}}   \\ \cline{1-2} \cline{5-8} 
-\textbf{Test}                               & \textbf{Ref}                               &                                      &                                    & \textbf{\# Files} & \textbf{\begin{tabular}[c]{@{}c@{}}Avg. Diff\\ (F-measure)\end{tabular}} & \textbf{\# Files} & \textbf{\begin{tabular}[c]{@{}c@{}}Avg. Diff\\ (F-measure)\end{tabular}} \\ \hline
-CONV-AE                                    & MFCC                                       & SD                                   & Feature Learning                   & 70/137            & 6.5\%                                                                    & 40/137            & -4.6\%                                                                   \\
-FC-200                                     & PFNMF (SMT)                                & HH                                   & S-T Learning                       & 78/137            & 13.8\%                                                                   & 44/137            & -7.6\%                                                                   \\ \hline
-\end{tabular}
-\caption{Significance check of the most improved pair from each paradigm. Note that for both pairs, the improvements are statistically significant ($p \ll 0.05$)}
-\label{tab:improvCheck}
-\end{table*}
+
+
 
 % finally, compare two paradigms (pool the best systems from each)
 % the differences between two systems are not statistically significant on all instruments
@@ -378,9 +394,10 @@ Comparing the pairs on Table~\ref{tab:improvCheck} with each other, the improvem
 \begin{figure}
 \centering
 \includegraphics[width = \columnwidth]{./figs/example_activ.pdf}
-\caption{Comparison of the (top) teacher's and (bottom) student's HH activation function on the most improved file from ENST-Drums dataset.\comment{maybe do both plots in one with a legend to save space?}}
+\caption{Example of the (top) teacher's and (bottom) student's HH activation function in comparison.}
 \label{fig:exampleActiv}
 \end{figure}
+
 
 \section{Conclusion}
 \label{sec:conc}
@@ -392,7 +409,7 @@ Possible future directions include
 \begin{inparaenum}[(i)]
 	\item the evaluation of various methods for unsupervised feature learning such as Sparse Coding \cite{Raina2007a} and Deep Belief Networks \cite{Hamel2010},
     \item the evaluation of different combinations of teacher and student models, for example, the combination of different types of DNN either as teachers or students; the identification of suitable architectures for these roles could be also be an interesting direction, and
-    \item the application of anomaly detection\comment{[REF?]} approaches to filter out noisy unlabeled data.   
+    \item the application of outlier detection \cite{Lu2016} approaches to filter out noisy unlabeled data.   
 \end{inparaenum} 
 
 % For bibtex users:
