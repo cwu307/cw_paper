@@ -21,7 +21,7 @@
 \usepackage{paralist}
 \usepackage[keeplastbox]{flushend}
 \usepackage{paralist}
-
+\usepackage{tabularx}
 
 % Title.
 % ------
@@ -78,7 +78,7 @@
 \maketitle
 %
 \begin{abstract}
-Automatic Drum Transcription (ADT), like many other music information retrieval tasks, has made progress in the past years through the integration of machine learning and audio signal processing techniques. However, with the increasing popularity of data-hungry approaches such as deep learning, the insufficient amount of data becomes more and more a challenge that concerns the generality of the resulting models and the validity of the evaluation. To address this challenge in ADT, this paper first examines the existing labeled datasets and how representative they are of the general problem. Next, the possibilities of using unlabeled data to improve general ADT systems are explored. Specifically, two paradigms that harness information from unlabeled data, namely feature learning and student-teacher learning, are applied to two major types of ADT systems. All systems are evaluated on four different drum datasets. The results highlight the necessity of more and larger annotated datasets and indicate the feasibility of exploiting unlabeled data for improving ADT systems.
+Automatic Drum Transcription (ADT), like many other music information retrieval tasks, has made progress in the past years through the integration of machine learning and audio signal processing techniques. However, with the increasing popularity of data-hungry approaches such as deep learning, the insufficient amount of data becomes more and more a challenge that concerns the generality of the resulting models and the validity of the evaluation. To address this challenge in ADT, this paper first examines the existing labeled datasets and how representative they are of the research problem. Next, the possibilities of using unlabeled data to improve general ADT systems are explored. Specifically, two paradigms that harness information from unlabeled data, namely feature learning and student-teacher learning, are applied to two major types of ADT systems. All systems are evaluated on four different drum datasets. The results highlight the necessity of more and larger annotated datasets and indicate the feasibility of exploiting unlabeled data for improving ADT systems.
 \end{abstract}
 
 %
@@ -131,12 +131,12 @@ Recently, this focus has shifted towards transcribing drums in polyphonic mixtur
 Generally speaking, the existing ADT systems can be categorized into four types according to the literature \cite{Gillet2008_taslp, Paulus09_DrumStructure_PhD}. These are
 \begin{inparaenum}[(i)]
 	\item \textit{Segment and Classify}: following the standard pattern recognition pipeline, these approaches extract audio features from detected onset locations and classifies them with pre-trained models; this is a popular approach with many proposed systems using different combinations of classifiers and features \cite{SteelantTDBLM05_DrumTransSVM_Chapter, Gillet2008_taslp, SouzaBN15_CymbalClassi_IJCNN, Gajhede2016},
-	\item \textit{Separate and Detect}: deriving activation functions from recordings to represent the activities of each drum, these systems subsequentially perform onset detection on these activation functions to locate drum hits; apporaches include matrix factorization methods such as Non-negative Matrix Factorization (NMF) \cite{DittmarG14_DrumTranscription_DAFX, Roebel2015, Wu2015_ismir} and deep-learning-based methods such as Recurrent Neural Networks (RNNs) \cite{Southall2016, Vogl2016, Vogl2017_icassp} and Convolutional Neural Networks (CNNs) \cite{Southall2017, Vogl2017_ismir},
+	\item \textit{Separate and Detect}: deriving activation functions from recordings to represent the activities of each drum, these systems subsequentially perform onset detection on these activation functions to locate drum hits; approaches include matrix factorization methods such as Non-negative Matrix Factorization (NMF) \cite{DittmarG14_DrumTranscription_DAFX, Roebel2015, Wu2015_ismir} and deep-learning-based methods such as Recurrent Neural Networks (RNNs) \cite{Southall2016, Vogl2016, Vogl2017_icassp} and Convolutional Neural Networks (CNNs) \cite{Southall2017, Vogl2017_ismir},
 	\item \textit{Match and Adapt}: identifying drum events by comparing with a set of pre-defined templates, these systems often iteratively update the templates \cite{YoshiiGO07_DrumTrans_IEEE-TASLP}, and
 	\item \textit{HMM-based Recognition}: modeling the temporal connections between drum events using probabilistic models such as Hidden Markov Models (HMMs), these models try to identify the underlying drum sequence by using the Viterbi algorithm \cite{PaulusK09_DrumTransHMM_JASMP, Dzhambazov14_DrumTransHMM_AES}. 
 \end{inparaenum} 
 
-To date, the majority of the existing ADT systems fall into the categories of \textit{Segment and Classify} and \textit{Separate and Detect}. These two types of systems, despite having the fundamental differences, both use data-driven methods and could potentially face the challenge described in Sect.~\ref{sec:introduction}.
+To date, the majority of the existing ADT systems fall into the categories of \textit{Segment and Classify} and \textit{Separate and Detect}. Both these types of systems, despite having the fundamental differences, use data-driven methods and could potentially face the challenge described in Sect.~\ref{sec:introduction}.
 Therefore, in this paper, we considered both types of systems in our experiments.
 
 \subsection{Learning from Unlabeled Data}
@@ -159,7 +159,7 @@ Another direction for addressing the data scarcity is to use unlabeled data. Int
 % first, start with an overview figure that shows the main idea of this paper on integrating unlabeled data
 \subsection{Overview}
 
-To connect general ADT systems to the abundant resources of unlabeled data, this paper investigates \textit{feature learning} and \textit{student-teacher learning} to \textit{Segment and Classify}-based and \textit{Separate and Detect}-based ADT systems, respectively. \figref{fig:overview} shows the two paradigms for integrating unlabeled data to ADT systems as investigated in this paper. The feature learning paradigm is designed for \textit{Segment and Classify}-based ADT systems. In this paradigm, the unlabeled data is used to derive a feature extractor using an unsupervised feature learning algorithm. The resulting feature extractor is then integrated into a generic \textit{Segment and Classify} ADT framework. The student-teacher learning paradigm is suitable for \textit{Separate and Detect}-based ADT systems. This paradigm uses teacher models and unlabeled data to generate soft-targets; these soft-targets play the important role of connecting any \textit{Separate and Detect}-based system with unlabeled data and enable the training of the student model. In the following sections, more details of both paradigms are presented. 
+To connect general ADT systems to the abundant resources of unlabeled data, this paper investigates the application of \textit{feature learning} and \textit{student-teacher learning} to \textit{Segment and Classify}-based and \textit{Separate and Detect}-based ADT systems, respectively. \figref{fig:overview} shows the two paradigms for integrating unlabeled data to ADT systems as investigated in this paper. The feature learning paradigm is designed for \textit{Segment and Classify}-based ADT systems. In this paradigm, the unlabeled data is used to derive a feature extractor using an unsupervised feature learning algorithm. The resulting feature extractor is then integrated into a generic \textit{Segment and Classify} ADT framework. The student-teacher learning paradigm is suitable for \textit{Separate and Detect}-based ADT systems. This paradigm uses teacher models and unlabeled data to generate soft-targets; these soft-targets play the important role of connecting any \textit{Separate and Detect}-based system with unlabeled data and enable the training of the student model. In the following sections, more details of both paradigms are presented. 
 
 \subsection{Feature Learning}
 \label{subsec:featureLearning}
@@ -189,7 +189,7 @@ The CAE is trained to minimize the Mean Squared Error (MSE) between $X$ and $X'$
 
 % this architecture keeps the temporal resolution intact, allowing the extraction of frame-wise features
 % talk about how we get the features and feature splicing 
-The feature extraction process, as shown in Fig.~\ref{fig:caeStructure}, is inspired by the method proposed by Choi et al.~\cite{Choi2017a}: first, the intermediate outputs from all the layers in the encoder (including the bottleneck layer) are computed. Next, these outputs are aggregated across the Mel-frequency axis through averaging. Finally, the aggregated outputs are stacked into a $64 \times N$ feature matrix, in which $N$ is the number of blocks. %\comment{you mean neighboring?}
+The feature extraction process, as shown in Fig.~\ref{fig:caeStructure}, is inspired by the method proposed by Choi et al.~\cite{Choi2017a}: first, the intermediate outputs from all the layers in the encoder (including the bottleneck layer) are computed. Next, these outputs are aggregated across the Mel-frequency axis through averaging. Finally, the aggregated outputs are stacked into a $64 \times N$ feature matrix, where $N$ is the number of blocks. %\comment{you mean neighboring?}
 To derive the final feature vector at each block, the feature vectors from the current block and the following two blocks are spliced together to capture the temporal variations of the event. This leads to a final feature vector with a dimensionality $d = 3 \times F$, in which $F$ is the number of features (i.e., 64). 
 % for each layer, average pooling is applied to summarized the activation map across different channels. The resulting vectors from all layers in the encoder part are stacked and used as the final feature matrix. Splicing 
 
@@ -226,7 +226,7 @@ The configuration and parametrization of this evaluated paradigm generally follo
 % all neural networks are 
 The main input representations for both paradigms are derived from the magnitude spectrogram of the Short Time Fourier Transform (STFT), which is computed using a block size of 2048 and a hop size of 512 samples with Hann window. All of the audio signals are normalized to a range between 1 and -1, down-mixed to mono, and resampled to \unit[44.1]{kHz} prior to the computation of STFT. %\comment{normalization?}
 
-For the feature learning paradigm, both the Mel-spectrogram in dB scale with 128 bins and the MFCCs are computed using librosa\footnote{https://librosa.github.io, last access 2018/03/27}, a Python library for audio signal processing. The onset detection is implemented using the \textit{CNNOnsetProcessor} from Madmom\footnote{https://madmom.readthedocs.io/en/latest/, last access 2018/03/27}. Additionally, scikit-learn\footnote{http://scikit-learn.org/stable/, last access 2018/03/27}, a Python library for machine learning, is used to implement  the Linear SVMs. A grid search on the penalty parameter $C$ within \{0.1, 1, 10, 100, 1000\} is performed to optimize the performance of the SVMs. 
+For the feature learning paradigm, both the Mel-spectrogram in dB scale with 128 bins and the MFCCs are computed using librosa\footnote{https://librosa.github.io, last access 2018/03/27}, a Python library for audio signal processing. The onset detection is implemented using the \textit{CNNOnsetProcessor} from Madmom\footnote{https://madmom.readthedocs.io/en/latest/, last access 2018/03/27}. Additionally, the implementation of Linear SVMs from scikit-learn\footnote{http://scikit-learn.org/stable/, last access 2018/03/27}, a Python library for machine learning, is used. A grid search on the penalty parameter $C$ within \{0.1, 1, 10, 100, 1000\} is performed to optimize the performance of the SVMs. 
 
 For student-teacher learning paradigm, the teacher models are implemented using the PFNMF function from NmfDrumToolbox\footnote{https://github.com/cwu307/NmfDrumToolbox, last access 2018/03/27}. The peak-picking parameters are set to the same as in the original paper \cite{Wu2017}.
 
@@ -277,7 +277,7 @@ For the feature learning paradigm, the 4 systems are differentiated by their fea
 \begin{enumerate}[(i)]
 \item MFCC: this set of features has shown its effectiveness in previous ADT studies \cite{PaulusK09_DrumTransHMM_JASMP, Thompson2014, SouzaBN15_CymbalClassi_IJCNN}. Therefore, it is included as a baseline.   
 \item CONV-RANDOM: this set of features is extracted using the proposed CAE architecture with all the weights randomly initialized without further training. This is another baseline inspired by \cite{Choi2017a} to serve as a sanity check for the effectiveness of the unsupervised training process.  
-\item CONV-AE: this is the set of features extracted from the proposed CAE after training. During the training, the original input is used as the target for optimization. In other words, the CAE is trained to reconstruct the input. 
+\item CONV-AE: this is the set of features extracted from the proposed CAE after training. During the training procedure, the original input is used as the target for optimization. In other words, the CAE is trained to reconstruct the input. 
 \item CONV-DAE: this set of features is similar to CONV-AE except for the optimization target. In this case, a processed input is used as the target. Specifically, the percussive component from the Harmonic Percussive Source Separation (HPSS) \cite{Fitzgerald2010} algorithm is used, and the CAE is trained to approximate the percussive component. This configuration is inspired by the concept of the Denoising Autoencoder (DAE) \cite{Vincent2008} and is designed to encourage the extraction of drum-related features. 
 \end{enumerate}
 
@@ -298,10 +298,10 @@ The teacher models for student-teacher learning paradigm are described in \cite{
 \end{figure}
 
 Based on these 9 systems, the following experiments are conducted:
-\begin{enumerate}[]
-\item \textbf{Experiment 1 (E1)} aims to examine the variance of the labeled datasets. For each dataset, the averaged F-measures across all 9 systems are reported. 
-\item \textbf{Experiment 2 (E2)} aims to evaluate the usefulness of unlabeled data for \textit{Segment and Classify}-based ADT systems using the feature learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
-\item \textbf{Experiment 3 (E3)} aims to evaluate the usefulness of unlabeled data for \textit{Separate and Detect}-based ADT systems using the student-teacher learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
+\begin{enumerate}
+\item [\textbf{E1:}]\textbf{Experiment 1} aims to examine the variance of the labeled datasets. For each dataset, the averaged F-measures across all 9 systems are reported. 
+\item [\textbf{E2:}]\textbf{Experiment 2} aims to evaluate the usefulness of unlabeled data for \textit{Segment and Classify}-based ADT systems using the feature learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
+\item [\textbf{E3:}]\textbf{Experiment 3} aims to evaluate the usefulness of unlabeled data for \textit{Separate and Detect}-based ADT systems using the student-teacher learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
 
 Note that for feature learning paradigm, a cross-dataset validation process is performed (e.g., train on three datasets and test on the remaining one) in order to train the binary classifiers (see Sect.~\ref{subsec:featureLearning} for more details). For student-teacher learning paradigm, since the student model does not need additional labeled data for training, the cross-dataset validation is unnecessary. 
 \end{enumerate}
@@ -323,7 +323,7 @@ Overall, the results show that the evaluated systems leave much room for optimiz
 \centering
 \resizebox{\columnwidth}{!}{%
 \footnotesize
-\begin{tabular}{lllll}
+\begin{tabularx}{\columnwidth}{XXXXX}
 \hline
 \multicolumn{2}{l}{\textbf{Experiments}}             & \multicolumn{3}{l}{\textbf{Averaged F-measure}} \\ \hline
 \textbf{Role} & \multicolumn{1}{l|}{\textbf{System}} & \textbf{HH}   & \textbf{BD}    & \textbf{SD}    \\ \hline
@@ -331,7 +331,7 @@ Baseline      & \multicolumn{1}{l|}{MFCC}            & 0.61          & \textbf{0
 Baseline      & \multicolumn{1}{l|}{CONV-RANDOM}    & 0.61          & 0.54           & 0.39           \\
 Evaluated      & \multicolumn{1}{l|}{CONV-AE}        & 0.61          & \textbf{0.62}  & \textbf{0.42}  \\
 Evaluated      & \multicolumn{1}{l|}{CONV-DAE}       & 0.61          & 0.61           & \textbf{0.42}  \\ \hline
-\end{tabular}
+\end{tabularx}
 }
 \caption{Evaluation results of the feature-learning-paradigm-based systems.}%\comment{I don't like the ``proposed.'' Maybe just remove the Role? Also, adjust to column width}}
 \label{tab:e2result}
@@ -339,16 +339,14 @@ Evaluated      & \multicolumn{1}{l|}{CONV-DAE}       & 0.61          & 0.61     
 
 \begin{table*}[t]
 \centering
-\resizebox{\textwidth}{!}{%
 \footnotesize
-\begin{tabular}{cccccccc}
+\begin{tabularx}{\textwidth}{XcccXcXc}%{cccccccc}
 \hline
 \multicolumn{2}{c}{\textbf{Compared Systems}} & \multirow{2}{*}{\textbf{Instrument}} & \multirow{2}{*}{\textbf{Paradigm}} & \multicolumn{2}{c}{\textbf{Improvement}}    & \multicolumn{2}{c}{\textbf{Deterioration}}  \\ \cline{1-2} \cline{5-8} 
 \textbf{Test}          & \textbf{Ref}         &                                      &                                    & \textbf{\# Files} & \textbf{F-measure Gain} & \textbf{\# Files} & \textbf{F-measure Loss} \\ \hline
 CONV-AE               & MFCC                 & SD                                   & Feature Learning                   & 70/137            & 6.5\%                   & 40/137            & -4.6\%                  \\
 FC-200                & PFNMF (SMT)          & HH                                   & S-T Learning                       & 78/137            & 13.8\%                  & 44/137            & -7.6\%                  \\ \hline
-\end{tabular}%
-}
+\end{tabularx}%
 \caption{Significance check of the most improved pair from each paradigm.}
 \label{tab:improvCheck}
 \end{table*}
@@ -362,9 +360,8 @@ The results of \textbf{E2} are shown in Table~\ref{tab:e2result}. The following 
 % criteria for selecting unlabeled data?
 \begin{table}[]
 \centering
-\resizebox{\columnwidth}{!}{%
 \footnotesize
-\begin{tabular}{lllll}
+\begin{tabularx}{\columnwidth}{XXXXX}
 \hline
 \multicolumn{2}{l}{\textbf{Experiments}}                    & \multicolumn{3}{l}{\textbf{Averaged F-measure}} \\ \hline
 \textbf{Role} & \multicolumn{1}{l|}{\textbf{System}}        & \textbf{HH}    & \textbf{BD}    & \textbf{SD}   \\ \hline
@@ -373,16 +370,15 @@ Teacher       & \multicolumn{1}{l|}{PFNMF (200D)}           & 0.47           & \
 Student       & \multicolumn{1}{l|}{FC-200}                & \textbf{0.56}  & 0.57           & 0.44          \\
 Student       & \multicolumn{1}{l|}{FC-ALL}               & 0.53           & 0.59           & 0.42          \\
 Student       & \multicolumn{1}{l|}{FC-ALL (ALT)} & 0.55           & 0.58           & 0.44          \\ \hline
-\end{tabular}
-}
+\end{tabularx}
 \caption{Evaluation results of the student-teacher-paradigm-based systems.}%\comment{Adjust to column width}}
 \label{tab:e3result}
 \end{table}
 
 
-Table~\ref{tab:e3result} shows the results of \textbf{E3}. The general trends can be summarized as follows: first, the student-teacher learning seems to be useful for \textit{Separate and Detect}-based ADT systems as all students show a noticeable improvement on HH over the teacher models. This observation consolidates the preliminary finding reported in \cite{Wu2017}. Second, more unlabeled data does not necessarily lead to better results. For example, FC-200 and FC-ALL (ALT) both outperform FC-ALL on HH and SD. 
+Table~\ref{tab:e3result} shows the results of \textbf{E3}. The general trends can be summarized as follows: first, the student-teacher learning seems to be useful for \textit{Separate and Detect}-based ADT systems as all students show a noticeable improvement on HH over the teacher models. This observation consolidates the preliminary finding reported in \cite{Wu2017}. Second, more unlabeled data do not necessarily lead to better results. For example, FC-200 and FC-ALL (ALT) both outperform FC-ALL on HH and SD. 
 %While this result seems somewhat counter-intuitive, it may suggest that the noisy nature of the unlabeled data increases with the increasing amount of data. 
-Since the student model is a simple feed-forward DNN, the lack of model capacity could limit its potential for further improvements as the data size grows. Experiments using other student models (e.g., CNNs and RNNs) would be necessary for confirmation.   
+Since the student model is a simple feed-forward DNN, the lack of model capacity could limit its potential for further improvement as the data size grows. Experiments using other student models (e.g., CNNs and RNNs) would be necessary for confirmation.   
 Third, the student models seem to struggle on BD. A detailed examination on the individual results from each dataset shows that teachers and students are mostly comparable on BD except for \textit{RBMA}. This is possibly due to the challenging nature of \textit{RBMA} as discussed in \textbf{E1}. However, further investigation might be needed before drawing conclusions. %\comment{do the results like much nicer when you remove rbma?}
 
 % additional analysis goes here
@@ -394,7 +390,7 @@ Third, the student models seem to struggle on BD. A detailed examination on the 
 % definitely mention the additional need of labeled data in feature learning 
 % so student  teacher is slightly favored for it requires less labeled data
 
-The results of \textbf{E2} and \textbf{E3} show that feature learning and student-teacher learning paradigms are able to improve the performance on SD and HH, respectively. In light of these results, an interesting question is: ``Are these improvements significant?'' In an attempt to answer this question, two pairs of systems are selected for further analysis. Each pair consists of the best baseline and the best evaluated system of each paradigm. A t-test is performed on each pair by comparing their results on all 137 files. Both pairs have shown significant improvements with $p \ll 0.05$ for both t-tests. Furthermore, the number of improved and deteriorated files is calculated. The results, shown in Table~\ref{tab:improvCheck}, show a positive trend: the number of improved files is in both cases greater than the number of deteriorated files. Moreover, the averaged F-measure gains are also higher than the averaged F-measure loss for both pairs.  
+The results of \textbf{E2} and \textbf{E3} show that feature learning and student-teacher learning paradigms are able to improve the performance on SD and HH, respectively. In light of these results, an interesting question is: ``Are these improvements significant?'' In an attempt to answer this question, two pairs of systems are selected for further analysis. Each pair consists of the best baseline and the best evaluated system of each paradigm. A t-test is performed on each pair by comparing their results on all 137 files. Both pairs have shown significant improvements with $p \ll 0.05$ for both t-tests. Furthermore, the number of improved and deteriorated files is calculated. The results, shown in Table~\ref{tab:improvCheck}, show a positive trend: the number of improved files is, in both cases, greater than the number of deteriorated files. Moreover, the averaged F-measure gains are also higher than the averaged F-measure loss for both pairs.  
 
 Comparing the pairs on Table~\ref{tab:improvCheck} with each other, the improvements on HH from the student-teacher learning paradigm seems to be more substantial. To further investigate the cause of this improvement, one example from the \textit{ENST} dataset, which has the largest F-measure gain among all files, is selected. The HH activation functions generated from both teacher and student model are shown in Fig.~\ref{fig:exampleActiv}. Compared to the teacher's activation function, the student's activation function is sharper and cleaner, demonstrating the benefit of this paradigm.
 
