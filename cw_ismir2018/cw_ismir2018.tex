@@ -303,8 +303,9 @@ Based on these 9 systems, the following experiments are conducted:
 \begin{compactenum}
 \item [\textbf{E1:}]\textbf{Experiment 1} aims to examine the variance of the labeled datasets. For each dataset, the averaged F-measures across all 9 systems are reported. 
 \item [\textbf{E2:}]\textbf{Experiment 2} aims to evaluate the usefulness of unlabeled data for \textit{Segment and Classify}-based ADT systems using the feature learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
-\item [\textbf{E3:}]\textbf{Experiment 3} aims to evaluate the usefulness of unlabeled data for \textit{Separate and Detect}-based ADT systems using the student-teacher learning paradigm. For each system, the averaged F-measures across all the datasets are reported. \\
+\item [\textbf{E3:}]\textbf{Experiment 3} aims to evaluate the usefulness of unlabeled data for \textit{Separate and Detect}-based ADT systems using the student-teacher learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
 \end{compactenum}
+
 Note that for feature learning paradigm, a cross-dataset validation process is performed (e.g., train on three datasets and test on the remaining one) in order to train the binary classifiers (see Sect.~\ref{subsec:featureLearning} for more details). For student-teacher learning paradigm, since the student model does not need additional labeled data for training, the cross-dataset validation is unnecessary. 
 
 \subsection{Results}
@@ -312,10 +313,12 @@ Note that for feature learning paradigm, a cross-dataset validation process is p
 % E1: averaged across systems: show the difficulty of the datasets
 % need another table here
 Figure~\ref{fig:resultsAcrossDatasets} shows the evaluation result of \textbf{E1}. On average, all systems tend to perform the best on \textit{ENST} and the worst on \textit{RBMA}. For some instruments, this gap can be as large as 22\% in F-measure. 
-There are two possible reasons for the good performance on \textit{ENST}. First, as all systems have been developed and evaluated mostly on this dataset, there could be potential bias towards this dataset. Second, the \textit{ENST} dataset might be relatively simple compared with the others. A closer examination of the dataset shows the lack of singing voices and the dominance of MIDI synthesized accompaniments, which could potentially over-simplify the ADT problem. 
+There are two possible reasons for the good performance on \textit{ENST}. %First, as all systems have been developed and evaluated mostly on this dataset, there could be potential bias towards this dataset. 
+First, as many ADT systems, including \textit{Segment and Classify}-based and \textit{Separate and Detect}-based, have been developed and evaluated on \textit{ENST}, there could be potential bias towards this dataset.
+Second, the \textit{ENST} dataset might be relatively simple compared with the others. A closer examination of the dataset shows the lack of singing voices and the dominance of MIDI synthesized accompaniments, which could potentially over-simplify the ADT problem. 
 The relative poor performance on the \textit{RBMA} dataset might be related to its focus on EDM; the electronic drum sounds with strong audio effects could possibly increase the difficulty for ADT. This seems to be especially true in case of the SD.
 Overall, the results show that the evaluated systems leave much room for optimization; since many of the parameters in these systems are not extensively tuned, this result is to be expected. However, this also reflects the challenge of building an ADT system that is easily generalizable. 
-%Finally, the high variance across all the datasets suggests the possibility of being biased when relying on only one dataset; this also highlights the importance of evaluating ADT systems on multiple datasets.   
+%Also, the high variance across all the datasets highlights the importance of evaluating ADT systems on multiple datasets.   
 
 % E2: results of the feature learning systems
 % trained is always better than random except hh
