@@ -19,7 +19,7 @@
 \usepackage{graphicx}
 \usepackage{multirow}
 \usepackage{paralist}
-\usepackage[keeplastbox]{flushend}
+%\usepackage[keeplastbox]{flushend}
 \usepackage{paralist}
 \usepackage{tabularx}
 
@@ -96,7 +96,7 @@ The heavy reliance on one dataset leads to two major concerns:
 	\item   the model could easily overfit the data, which questions its generality, and
     \item   the evaluation results could be overly optimistic due to the small sample size of the split. 
 \end{inparaenum} 
-To avoid these pitfalls, larger datasets and cross-dataset evaluation are necessary. This need has been identified by researchers and has been addressed with newly released annotated datasets such as MDB-Drums \cite{Southall2017_mdb} and RBMA \cite{Vogl2017_ismir}. These new data enables us to revisit ENST-Drums and re-examine the representativeness of this widely-used dataset through a unified comparison. 
+To avoid these pitfalls, larger datasets and cross-dataset evaluation are necessary. This need has been identified by researchers and has been addressed with newly released annotated datasets such as MDB-Drums \cite{Southall2017_mdb} and RBMA \cite{Vogl2017_ismir}. These new data enable us to revisit ENST-Drums and re-examine the representativeness of this widely-used dataset through a unified comparison. 
 
 % the challenge leads to the question: 
 % to answer this question 
@@ -176,7 +176,7 @@ To connect general ADT systems to the abundant resources of unlabeled data, this
 \begin{figure}
 \centering
 \includegraphics[width = \columnwidth]{./figs/caeStructure.pdf}
-\caption{The architecture of the proposed CAE for unsupervised feature learning. The input $X$ is a $128 \times 128$ Mel-spectrogram.}
+\caption{The architecture of the proposed CAE for unsupervised feature learning. The input $X$ is a $128 \times N$ Mel-spectrogram.}
 \label{fig:caeStructure}
 \end{figure}
 
@@ -274,21 +274,23 @@ To determine whether an onset is a match with the ground truth, a tolerance wind
 This paper evaluates 9 ADT systems, comprising 4 systems for the feature learning paradigm and 5 systems for the student-teacher learning paradigm. The configurations of these systems are described as follows:
 
 For the feature learning paradigm, the 4 systems are differentiated by their features. These features are: 
-\begin{enumerate}[(i)]
+\begin{compactenum}[(i)]
 \item MFCC: this set of features has shown its effectiveness in previous ADT studies \cite{PaulusK09_DrumTransHMM_JASMP, Thompson2014, SouzaBN15_CymbalClassi_IJCNN}. Therefore, it is included as a baseline.   
 \item CONV-RANDOM: this set of features is extracted using the proposed CAE architecture with all the weights randomly initialized without further training. This is another baseline inspired by \cite{Choi2017a} to serve as a sanity check for the effectiveness of the unsupervised training process.  
 \item CONV-AE: this is the set of features extracted from the proposed CAE after training. During the training procedure, the original input is used as the target for optimization. In other words, the CAE is trained to reconstruct the input. 
-\item CONV-DAE: this set of features is similar to CONV-AE except for the optimization target. In this case, a processed input is used as the target. Specifically, the percussive component from the Harmonic Percussive Source Separation (HPSS) \cite{Fitzgerald2010} algorithm is used, and the CAE is trained to approximate the percussive component. This configuration is inspired by the concept of the Denoising Autoencoder (DAE) \cite{Vincent2008} and is designed to encourage the extraction of drum-related features. 
-\end{enumerate}
+\item CONV-DAE: this set of features is similar to CONV-AE except for the optimization target. In this case, a processed input is used as the target. Specifically, the percussive component from the Harmonic Percussive Source Separation (HPSS) \cite{Fitzgerald2010} algorithm is used, and the CAE is trained to approximate the percussive component. This configuration is inspired by the concept of the Denoising Autoencoder (DAE) \cite{Vincent2008} and is designed to encourage the extraction of drum-related features.\\ 
+\end{compactenum}
 
 The teacher models for student-teacher learning paradigm are described in \cite{Wu2017}. The 3 student models can be differentiated by their training data. The systems are: 
-\begin{enumerate}[(i)]
+%\begin{enumerate}[(i)]
+\begin{compactenum}[(i)]
 \item PFNMF (SMT): a teacher PFNMF initialized with the drum templates extracted from the IDMT-SMT-Drum dataset \cite{DittmarG14_DrumTranscription_DAFX}.
 \item PFNMF (200D): a teacher PFNMF initialized with the drum templates extracted from the 200 Drum Machine dataset\footnote{http://www.hexawe.net/mess/200.Drum.Machines/, last access 2018/03/27}.
 \item FC-200: a fully-connected student DNN trained with a subset of the unlabeled dataset, which consists of 200 randomly selected songs from each genre. 
 \item FC-ALL: a fully-connected student DNN trained with all the songs from all genres.
-\item FC-ALL (ALT): a fully connected student DNN trained with all the songs from only the ``Alternative" genre. This particular genre is selected for its superior performance in preliminary tests. 
-\end{enumerate}
+\item FC-ALL (ALT): a fully connected student DNN trained with all the songs from only the ``Alternative" genre. This particular genre is selected for its superior performance in preliminary tests. \\
+\end{compactenum}
+%\end{enumerate}
 
 \begin{figure}
 \centering
@@ -298,13 +300,12 @@ The teacher models for student-teacher learning paradigm are described in \cite{
 \end{figure}
 
 Based on these 9 systems, the following experiments are conducted:
-\begin{enumerate}
+\begin{compactenum}
 \item [\textbf{E1:}]\textbf{Experiment 1} aims to examine the variance of the labeled datasets. For each dataset, the averaged F-measures across all 9 systems are reported. 
 \item [\textbf{E2:}]\textbf{Experiment 2} aims to evaluate the usefulness of unlabeled data for \textit{Segment and Classify}-based ADT systems using the feature learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
-\item [\textbf{E3:}]\textbf{Experiment 3} aims to evaluate the usefulness of unlabeled data for \textit{Separate and Detect}-based ADT systems using the student-teacher learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
-
+\item [\textbf{E3:}]\textbf{Experiment 3} aims to evaluate the usefulness of unlabeled data for \textit{Separate and Detect}-based ADT systems using the student-teacher learning paradigm. For each system, the averaged F-measures across all the datasets are reported. \\
+\end{compactenum}
 Note that for feature learning paradigm, a cross-dataset validation process is performed (e.g., train on three datasets and test on the remaining one) in order to train the binary classifiers (see Sect.~\ref{subsec:featureLearning} for more details). For student-teacher learning paradigm, since the student model does not need additional labeled data for training, the cross-dataset validation is unnecessary. 
-\end{enumerate}
 
 \subsection{Results}
 
@@ -322,8 +323,9 @@ Overall, the results show that the evaluated systems leave much room for optimiz
 \begin{table}[]
 \centering
 \resizebox{\columnwidth}{!}{%
-\footnotesize
-\begin{tabularx}{\columnwidth}{XXXXX}
+%\footnotesize
+%\begin{tabularx}{\columnwidth}{XXXXX}
+\begin{tabularx}{\columnwidth}{ccccc}
 \hline
 \multicolumn{2}{l}{\textbf{Experiments}}             & \multicolumn{3}{l}{\textbf{Averaged F-measure}} \\ \hline
 \textbf{Role} & \multicolumn{1}{l|}{\textbf{System}} & \textbf{HH}   & \textbf{BD}    & \textbf{SD}    \\ \hline
@@ -339,10 +341,11 @@ Evaluated      & \multicolumn{1}{l|}{CONV-DAE}       & 0.61          & 0.61     
 
 \begin{table*}[t]
 \centering
-\footnotesize
-\begin{tabularx}{\textwidth}{XcccXcXc}%{cccccccc}
+%\footnotesize
+%\begin{tabularx}{\textwidth}{XcccXcXc}%{cccccccc}
+\begin{tabularx}{\textwidth}{cccccccc}
 \hline
-\multicolumn{2}{c}{\textbf{Compared Systems}} & \multirow{2}{*}{\textbf{Instrument}} & \multirow{2}{*}{\textbf{Paradigm}} & \multicolumn{2}{c}{\textbf{Improvement}}    & \multicolumn{2}{c}{\textbf{Deterioration}}  \\ \cline{1-2} \cline{5-8} 
+\multicolumn{2}{c}{\textbf{Compared Systems}} & \multirow{2}{*}{\textbf{Inst.}} & \multirow{2}{*}{\textbf{Paradigm}} & \multicolumn{2}{c}{\textbf{Improvement}}    & \multicolumn{2}{c}{\textbf{Deterioration}}  \\ \cline{1-2} \cline{5-8} 
 \textbf{Test}          & \textbf{Ref}         &                                      &                                    & \textbf{\# Files} & \textbf{F-measure Gain} & \textbf{\# Files} & \textbf{F-measure Loss} \\ \hline
 CONV-AE               & MFCC                 & SD                                   & Feature Learning                   & 70/137            & 6.5\%                   & 40/137            & -4.6\%                  \\
 FC-200                & PFNMF (SMT)          & HH                                   & S-T Learning                       & 78/137            & 13.8\%                  & 44/137            & -7.6\%                  \\ \hline
@@ -360,7 +363,7 @@ The results of \textbf{E2} are shown in Table~\ref{tab:e2result}. The following 
 % criteria for selecting unlabeled data?
 \begin{table}[]
 \centering
-\footnotesize
+%\footnotesize
 \begin{tabularx}{\columnwidth}{XXXXX}
 \hline
 \multicolumn{2}{l}{\textbf{Experiments}}                    & \multicolumn{3}{l}{\textbf{Averaged F-measure}} \\ \hline
@@ -406,13 +409,13 @@ Comparing the pairs on Table~\ref{tab:improvCheck} with each other, the improvem
 \section{Conclusion}
 \label{sec:conc}
 
-In this paper, we discussed the data challenge in ADT and investigated two approaches to address this challenge by considering both labeled and unlabeled data. First, we compared system performance on the multiple existing labeled datasets in an unified setting. The results indicate a potential bias of relying on one dataset and highlight the necessity of including more datasets in the future ADT evaluation. Furthermore, we evaluated the usefulness of unlabeled data for two major types of ADT systems via two different learning paradigms, feature learning and the student-teacher approach. For both paradigms, we got encouraging (and statistically significant) results demonstrating the potential of achieving better performance than the baseline systems on different instruments.
+In this paper, we discussed the data challenge in ADT and investigated two approaches to address this challenge by considering both labeled and unlabeled data. First, we compared system performance on the multiple existing labeled datasets in an unified setting. The results indicate a potential bias of relying on one dataset and highlight the necessity of including more datasets in the future ADT evaluation. Furthermore, we evaluated the usefulness of unlabeled data for two major types of ADT systems via two different learning paradigms, feature learning and the student-teacher learning approach. For both paradigms, we got encouraging (and statistically significant) results demonstrating the potential of achieving better performance than the baseline systems on different drum instruments.
 
 These results, while suggesting the need for additional labeled data in the field of ADT, also encourage the exploration of incorporating unlabeled data in the training. 
 Possible future directions include
 \begin{inparaenum}[(i)]
 	\item the evaluation of various methods for unsupervised feature learning such as Sparse Coding \cite{Raina2007a} and Deep Belief Networks \cite{Hamel2010},
-    \item the evaluation of different combinations of teacher and student models, for example, the combination of different types of DNN either as teachers or students; the identification of suitable architectures for these roles could be also be an interesting direction, and
+    \item the evaluation of different combinations of teacher and student models, for example, the combination of different types of DNN either as teachers or students; the identification of suitable architectures for these roles could also be an interesting direction, and
     \item the application of outlier detection \cite{Lu2016} approaches to filter out noisy unlabeled data.   
 \end{inparaenum} 
 
