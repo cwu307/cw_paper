@@ -175,6 +175,9 @@ and $n_\mathrm{s}$ is the number of local segments.
 
 
 \subsection{Feature Learning}\label{subsec:feat_learn}
+
+\subsubsection{Sparse Coding}
+\label{subsubsec:sc}
 % sparse coding
 The feature learning algorithm used in this paper is Sparse Coding (SC), which can be expressed as %Eq.~\ref{eq:lasso}
 \begin{equation}\label{eq:lasso}
@@ -190,9 +193,28 @@ Next, the $\alpha_\mathrm{individual}$ is estimated from each recording by subst
 
 In our experiment, the Matlab implementation for SC from the open source library SPAMS\footnote{http://spams-devel.gforge.inria.fr Last accessed: 2017/10/15} \cite{Mairal2009a} is used. The parametrizations $k = \{32, 64, 128\}$ are tested, and a sparsity coefficient $\lambda = \nicefrac{1}{\sqrt{block\, size}}$ is applied. 
 
+
+\subsubsection{Convolutional Autoencoder}
+\label{subsubsec:cae}
 %TODO talk about the additional baseline: convolutional autoencoder for feature learning
 
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8 \linewidth]{./figs/cae.pdf}
+    \caption{The architecture of the CAE and the feature extraction process. Note that the mean and standard deviation (STD) vectors are computed across the blocks; these two vectors are concatenated to summarize the entire recording. $X$ is a $64 \times N$ Mel-spectrogram in dB scale. $64$ is the number of Mel frequency bins.} 
+    \label{fig:cae}
+\end{figure}
 
+In this paper, we included another baseline system for feature learning, which is a Convolutional Auto-encoder (CAE). The inclusion of this system allows us to compare our Sparse Coding-based system with a generic feature learning framework, providing more insights on feature learning in the context of music performance assessment. The architecture of the CAE in this paper is shown in Fig.~\ref{fig:cae}.
+The CAE feature learning process starts by taking a Mel-spectrogram $X$ of the recording as the input. The network is trained to output $X'$, which is the reconstruction of the input. 
+There are four convolutional layers with \{32, 16, 8, 4\} channels of $3 \times 3$ kernels in our encoder. A batch normalization layer and a max-pooling layer of (2, 1) are added to each convolutional layer. The specific parameters are chosen for max-pooling in order to maintain the temporal resolutions and extract block-wise features from the input.
+The bottleneck layer is also a convolutional layer with 4 channels of $3 \times 3$ kernels. 
+All of the non-linear units in this CAE are Rectified Linear Units (ReLUs).
+For the decoder, it has a symmetric structure to the encoder with the max-pooling layers replaced by the up-sampling layers.  
+The selected loss function for the training process is the Mean Squared Error (MSE) between $X$ and $X'$; this optimization process is achieved using a gradient-descent-based algorithm, and the number of training epochs is $30$. 
+
+To extract the features from the CAE, a process inspired by Choi et al.~\cite{Choi2017a} is used. As shown in Fig.~\ref{fig:cae}, this process first computes the intermediate outputs from all the layers in the encoder (including the bottleneck layer). Next, these outputs are aggregated across the Mel-frequency axis through averaging. Finally, the aggregated outputs are stacked into a $64 \times N$ feature matrix, where $N$ is the number of blocks. 
+To derive the final feature vector for each recording, these frame-wise features are further aggregated by computing the mean and standard deviation across the blocks. This is similar to the process described in Sect.~\ref{subsubsec:sc}. Finally, the concatenation of mean and standard deviation vector is used to represent the entire recording of the student's music performance. The dimensionality of this final vector is $d_\mathrm{cae} = 128$
 
 \subsection{Regression Model}
 % SVR training and outlier removal
@@ -274,6 +296,10 @@ In Experiment 2, the regression model trained on the SC learned features using t
 \end{enumerate}
 
 %TODO Add more settings from the convolutional autoencoder
+% CAE
+% CAE + Baseline
+% CAE + Designed
+
 
 \subsection{Metrics}
 The performance of the models is investigated using the following standard statistical metrics: the Pearson correlation coefficient $r$ and the coefficient of determination, i.e., $R^{2}$. These metrics are commonly used to evaluate the strength of the relationship between the regression predictions and ground truth. Details of the mathematical formulations can be found in \cite{McClave2003}. 
@@ -311,6 +337,10 @@ Second, both STFT and LHM perform poorly for the largest dictionary size with $k
 Third, when $k = 32$, the LHM has the largest improvement over STFT in both L1 and L2. This result might indicate a relationship between the best performing $k$ and the number of samples in the dataset.
 
 %TODO mention the additional comparison with auto-encoder results
+% CAE results are the worst
+
+
+
 
 % Experiment 2-1
 
@@ -343,8 +373,9 @@ This demonstrates the potential of using feature learning methods to complement 
 A general observation that can be made from all experiment results is the superior model performance for L1 over L2. As discussed in \cite{Wu2016}, musicality is an abstract but holistic measure of the performance, and it is therefore more likely to reflect the overall perception of the judges and is more consistent across the years. %{\color{red}I think this could be extended if you wanted to. Both here and in the data section, possibly referring to the correlations between labels as well. Did you intentionally omit this? Also, I am really not sure if we can just say it's more consistently graded...}
 
 %TODO add discussions for autoencoder results
-
-
+% CAE is bad because it does not include any domain knowledge, and the network might not be able to learn the most essential information 
+% CAE uses melspectrogram as the input representation in favor of its smaller dimensionality. however, this might not be the most effective input representation for CAE
+% CAE + designed is better than 
 
 % conclude from both experiments: musicality is easier to model
 \section{Conclusion}\label{sec:conclusion}
