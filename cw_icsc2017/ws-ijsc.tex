@@ -21,8 +21,8 @@
 
 \begin{document}
 
-\markboth{Authors' Names}
-{Instructions for Typing Manuscripts (Paper's Title)}
+\markboth{Chih-Wei Wu and Alexander Lerch}
+{Assessment of Percussive Music Performances with Feature Learning}
 
 %%%%%%%%%%%%%%%%%%%%% Publisher's Area please ignore %%%%%%%%%%%%%%%
 %
@@ -61,7 +61,7 @@ alexander.lerch@gatech.edu
 The automatic assessment of (student) music performance involves the characterization of the audio recordings and the modeling of human judgments. To build a computational model that provides a reliable assessment, the system must take into account various aspects of a performance including technical correctness and aesthetic standards. While some progress has been made in recent years, the search for an effective feature representation remains open-ended. In this study, we explore the possibility of using learned features from sparse coding. Specifically, we investigate three sets of features, namely a baseline set, a set of designed features, and a feature set learned with sparse coding. In addition, we compare the impact of two different input representations on the effectiveness of the learned features. The evaluation is performed on a dataset of annotated recordings of students playing snare exercises. The results imply the general viability of feature learning in the context of automatic assessment of music performances.   
 \end{abstract}
 
-\keywords{Keyword1; keyword2; keyword3.}
+\keywords{Music Performance Assessment; Music Information Retrieval; Feature Learning.}
 
 \section{Introduction}
 Music performance is a sequence of actions that integrates both cognitive and motor skills. Starting from the musical ideas, this process of converting thoughts into movements is, as pointed out by Palmer \cite{Palmer1997}, among the most skill-intensive actions produced by human beings. To cultivate these skills, the qualitative assessment by peers and teachers is an essential pedagogical component in music education. A systematic assessment that is able to facilitate improvements usually requires careful examination of different aspects of a performance, such as technical correctness and alignment with aesthetic ideals. This task, however, is extremely difficult due to its subjective nature. As a result, human raters tend to exhibit a large variance in terms of their severity, rating scale, and the interpretation of rating categories \cite{Wesolowski2016}; the bias of the raters and the ill-defined categories, as suggested by Thompson and Williamon \cite{Thompson2003}, could adversely impact both the discriminability and the fairness of assessment. A computational approach that provides consistent and repeatable feedback, as illustrated in Fig.~\ref{fig:basic_idea}, might offer a potential solution to this issue and enhance the students' learning experience. 
@@ -289,11 +289,13 @@ In Experiment 2, the regression model trained on the SC learned features using t
 \item \textbf{Baseline}: the standard spectral and temporal features such as spectral centroid, spectral rolloff, spectral flux, zero-crossing rate, and 13 MFCCs. The dimensionality is $d_\mathrm{baseline} = 68$.
 \item \textbf{Designed}: the designed rhythmic and dynamic features derived from the IOI and amplitude histograms. These features involve the calculation of various statistics, such as crest, skewness, flatness, kurtosis, etc., directly from the histograms of the entire recording (compare \cite{Wu2016} for more details). The dimensionality is $d_\mathrm{designed} = 18$. 
 %{\color{red} we could add more description here. Maybe it's a bit annoying to look this all up?}
-\highlight{\item  CAE?? see Sect.~\ref{subsubsec:cae}?}
-\item \textbf{SC (LHM)}: see Sect.~\ref{subsec:feat_learn}. %{\color{red}why is this ``proposed'' and not lhm?}
+\item \textbf{CAE}: see Sect.~\ref{subsubsec:cae}
+\item \textbf{SC (LHM)}: see Sect.~\ref{subsubsec:sc}. %{\color{red}why is this ``proposed'' and not lhm?}
 \item \textbf{Designed + Baseline}: a combined feature set consisting of both baseline and designed features. %{\color{red}I changed the naming order --- I just like it better that way. Could you adapt the plot?} 
 \item \textbf{SC + Baseline}:  a combined feature set consisting of both SC and baseline features.
+\item \textbf{CAE + Baseline}: a combined feature set consisting of both CAE and baseline features.
 \item \textbf{SC + Designed}:  a combined feature set consisting of both SC and designed features.
+\item \textbf{CAE + Designed}: a combined feature set consisting of both CAE and designed features.
 %\item \textbf{All}: a combination of all three sets of features
 \end{enumerate}
 
