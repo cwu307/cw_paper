@@ -17,7 +17,7 @@
 \usepackage{multirow}
 
 \usepackage{xcolor}
-\newcommand{\highlight}[1]{\textcolor{red}{#1}}
+\newcommand{\highlight}[1]{\textcolor{black}{#1}}
 
 \begin{document}
 
@@ -169,7 +169,7 @@ Concatenating these vectors will result in local histogram matrix $M_\mathrm{lhm
     \item   \textbf{Averaged MFCC vector ($\mathbf{v}_\mathrm{mfcc}$)}: Given a local segment, the first 13 Mel Frequency Cepstral Coefficients (MFCCs) \cite{davis_comparison_1980}, a compact and widely used description of the shape of the spectral envelope of the signal are computed. The used STFT parametrization equals the one defined in Sect.~\ref{subsec:stft}. This leads to a $13 \times n_\mathrm{b}$ MFCC matrix where $n_\mathrm{b}$ is the number of blocks within the segment. This matrix $\mathbf{v}_\mathrm{mfcc}$ is aggregated  across the $n_\mathrm{b}$ blocks, resulting in an output column vector of dimensionality $d_\mathrm{mfcc} = 13$. 
 \end{enumerate} 
 
-The same procedure will repeated for each 10-second local segment, resulting in the final matrix $M_\mathrm{lhm}$ is a $m' \times n_\mathrm{s}$ matrix,  in which 
+The same procedure will repeat for each 10-second local segment, resulting in the final matrix $M_\mathrm{lhm}$ is a $m' \times n_\mathrm{s}$ matrix,  in which 
 \begin{equation}
     m' = d_\mathrm{ioi} + d_\mathrm{amp} + d_\mathrm{mfcc} = 85
 \end{equation}%
