@@ -32,9 +32,9 @@
 % Single address
 % To use with only one author or several with the same address
 % ---------------
-%\oneauthor
-% {Chih-Wei Wu and Alexander Lerch}
-% {Center for Music Technology, Georgia Institute of Technology\\ {\tt \{ cwu307, alexander.lerch\}@gatech.edu}}
+\oneauthor
+ {Chih-Wei Wu, Alexander Lerch}
+ {Georgia Institute of Technology, Center for Music Technology\\ {\tt \{ cwu307, alexander.lerch\}@gatech.edu}}
 
 % Two addresses
 % --------------
@@ -48,10 +48,10 @@
 
 % Three addresses
 % --------------
-\threeauthors
-  {First Author} {Affiliation1 \\ {\tt author1@ismir.edu}}
-  {Second Author} {\bf Retain these fake authors in\\\bf submission to preserve the formatting}
-  {Third Author} {Affiliation3 \\ {\tt author3@ismir.edu}}
+%\threeauthors
+%  {First Author} {Affiliation1 \\ {\tt author1@ismir.edu}}
+%  {Second Author} {\bf Retain these fake authors in\\\bf submission to preserve the formatting}
+%  {Third Author} {Affiliation3 \\ {\tt author3@ismir.edu}}
 
 %% To make customize author list in Creative Common license, uncomment and customize the next line
 %  \def\authorname{First Author, Second Author, Third Author}
@@ -188,8 +188,8 @@ The structure of the decoder is symmetric to the encoder with the max-pooling la
 The CAE is trained to minimize the Mean Squared Error (MSE) between $X$ and $X'$ using a gradient-descent-based optimization process, and the number of training epochs is $30$. 
 
 % this architecture keeps the temporal resolution intact, allowing the extraction of frame-wise features
-% talk about how we get the features and feature splicing 
-The feature extraction process, as shown in Fig.~\ref{fig:caeStructure}, is inspired by the method proposed by Choi et al.~\cite{Choi2017a}: first, the intermediate outputs from all the layers in the encoder (including the bottleneck layer) are computed. Next, these outputs are aggregated across the Mel-frequency axis through averaging. Finally, the aggregated outputs are stacked into a $64 \times N$ feature matrix, where $N$ is the number of blocks. %\comment{you mean neighboring?}
+% talk about how we get the features and feature splicing
+{\color{red}The feature extraction process, as shown in Fig.~\ref{fig:caeStructure}, is inspired by the method proposed by Choi et al.~\cite{Choi2017a}: first, the intermediate activation maps from all the layers in the encoder (including the bottleneck layer) are computed. Next, average pooling is performed on these maps across the Mel-frequency axis.} Finally, these outputs are stacked into a $64 \times N$ feature matrix, where $N$ is the number of blocks. %\comment{you mean neighboring?}
 To derive the final feature vector at each block, the feature vectors from the current block and the following two blocks are spliced together to capture the temporal variations of the event. This leads to a final feature vector with a dimensionality $d = 3 \times F$, in which $F$ is the number of features (i.e., 64). 
 % for each layer, average pooling is applied to summarized the activation map across different channels. The resulting vectors from all layers in the encoder part are stacked and used as the final feature matrix. Splicing 
 
@@ -210,7 +210,7 @@ Figure~\ref{fig:studentTeacherFlow} shows the flowchart of the student-teacher l
 When multiple teachers are presented, the student model can be trained by iteratively passing the unlabeled data and its corresponding soft-targets from each teacher. The student model is trained by minimizing the MSE between the soft-targets and the model outputs. 
 In the testing phase, the trained student model processes the test data and generates the corresponding activation functions. The estimated locations of drum hits are identified with a simple peak picking process. 
 
-The configuration and parametrization of this evaluated paradigm generally follows the setup described in \cite{Wu2017}. This includes two teacher models based on Partially-fixed NMF (PFNMF) \cite{Wu2015_ismir} and one student model using a fully-connected, feed-forward Deep Neural Network (DNN). The soft-targets are scaled to a numerical range between 0 and 1 using min-max scaling across the training data for each instrument in order to ensure their compatibility with the outputs from the student DNN. 
+The model architecture, configuration and parametrization of this evaluated paradigm generally follows the setup described in \cite{Wu2017}. This includes two teacher models based on Partially-fixed NMF (PFNMF) \cite{Wu2015_ismir} and one student model using a fully-connected, feed-forward Deep Neural Network (DNN). The soft-targets are scaled to a numerical range between 0 and 1 using min-max scaling across the training data for each instrument in order to ensure their compatibility with the outputs from the student DNN. 
 % training
 % testing 
 % teacher and student models
@@ -230,14 +230,14 @@ For the feature learning paradigm, both the Mel-spectrogram in dB scale with 128
 
 For student-teacher learning paradigm, the teacher models are implemented using the PFNMF function from NmfDrumToolbox\footnote{https://github.com/cwu307/NmfDrumToolbox, last access 2018/03/27}. The peak-picking parameters are set to the same as in the original paper \cite{Wu2017}.
 
-The neural networks in both paradigms are implemented using Keras\footnote{https://keras.io, last access 2018/03/27} and the Tensorflow \cite{Abadi2016} backend. The weights are randomly initialized with normal distributions, and the parameters of the optimizers are set to default. The source code used in this paper is available on Github \footnote{http://dummy.link}.
+The neural networks in both paradigms are implemented using Keras\footnote{https://keras.io, last access 2018/03/27} and the Tensorflow \cite{Abadi2016} backend. The weights are randomly initialized with normal distributions, and the parameters of the ADAM optimizer are set to default. The source code used in this paper is available on Github \footnote{https://github.com/cwu307/ADT\_with\_unlabeledData, last access 2018/06/14}.
 
 \section{Experiment}
 \label{sec:experiment}
 
 \subsection{Unlabeled Data}
 
-The unlabeled dataset in this paper is built using the source code provided in \cite{Wu2017}; this tool allows the compilation of a list of songs from the Billboard Chart\footnote{https://www.billboard.com/charts, last access 2018/03/27} and the retrieval of these songs from Youtube. This dataset consists of six musical genres, including R\&B$\slash$HipHop, Pop, Rock, Latin, Alternative, and  Dance$\slash$Electronic. Each genre has 1900 songs, which leads to a collection of 11400 songs. All the songs are cross-checked for duplicates and converted to mp3 format with a sampling rate of \unit[44.1]{kHz}. In our experiments, this dataset is further split into training, validation, and testing set with a percentage of 70\%, 15\%, and 15\%, respectively. To speed up the process while maintaining the diversity, only a \unit[30]{s} segment is extracted from each song for training. The segment starts in the middle of the song to avoid potential inactivity at the beginning. As a result, the entire training set has a total duration of \unit[66.5]{hrs}, which is significantly larger than any existing ADT dataset. The list of songs and links are available on Github\footnote{http://dummy.link}. %\comment{is the list of songs/links accessible?}
+The unlabeled dataset in this paper is built using the source code provided in \cite{Wu2017}; this tool allows the compilation of a list of songs from the Billboard Chart\footnote{https://www.billboard.com/charts, last access 2018/03/27} and the retrieval of these songs from Youtube. This dataset consists of six musical genres, including R\&B$\slash$HipHop, Pop, Rock, Latin, Alternative, and  Dance$\slash$Electronic. Each genre has 1900 songs, which leads to a collection of 11400 songs. All the songs are cross-checked for duplicates and converted to mp3 format with a sampling rate of \unit[44.1]{kHz}. In our experiments, this dataset is further split into training, validation, and testing set with a percentage of 70\%, 15\%, and 15\%, respectively. To speed up the process while maintaining the diversity, only a \unit[30]{s} segment is extracted from each song for training. The segment starts in the middle of the song to avoid potential inactivity at the beginning. As a result, the entire training set has a total duration of \unit[66.5]{hrs}, which is significantly larger than any existing ADT dataset. The list of songs and links are available on Github\footnote{https://github.com/cwu307/unlabeledDrumDataset, last access 2018/06/14}. %\comment{is the list of songs/links accessible?}
 
 \subsection{Labeled Data}
 % mention the evaluation is performed using a cross-dataset validation scheme. For feature learning 
@@ -315,7 +315,7 @@ Note that for feature learning paradigm, a cross-dataset validation process is p
 Figure~\ref{fig:resultsAcrossDatasets} shows the evaluation result of \textbf{E1}. On average, all systems tend to perform the best on \textit{ENST} and the worst on \textit{RBMA}. For some instruments, this gap can be as large as 22\% in F-measure. 
 There are two possible reasons for the good performance on \textit{ENST}. %First, as all systems have been developed and evaluated mostly on this dataset, there could be potential bias towards this dataset. 
 First, as many ADT systems, including \textit{Segment and Classify}-based and \textit{Separate and Detect}-based, have been developed and evaluated on \textit{ENST}, there could be potential bias towards this dataset.
-Second, the \textit{ENST} dataset might be relatively simple compared with the others. A closer examination of the dataset shows the lack of singing voices and the dominance of MIDI synthesized accompaniments, which could potentially over-simplify the ADT problem. 
+Second, the \textit{ENST} dataset might be relatively simple compared to the others. A closer examination of the dataset shows the lack of singing voices and the dominance of MIDI synthesized accompaniments, which could potentially over-simplify the ADT problem. 
 The relative poor performance on the \textit{RBMA} dataset might be related to its focus on EDM; the electronic drum sounds with strong audio effects could possibly increase the difficulty for ADT. This seems to be especially true in case of the SD.
 Overall, the results show that the evaluated systems leave much room for optimization; since many of the parameters in these systems are not extensively tuned, this result is to be expected. However, this also reflects the challenge of building an ADT system that is easily generalizable. 
 %Also, the high variance across all the datasets highlights the importance of evaluating ADT systems on multiple datasets.   
@@ -357,7 +357,7 @@ FC-200                & PFNMF (SMT)          & HH                               
 \label{tab:improvCheck}
 \end{table*}
 
-The results of \textbf{E2} are shown in Table~\ref{tab:e2result}. The following trends can be observed: first, the unlabeled data seems to be helpful in \textit{Segment and Classify}-based ADT systems. A direct comparison between CONV-AE and MFCC shows that the features learned from unlabeled data seem to slightly improve for SD while achieving equal performance on HH and BD. Second, the unsupervised training process is useful for deriving better features. Compared with CONV-RANDOM, both CONV-AE and CONV-DAE show improvements on nearly all instruments, indicating the advantage of the training process. Third, the DAE-inspired training process does not lead to improvements for ADT. This is shown by the almost equivalent results from CONV-AE and CONV-DAE. Since HPSS also introduces artifacts, it might not be the most ideal method for this task;  experimentation with other source separation algorithms might provide more insights. 
+The results of \textbf{E2} are shown in Table~\ref{tab:e2result}. The following trends can be observed: first, the unlabeled data seems to be helpful in \textit{Segment and Classify}-based ADT systems. A direct comparison between CONV-AE and MFCC shows that the features learned from unlabeled data seem to slightly improve for SD while achieving equal performance on HH and BD. Second, the unsupervised training process is useful for deriving better features. Compared to CONV-RANDOM, both CONV-AE and CONV-DAE show improvements on nearly all instruments, indicating the advantage of the training process. Third, the DAE-inspired training process does not lead to improvements for ADT. This is shown by the almost equivalent results from CONV-AE and CONV-DAE. Since HPSS also introduces artifacts, it might not be the most ideal method for this task;  experimentation with other source separation algorithms might provide more insights. 
 %\comment{yeah, but why not?}
 
 
@@ -377,14 +377,14 @@ Student       & \multicolumn{1}{l|}{FC-200}                & \textbf{0.56}  & 0.
 Student       & \multicolumn{1}{l|}{FC-ALL}               & 0.53           & 0.59           & 0.42          \\
 Student       & \multicolumn{1}{l|}{FC-ALL (ALT)} & 0.55           & 0.58           & 0.44          \\ \hline
 \end{tabularx}
-\caption{Evaluation results of the student-teacher-paradigm-based systems.}%\comment{Adjust to column width}}
+\caption{Evaluation results of the student-teacher-paradigm-based systems. The performance of the teacher models are the baseline.}%\comment{Adjust to column width}}
 \label{tab:e3result}
 \end{table}
 
 
 Table~\ref{tab:e3result} shows the results of \textbf{E3}. The general trends can be summarized as follows: first, the student-teacher learning seems to be useful for \textit{Separate and Detect}-based ADT systems as all students show a noticeable improvement on HH over the teacher models. This observation consolidates the preliminary finding reported in \cite{Wu2017}. Second, more unlabeled data do not necessarily lead to better results. For example, FC-200 and FC-ALL (ALT) both outperform FC-ALL on HH and SD. 
 %While this result seems somewhat counter-intuitive, it may suggest that the noisy nature of the unlabeled data increases with the increasing amount of data. 
-Since the student model is a simple feed-forward DNN, the lack of model capacity could limit its potential for further improvement as the data size grows. Experiments using other student models (e.g., CNNs and RNNs) would be necessary for confirmation.   
+Since the student model is a simple feed-forward DNN, the lack of model capacity and temporal information could limit its potential for further improvement as the data size grows. Experiments using other student models (e.g., CNNs and RNNs) would be necessary for confirmation.   
 Third, the student models seem to struggle on BD. A detailed examination on the individual results from each dataset shows that teachers and students are mostly comparable on BD except for \textit{RBMA}. This is possibly due to the challenging nature of \textit{RBMA} as discussed in \textbf{E1}. However, further investigation might be needed before drawing conclusions. %\comment{do the results like much nicer when you remove rbma?}
 
 % additional analysis goes here
