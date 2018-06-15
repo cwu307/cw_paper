@@ -19,7 +19,7 @@
 \usepackage{graphicx}
 \usepackage{multirow}
 \usepackage{paralist}
-%\usepackage[keeplastbox]{flushend}
+\usepackage[keeplastbox]{flushend}
 \usepackage{paralist}
 \usepackage{tabularx}
 
@@ -78,7 +78,7 @@
 \maketitle
 %
 \begin{abstract}
-Automatic Drum Transcription (ADT), like many other music information retrieval tasks, has made progress in the past years through the integration of machine learning and audio signal processing techniques. However, with the increasing popularity of data-hungry approaches such as deep learning, the insufficient amount of data becomes more and more a challenge that concerns the generality of the resulting models and the validity of the evaluation. To address this challenge in ADT, this paper first examines the existing labeled datasets and how representative they are of the research problem. Next, the possibilities of using unlabeled data to improve general ADT systems are explored. Specifically, two paradigms that harness information from unlabeled data, namely feature learning and student-teacher learning, are applied to two major types of ADT systems. All systems are evaluated on four different drum datasets. The results highlight the necessity of more and larger annotated datasets and indicate the feasibility of exploiting unlabeled data for improving ADT systems.
+Automatic Drum Transcription (ADT), like many other music information retrieval tasks, has made progress in the past years through the integration of machine learning and audio signal processing techniques. However, with the increasing popularity of data-hungry approaches such as deep learning, the insufficient amount of data becomes more and more a challenge that concerns the generality of the resulting models and the validity of the evaluation. To address this challenge in ADT, this paper first examines the existing labeled datasets and how representative they are of the research problem. Next, possibilities of using unlabeled data to improve general ADT systems are explored. Specifically, two paradigms that harness information from unlabeled data, namely feature learning and student-teacher learning, are applied to two major types of ADT systems. All systems are evaluated on four different drum datasets. The results highlight the necessity of more and larger annotated datasets and indicate the feasibility of exploiting unlabeled data for improving ADT systems.
 \end{abstract}
 
 %
@@ -90,8 +90,8 @@ Automatic Drum Transcription (ADT), like many other music information retrieval 
 % MIREX 2017, performance of the systems varies quite a lot across different datasets, indicating the potential problem of generality
 % attempts to do data-augmentation
 % we need more data 
-Automatic drum transcription (ADT), a sub-task of Automatic Music Transcription (AMT) \cite{Benetos2013} that concerns the extraction of drum events from music signals, witnesses a growth in data-driven approaches such as deep learning in recent years \cite{Vogl2016, Southall2016, Vogl2017_icassp, Southall2017, Vogl2017_ismir}. The majority of these ADT studies that focus on polyphonic mixtures use the popular ENST-Drums dataset \cite{Gillet2006_enst} for development by splitting the dataset into different subsets for training, validation, and testing purposes. Nevertheless, the limited amount of labeled data and its potential impact in the context of ADT are rarely discussed. 
-The heavy reliance on one dataset leads to two major concerns: 
+Automatic drum transcription (ADT), a sub-task of Automatic Music Transcription (AMT) \cite{Benetos2013} that concerns the extraction of drum events from music signals, witnesses a growth in data-driven approaches such as deep learning in recent years \cite{Vogl2016, Southall2016, Vogl2017_icassp, Southall2017, Vogl2017_ismir}. The majority of these ADT studies use the popular ENST-Drums dataset \cite{Gillet2006_enst} for development by splitting the dataset into different subsets for training, validation, and testing purposes. Nevertheless, the limited amount of labeled data and its potential impact on ADT systems are rarely discussed. 
+The heavy reliance on one dataset raises two major concerns: 
 \begin{inparaenum}[(i)]
 	\item   the model could easily overfit the data, which questions its generality, and
     \item   the evaluation results could be overly optimistic due to the small sample size of the split. 
@@ -126,7 +126,7 @@ The contributions of this work include: first, the examination of four different
 The task of automatic drum transcription can be described as converting drum related audio events into music notation. 
 %Similar to melody extraction \cite{Salamon2014}, which finds the dominant pitch values and provides information about the melodic content, ADT extracts the drum sequences and contributes to the understanding of rhythmic aspect of music. 
 Most of the early ADT systems, as summarized by FitzGerald and Paulus \cite{FitzGerald2006}, detect onsets of HiHat (HH), Bass Drum (BD), and Snare Drum (SD) in drum only recordings. 
-Recently, this focus has shifted towards transcribing drums in polyphonic mixtures comprised of both drum and melodic instruments. Following these conventions, this paper defines the ADT task as detecting HH, BD, and SD in polyphonic mixtures. 
+Recently, this focus has shifted towards transcribing drums in polyphonic mixtures comprised of both percussive and melodic instruments. Following these conventions, this paper defines the ADT task as detecting HH, BD, and SD in polyphonic mixtures. 
 
 Generally speaking, the existing ADT systems can be categorized into four types according to the literature \cite{Gillet2008_taslp, Paulus09_DrumStructure_PhD}. These are
 \begin{inparaenum}[(i)]
@@ -136,13 +136,13 @@ Generally speaking, the existing ADT systems can be categorized into four types 
 	\item \textit{HMM-based Recognition}: modeling the temporal connections between drum events using probabilistic models such as Hidden Markov Models (HMMs), these models try to identify the underlying drum sequence by using the Viterbi algorithm \cite{PaulusK09_DrumTransHMM_JASMP, Dzhambazov14_DrumTransHMM_AES}. 
 \end{inparaenum} 
 
-To date, the majority of the existing ADT systems fall into the categories of \textit{Segment and Classify} and \textit{Separate and Detect}. Both these types of systems, despite having the fundamental differences, use data-driven methods and could potentially face the challenge described in Sect.~\ref{sec:introduction}.
+To date, the majority of the existing ADT systems fall into the categories of \textit{Segment and Classify} and \textit{Separate and Detect}. Both these types of systems, despite having fundamental differences, use data-driven methods and face the challenge described in Sect.~\ref{sec:introduction}.
 Therefore, in this paper, we considered both types of systems in our experiments.
 
 \subsection{Learning from Unlabeled Data}
 \label{subsec:learnFromUnlabeledData}
 % talk about learning from unlabeled data
-To address the data challenge in MIR tasks, techniques that build upon the existing labeled data have been proposed. For example, in \textit{transfer learning} \cite{Choi2017a}, a deep neural network trained on a task that has sufficient data can be used to derive features for another task with limited data. This method alleviates the data insufficiency by re-using the effective models in the similar domains. \textit{Data augmentation}, a technique to increase diversity of training data through music-related deformations (e.g., time-stretching, pitch shifting, or distortion) and synthesis, has been successfully applied in MIR tasks \cite{Mcfee2015} and in ADT specifically \cite{Wu2016, Vogl2017_icassp}. However, these techniques still require a reasonably sized correctly annotated dataset as a starting point, which can be a challenge in certain scenarios. 
+To address the data challenge in MIR tasks, techniques that build upon the existing labeled data have been proposed. For example, in \textit{transfer learning} \cite{Choi2017a}, a deep neural network trained on a task that has sufficient data can be used to derive features for another task with limited data. This method alleviates the data insufficiency by re-using the effective models in the similar domains. \textit{Data augmentation}, a technique to increase diversity of training data through music-related deformations (e.g., time-stretching, pitch shifting, or distortion) and synthesis, has been successfully applied to MIR tasks \cite{Mcfee2015} and in ADT specifically \cite{Wu2016, Vogl2017_icassp}. However, these techniques still require a reasonably sized correctly annotated dataset as a starting point, which remains a challenge in certain scenarios. 
 \begin{figure}
 \centering
 \includegraphics[width = \columnwidth]{./figs/paradigms_overview.pdf}
@@ -150,7 +150,8 @@ To address the data challenge in MIR tasks, techniques that build upon the exist
 \label{fig:overview}
 \end{figure}
 
-Another direction for addressing the data scarcity is to use unlabeled data. Intuitively, a large collection of unlabeled data can be helpful in deriving more generalized features. This is the main concept of unsupervised \textit{feature learning}, and it can be implemented with algorithms such as Sparse Coding \cite{Raina2007a}, Deep Belief Networks \cite{Hamel2010}, and Auto-encoders \cite{Masci2011}. More recently, the \textit{student-teacher learning} paradigm has also emerged as an interesting concept to incorporate unlabeled data. Referred by Hinton et al.~as ``knowledge distillation'' \cite{Hinton2015}, this paradigm transfers the knowledge of a teacher model to a student model using the soft-targets generated by the teacher. As opposed to learning from the hard targets (i.e., ground truth), the student learns from the ``dark knowledge'' residing in the soft-targets, which can be created using either labeled or unlabeled data \cite{Li2014}. A successful student model can reduce the complexity of the original teacher model without significant performance loss. Some studies even report superior performance of the student models \cite{Cui2017,Watanabe2017, Wu2017}. Overall, methods that work directly with unlabeled data obviously have less dependency on existing labeled data and have shown promise for future applications. 
+Another direction for addressing the data scarcity is to use unlabeled data. Intuitively, a large collection of unlabeled data can be helpful in deriving more generalized features. This is the main concept of unsupervised \textit{feature learning}, and it can be implemented with algorithms such as Sparse Coding \cite{Raina2007a}, Deep Belief Networks \cite{Hamel2010}, and Auto-encoders \cite{Masci2011}. More recently, the \textit{student-teacher learning} paradigm has also emerged as an interesting concept to incorporate unlabeled data. Referred by Hinton et al.~as ``knowledge distillation'' \cite{Hinton2015}, this paradigm transfers the knowledge of a teacher model to a student model using the soft-targets generated by the teacher. As opposed to learning from the hard targets (i.e., ground truth), the student learns from the ``dark knowledge'' residing in the soft-targets, which can be created using either labeled or unlabeled data \cite{Li2014}. A successful student model can reduce the complexity of the original teacher model without significant performance loss. Several studies also report superior performance of the student models \cite{Cui2017,Watanabe2017, Wu2017}. Overall, methods that work directly with unlabeled data obviously have less dependency on existing labeled data and have higher potential to be applicable to more tasks.
+%have shown promise for future applications. 
 
 
 %
@@ -173,6 +174,13 @@ To connect general ADT systems to the abundant resources of unlabeled data, this
 \label{fig:featureLearningFlow}
 \end{figure}
 
+The flowchart in Fig.~\ref{fig:featureLearningFlow} shows the feature learning paradigm for ADT, including both training and testing. The training phase starts with the training of a feature extractor using the unlabeled data. Specifically, we use a Convolutional Auto-encoder (CAE) as the feature extractor. A generic \textit{Segment and Classify}-based ADT system is then constructed with the following steps: first, the features are extracted from the audio signals using the pre-trained feature extractor. Second, the onset locations are determined by using the ground truth annotations while training. Finally, the feature vectors around the onset locations are collected and used to train three binary classifiers for HH, BD, and SD, respectively. The classifiers used in this paper are Support Vector Machines (SVMs). In the testing phase, the same pipeline is followed except for the onset detection step, which uses an onset detector instead of the ground truth locations. Finally, the presence of each drum can be predicted using the pre-trained SVMs. 
+
+The architecture of the CAE is shown in Fig.~\ref{fig:caeStructure}. The input $X$ of the CAE is a Mel-spectrogram, and the output $X'$ is the reconstruction of $X$. The encoder consists of four convolutional layers with \{32, 16, 8, 4\} channels of $3 \times 3$ kernels, accordingly. Each convolutional layer is used by a batch normalization layer and a max-pooling layer of (2, 1). This design maintains the temporal resolution, allowing the extraction of block-wise features. 
+The bottleneck layer is also a convolutional layer with 4 channels of $3 \times 3$ kernels. All non-linear units are Rectified Linear Units (ReLUs).
+The structure of the decoder is symmetric to the encoder with the max-pooling layers replaced by the up-sampling layers.  
+The CAE is trained to minimize the Mean Squared Error (MSE) between $X$ and $X'$ using a gradient-descent-based optimization process, and the number of training epochs is $30$. 
+
 \begin{figure}
 \centering
 \includegraphics[width = \columnwidth]{./figs/caeStructure.pdf}
@@ -180,16 +188,9 @@ To connect general ADT systems to the abundant resources of unlabeled data, this
 \label{fig:caeStructure}
 \end{figure}
 
-The flowchart in Fig.~\ref{fig:featureLearningFlow} shows the feature learning paradigm for ADT, including both training and testing. The training phase starts with the training of a feature extractor using the unlabeled data. Specifically, we use a Convolutional Auto-encoder (CAE) as the feature extractor. A generic \textit{Segment and Classify}-based ADT system is then constructed with the following steps: first, the features are extracted from the audio signals using the pre-trained feature extractor. Second, the onset locations are determined by using the ground truth annotations while training. Finally, the feature vectors around the onset locations are collected and used to train three binary classifiers for HH, BD, and SD, respectively. The classifiers used in this paper are Support Vector Machines (SVMs). In the testing phase, the same pipeline is followed except for the onset detection step, which uses an onset detector instead of the ground truth locations. Finally, the presence of each drum can be predicted using the pre-trained SVMs. 
-
-The architecture of the CAE in this paper is shown in Fig.~\ref{fig:caeStructure}. The input $X$ of the CAE is a Mel-spectrogram, and the output $X'$ is the reconstruction of $X$. The encoder consists of four convolutional layers with \{32, 16, 8, 4\} channels of $3 \times 3$ kernels, accordingly. Each convolutional layer is followed by a batch normalization layer and a max-pooling layer of (2, 1). This design maintains the temporal resolution, allowing the extraction of block-wise features. 
-The bottleneck layer is also a convolutional layer with 4 channels of $3 \times 3$ kernels. All non-linear units are Rectified Linear Units (ReLUs).
-The structure of the decoder is symmetric to the encoder with the max-pooling layers replaced by the up-sampling layers.  
-The CAE is trained to minimize the Mean Squared Error (MSE) between $X$ and $X'$ using a gradient-descent-based optimization process, and the number of training epochs is $30$. 
-
 % this architecture keeps the temporal resolution intact, allowing the extraction of frame-wise features
 % talk about how we get the features and feature splicing
-{\color{red}The feature extraction process, as shown in Fig.~\ref{fig:caeStructure}, is inspired by the method proposed by Choi et al.~\cite{Choi2017a}: first, the intermediate activation maps from all the layers in the encoder (including the bottleneck layer) are computed. Next, average pooling is performed on these maps across the Mel-frequency axis.} Finally, these outputs are stacked into a $64 \times N$ feature matrix, where $N$ is the number of blocks. %\comment{you mean neighboring?}
+The feature extraction process, as shown in Fig.~\ref{fig:caeStructure}, is inspired by the method proposed by Choi et al.~\cite{Choi2017a}: first, the intermediate activation maps from all the layers in the encoder (including the bottleneck layer) are computed. Next, average pooling is performed on these maps across the Mel-frequency axis. Finally, these outputs are stacked into a $64 \times N$ feature matrix, where $N$ is the number of blocks. %\comment{you mean neighboring?}
 To derive the final feature vector at each block, the feature vectors from the current block and the following two blocks are spliced together to capture the temporal variations of the event. This leads to a final feature vector with a dimensionality $d = 3 \times F$, in which $F$ is the number of features (i.e., 64). 
 % for each layer, average pooling is applied to summarized the activation map across different channels. The resulting vectors from all layers in the encoder part are stacked and used as the final feature matrix. Splicing 
 
@@ -207,10 +208,10 @@ In addition to the learned features, a set of baseline features consisting of 20
 \end{figure}
 
 Figure~\ref{fig:studentTeacherFlow} shows the flowchart of the student-teacher learning paradigm for ADT. In the training phase, the teacher models are used to analyze the unlabeled data and generate the soft-targets. These soft-targets, used as pseudo ground truth to train a student model, contain the activation functions for the different drums. 
-When multiple teachers are presented, the student model can be trained by iteratively passing the unlabeled data and its corresponding soft-targets from each teacher. The student model is trained by minimizing the MSE between the soft-targets and the model outputs. 
+When multiple teachers are present, the student model can be trained by iteratively passing the unlabeled data and its corresponding soft-targets from each teacher. The student model is trained by minimizing the MSE between the soft-targets and the model outputs. 
 In the testing phase, the trained student model processes the test data and generates the corresponding activation functions. The estimated locations of drum hits are identified with a simple peak picking process. 
 
-The model architecture, configuration and parametrization of this evaluated paradigm generally follows the setup described in \cite{Wu2017}. This includes two teacher models based on Partially-fixed NMF (PFNMF) \cite{Wu2015_ismir} and one student model using a fully-connected, feed-forward Deep Neural Network (DNN). The soft-targets are scaled to a numerical range between 0 and 1 using min-max scaling across the training data for each instrument in order to ensure their compatibility with the outputs from the student DNN. 
+The model architecture, configuration, and parametrization of this evaluated paradigm generally follows the setup described in \cite{Wu2017}. This includes two teacher models based on Partially-Fixed NMF (PFNMF) \cite{Wu2015_ismir} and one student model using a fully-connected, feed-forward Deep Neural Network (DNN). The soft-targets are scaled to a numerical range between 0 and 1 using min-max scaling across the training data for each instrument in order to ensure their compatibility with the outputs from the student DNN. 
 % training
 % testing 
 % teacher and student models
@@ -226,18 +227,18 @@ The model architecture, configuration and parametrization of this evaluated para
 % all neural networks are 
 The main input representations for both paradigms are derived from the magnitude spectrogram of the Short Time Fourier Transform (STFT), which is computed using a block size of 2048 and a hop size of 512 samples with Hann window. All of the audio signals are normalized to a range between 1 and -1, down-mixed to mono, and resampled to \unit[44.1]{kHz} prior to the computation of STFT. %\comment{normalization?}
 
-For the feature learning paradigm, both the Mel-spectrogram in dB scale with 128 bins and the MFCCs are computed using librosa\footnote{https://librosa.github.io, last access 2018/03/27}, a Python library for audio signal processing. The onset detection is implemented using the \textit{CNNOnsetProcessor} from Madmom\footnote{https://madmom.readthedocs.io/en/latest/, last access 2018/03/27}. Additionally, the implementation of Linear SVMs from scikit-learn\footnote{http://scikit-learn.org/stable/, last access 2018/03/27}, a Python library for machine learning, is used. A grid search on the penalty parameter $C$ within \{0.1, 1, 10, 100, 1000\} is performed to optimize the performance of the SVMs. 
+For the feature learning paradigm, both the Mel-spectrogram in dB scale with 128 bins and the MFCCs are computed using librosa,\footnote{https://librosa.github.io, last access 2018/03/27} a Python library for audio signal processing. The onset detection is implemented using the \textit{CNNOnsetProcessor} from Madmom.\footnote{https://madmom.readthedocs.io/en/latest/, last access 2018/03/27} Additionally, the implementation of Linear SVMs from scikit-learn,\footnote{http://scikit-learn.org/stable/, last access 2018/03/27} a Python library for machine learning, is used. A grid search on the penalty parameter $C$ within \{0.1, 1, 10, 100, 1000\} is performed to optimize the performance of the SVMs. 
 
-For student-teacher learning paradigm, the teacher models are implemented using the PFNMF function from NmfDrumToolbox\footnote{https://github.com/cwu307/NmfDrumToolbox, last access 2018/03/27}. The peak-picking parameters are set to the same as in the original paper \cite{Wu2017}.
+For student-teacher learning paradigm, the teacher models are implemented using the PFNMF function from NmfDrumToolbox.\footnote{https://github.com/cwu307/NmfDrumToolbox, last access 2018/03/27} The peak-picking parameters are set to the same as in the original paper \cite{Wu2017}.
 
-The neural networks in both paradigms are implemented using Keras\footnote{https://keras.io, last access 2018/03/27} and the Tensorflow \cite{Abadi2016} backend. The weights are randomly initialized with normal distributions, and the parameters of the ADAM optimizer are set to default. The source code used in this paper is available on Github \footnote{https://github.com/cwu307/ADT\_with\_unlabeledData, last access 2018/06/14}.
+The neural networks in both paradigms are implemented using Keras\footnote{https://keras.io, last access 2018/03/27} and the Tensorflow \cite{Abadi2016} backend. The weights are randomly initialized with normal distributions, and the parameters of the ADAM optimizer are set to default. The source code used in this paper is available on Github.\footnote{https://github.com/cwu307/ADT\_with\_unlabeledData, last access 2018/06/14}
 
 \section{Experiment}
 \label{sec:experiment}
 
 \subsection{Unlabeled Data}
 
-The unlabeled dataset in this paper is built using the source code provided in \cite{Wu2017}; this tool allows the compilation of a list of songs from the Billboard Chart\footnote{https://www.billboard.com/charts, last access 2018/03/27} and the retrieval of these songs from Youtube. This dataset consists of six musical genres, including R\&B$\slash$HipHop, Pop, Rock, Latin, Alternative, and  Dance$\slash$Electronic. Each genre has 1900 songs, which leads to a collection of 11400 songs. All the songs are cross-checked for duplicates and converted to mp3 format with a sampling rate of \unit[44.1]{kHz}. In our experiments, this dataset is further split into training, validation, and testing set with a percentage of 70\%, 15\%, and 15\%, respectively. To speed up the process while maintaining the diversity, only a \unit[30]{s} segment is extracted from each song for training. The segment starts in the middle of the song to avoid potential inactivity at the beginning. As a result, the entire training set has a total duration of \unit[66.5]{hrs}, which is significantly larger than any existing ADT dataset. The list of songs and links are available on Github\footnote{https://github.com/cwu307/unlabeledDrumDataset, last access 2018/06/14}. %\comment{is the list of songs/links accessible?}
+The unlabeled dataset in this paper is built using the source code provided in \cite{Wu2017}; this tool allows the compilation of a list of songs from the Billboard Chart\footnote{https://www.billboard.com/charts, last access 2018/03/27} and the retrieval of these songs from Youtube. This dataset consists of six musical genres, including R\&B$\slash$HipHop, Pop, Rock, Latin, Alternative, and  Dance$\slash$Electronic. Each genre has 1900 songs, which leads to a collection of 11400 songs. All the songs are cross-checked for duplicates and converted to mp3 format with a sampling rate of \unit[44.1]{kHz}. In our experiments, this dataset is further split into training, validation, and testing set with a percentage of 70\%, 15\%, and 15\%, respectively. To speed up the process while maintaining the diversity, only a \unit[30]{s} segment is extracted from each song for training. The segment starts in the middle of the song to avoid potential inactivity at the beginning. As a result, the entire training set has a total duration of \unit[66.5]{hrs}, which is significantly larger than any existing ADT dataset. The list of songs and links are available on Github.\footnote{https://github.com/cwu307/unlabeledDrumDataset, last access 2018/06/14} %\comment{is the list of songs/links accessible?}
 
 \subsection{Labeled Data}
 % mention the evaluation is performed using a cross-dataset validation scheme. For feature learning 
@@ -245,20 +246,20 @@ The unlabeled dataset in this paper is built using the source code provided in \
 In this paper, four different labeled datasets featuring polyphonic mixtures are used:
 \begin{inparaenum}[(i)]
     \item   the popular ENST-Drums (referred to as ENST) \cite{Gillet2006_enst},
-    \item   the MIREX 2005 (referred to as m2005)%\comment{[REF]},
+    \item   the MIREX 2005 (referred to as m2005),%\comment{[REF]},
     \item   the MDB-Drums (referred to as MDB) \cite{Southall2017_mdb}, and
     \item   the RBMA dataset \cite{Vogl2017_ismir}.
 \end{inparaenum}
 The latter three public sets have been used in the 2017 Music Information Retrieval Evaluation eXchange (MIREX)\footnote{http://www.music-ir.org/mirex/wiki/2017, last access 2018/03/27} drum transcription task. 
 
-\textit{ENST} \textit{minus one} subset consists of 64 recordings performed by three different drummers on their own drum kits. Each recording has an average duration of \unit[55]{s}. These recordings feature different musical genres and playing styles, and the multi-track files are available for remixing. In this paper, the accompaniments are mixed with their corresponding drum tracks using a scaling factor of 1/3 and 2/3, respectively. This setup is consistent with several previous studies \cite{Wu2015_ismir, Vogl2016, Southall2016}. 
+\textit{ENST} \textit{minus one} subset consists of 64 recordings performed by three different drummers on their own drum kits. The average duration of the recordings is \unit[55]{s}. These recordings feature different musical genres and playing styles, and the multi-track files are available for remixing. In this paper, the accompaniments are mixed with their corresponding drum tracks using a scaling factor of 1/3 and 2/3, respectively. This setup is consistent with several previous studies \cite{Wu2015_ismir, Vogl2016, Southall2016}. 
 %One potential downside of this dataset is the lack of singing voice, which fails to represent the common instrumentation in Western Pop or Rock music. 
 
-\textit{m2005} was originally collected for the first MIREX drum transcription task back in 2005 and re-released for MIREX 2017. The public set includes 23 recordings contributed from all the participants of MIREX 2005. While covering a variety of musical genres, J-pop has the highest presence in this dataset with 10 recordings. The average duration of this dataset is \unit[125]{s}. 
+\textit{m2005} was originally collected for the first MIREX drum transcription task in 2005 and recently made available for MIREX 2017 drum transcription task participants. The public set includes 23 recordings contributed from all the participants of MIREX 2005. While covering a variety of musical genres, J-pop has the highest presence in this dataset with 10 recordings. The average duration of this dataset is \unit[125]{s}. 
 
 \textit{MDB} consists of 23 recordings of the MusicDelta subset from the MEDLEYDB dataset \cite{Bittner2014a}. These recordings include a variety of musical genres such as Rock, Country, Disco, Reggae, and Jazz. The average duration of the recordings is \unit[54]{s}. Similar to \textit{ENST}, this dataset contains multi-track files as well as the full mixtures. In this paper, we use the full-mixtures directly without any adjustment of the mixing levels. 
 
-\textit{RBMA} was released as part of the public set for the MIREX 2017 drum transcription task. This public set includes 27 recordings featuring mostly Electronic Dance Music (EDM). The average duration of the tracks is \unit[230]{s}. Since this dataset focuses on electronic music, it contains electronic drum sounds that are distinctively different from the other three datasets. 
+\textit{RBMA} was released as part of the public set for the MIREX 2017 drum transcription task. This public set includes 27 recordings featuring mostly Electronic Dance Music (EDM). The average duration of the tracks is \unit[230]{s}. Since this dataset focuses on electronic music, it contains electronic drum sounds that can be distinctively different from the other three datasets. 
 
 In total, there are 137 files with annotations available for evaluation. All files have a sampling rate of  \unit[44.1]{kHz}.
 
@@ -285,7 +286,7 @@ The teacher models for student-teacher learning paradigm are described in \cite{
 %\begin{enumerate}[(i)]
 \begin{compactenum}[(i)]
 \item PFNMF (SMT): a teacher PFNMF initialized with the drum templates extracted from the IDMT-SMT-Drum dataset \cite{DittmarG14_DrumTranscription_DAFX}.
-\item PFNMF (200D): a teacher PFNMF initialized with the drum templates extracted from the 200 Drum Machine dataset\footnote{http://www.hexawe.net/mess/200.Drum.Machines/, last access 2018/03/27}.
+\item PFNMF (200D): a teacher PFNMF initialized with the drum templates extracted from the 200 Drum Machine dataset.\footnote{http://www.hexawe.net/mess/200.Drum.Machines/, last access 2018/03/27}
 \item FC-200: a fully-connected student DNN trained with a subset of the unlabeled dataset, which consists of 200 randomly selected songs from each genre. 
 \item FC-ALL: a fully-connected student DNN trained with all the songs from all genres.
 \item FC-ALL (ALT): a fully connected student DNN trained with all the songs from only the ``Alternative" genre. This particular genre is selected for its superior performance in preliminary tests. \\
@@ -301,12 +302,12 @@ The teacher models for student-teacher learning paradigm are described in \cite{
 
 Based on these 9 systems, the following experiments are conducted:
 \begin{compactenum}
-\item [\textbf{E1:}]\textbf{Experiment 1} aims to examine the variance of the labeled datasets. For each dataset, the averaged F-measures across all 9 systems are reported. 
+\item [\textbf{E1:}]\textbf{Experiment 1} aims to examine the variance of the labeled datasets. For each dataset, the averaged \mbox{F-measures} across all 9 systems are reported. 
 \item [\textbf{E2:}]\textbf{Experiment 2} aims to evaluate the usefulness of unlabeled data for \textit{Segment and Classify}-based ADT systems using the feature learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
 \item [\textbf{E3:}]\textbf{Experiment 3} aims to evaluate the usefulness of unlabeled data for \textit{Separate and Detect}-based ADT systems using the student-teacher learning paradigm. For each system, the averaged F-measures across all the datasets are reported. 
 \end{compactenum}
 
-Note that for feature learning paradigm, a cross-dataset validation process is performed (e.g., train on three datasets and test on the remaining one) in order to train the binary classifiers (see Sect.~\ref{subsec:featureLearning} for more details). For student-teacher learning paradigm, since the student model does not need additional labeled data for training, the cross-dataset validation is unnecessary. 
+Note that for the feature learning paradigm, a cross-dataset validation process is performed (e.g., train on three datasets and test on the remaining one) in order to train the binary classifiers (see Sect.~\ref{subsec:featureLearning}). For student-teacher learning paradigm, since the student model does not need additional labeled data for training so that a cross-dataset validation is unnecessary. 
 
 \subsection{Results}
 
@@ -315,7 +316,7 @@ Note that for feature learning paradigm, a cross-dataset validation process is p
 Figure~\ref{fig:resultsAcrossDatasets} shows the evaluation result of \textbf{E1}. On average, all systems tend to perform the best on \textit{ENST} and the worst on \textit{RBMA}. For some instruments, this gap can be as large as 22\% in F-measure. 
 There are two possible reasons for the good performance on \textit{ENST}. %First, as all systems have been developed and evaluated mostly on this dataset, there could be potential bias towards this dataset. 
 First, as many ADT systems, including \textit{Segment and Classify}-based and \textit{Separate and Detect}-based, have been developed and evaluated on \textit{ENST}, there could be potential bias towards this dataset.
-Second, the \textit{ENST} dataset might be relatively simple compared to the others. A closer examination of the dataset shows the lack of singing voices and the dominance of MIDI synthesized accompaniments, which could potentially over-simplify the ADT problem. 
+Second, the \textit{ENST} dataset might be relatively simple compared to the others. A closer examination of the dataset shows a lack of singing voices and the dominance of MIDI synthesized accompaniments, which could potentially over-simplify the ADT problem. 
 The relative poor performance on the \textit{RBMA} dataset might be related to its focus on EDM; the electronic drum sounds with strong audio effects could possibly increase the difficulty for ADT. This seems to be especially true in case of the SD.
 Overall, the results show that the evaluated systems leave much room for optimization; since many of the parameters in these systems are not extensively tuned, this result is to be expected. However, this also reflects the challenge of building an ADT system that is easily generalizable. 
 %Also, the high variance across all the datasets highlights the importance of evaluating ADT systems on multiple datasets.   
@@ -384,8 +385,8 @@ Student       & \multicolumn{1}{l|}{FC-ALL (ALT)} & 0.55           & 0.58       
 
 Table~\ref{tab:e3result} shows the results of \textbf{E3}. The general trends can be summarized as follows: first, the student-teacher learning seems to be useful for \textit{Separate and Detect}-based ADT systems as all students show a noticeable improvement on HH over the teacher models. This observation consolidates the preliminary finding reported in \cite{Wu2017}. Second, more unlabeled data do not necessarily lead to better results. For example, FC-200 and FC-ALL (ALT) both outperform FC-ALL on HH and SD. 
 %While this result seems somewhat counter-intuitive, it may suggest that the noisy nature of the unlabeled data increases with the increasing amount of data. 
-Since the student model is a simple feed-forward DNN, the lack of model capacity and temporal information could limit its potential for further improvement as the data size grows. Experiments using other student models (e.g., CNNs and RNNs) would be necessary for confirmation.   
-Third, the student models seem to struggle on BD. A detailed examination on the individual results from each dataset shows that teachers and students are mostly comparable on BD except for \textit{RBMA}. This is possibly due to the challenging nature of \textit{RBMA} as discussed in \textbf{E1}. However, further investigation might be needed before drawing conclusions. %\comment{do the results like much nicer when you remove rbma?}
+Since the student model is a simple feed-forward DNN, the lack of model capacity and temporal information could limit its potential for further improvement as the data size grows. Experiments using other student models (e.g., CNNs and RNNs) are necessary for confirmation.   
+Third, the student models seem to struggle on BD. A detailed examination on the individual results from each dataset shows that teachers and students are mostly comparable on BD except for \textit{RBMA}. This is possibly due to the challenging nature of \textit{RBMA} as discussed in \textbf{E1}. However, further investigation is needed before drawing conclusions. %\comment{do the results like much nicer when you remove rbma?}
 
 % additional analysis goes here
 
@@ -396,9 +397,9 @@ Third, the student models seem to struggle on BD. A detailed examination on the 
 % definitely mention the additional need of labeled data in feature learning 
 % so student  teacher is slightly favored for it requires less labeled data
 
-The results of \textbf{E2} and \textbf{E3} show that feature learning and student-teacher learning paradigms are able to improve the performance on SD and HH, respectively. In light of these results, an interesting question is: ``Are these improvements significant?'' In an attempt to answer this question, two pairs of systems are selected for further analysis. Each pair consists of the best baseline and the best evaluated system of each paradigm. A t-test is performed on each pair by comparing their results on all 137 files. Both pairs have shown significant improvements with $p \ll 0.05$ for both t-tests. Furthermore, the number of improved and deteriorated files is calculated. The results, shown in Table~\ref{tab:improvCheck}, show a positive trend: the number of improved files is, in both cases, greater than the number of deteriorated files. Moreover, the averaged F-measure gains are also higher than the averaged F-measure loss for both pairs.  
+The results of \textbf{E2} and \textbf{E3} show that feature learning and student-teacher learning paradigms are able to improve the performance on SD and HH, respectively. In light of these results, an interesting question is: ``Are these improvements significant?'' In an attempt to answer this question, two pairs of systems are selected for further analysis. Each pair consists of the best baseline and the best evaluated system of each paradigm. A t-test is performed on each pair by comparing their results on all 137 files. Both pairs have shown significant improvements with $p \ll 0.0014$ for both t-tests. Furthermore, the number of improved and deteriorated files is calculated. The results, shown in Table~\ref{tab:improvCheck}, show a positive trend: the number of improved files is, in both cases, greater than the number of deteriorated files. Moreover, the averaged F-measure gains are also higher than the averaged F-measure loss for both pairs.  
 
-Comparing the pairs on Table~\ref{tab:improvCheck} with each other, the improvements on HH from the student-teacher learning paradigm seems to be more substantial. To further investigate the cause of this improvement, one example from the \textit{ENST} dataset, which has the largest F-measure gain among all files, is selected. The HH activation functions generated from both teacher and student model are shown in Fig.~\ref{fig:exampleActiv}. Compared to the teacher's activation function, the student's activation function is sharper and cleaner, demonstrating the benefit of this paradigm.
+From Table~\ref{tab:improvCheck}, it can be observed that the improvements on HH from the student-teacher learning paradigm seems to be more substantial. To further investigate the cause of this improvement, one example from the \textit{ENST} dataset, which has the largest F-measure gain among all files, is selected. The HH activation functions generated from both teacher and student model are shown in Fig.~\ref{fig:exampleActiv}. Compared to the teacher's activation function, the student's activation function is sharper and less noisy, demonstrating the benefit of this paradigm.
 
 % example from ENST
 \begin{figure}
@@ -412,7 +413,7 @@ Comparing the pairs on Table~\ref{tab:improvCheck} with each other, the improvem
 \section{Conclusion}
 \label{sec:conc}
 
-In this paper, we discussed the data challenge in ADT and investigated two approaches to address this challenge by considering both labeled and unlabeled data. First, we compared system performance on the multiple existing labeled datasets in an unified setting. The results indicate a potential bias of relying on one dataset and highlight the necessity of including more datasets in the future ADT evaluation. Furthermore, we evaluated the usefulness of unlabeled data for two major types of ADT systems via two different learning paradigms, feature learning and the student-teacher learning approach. For both paradigms, we got encouraging (and statistically significant) results demonstrating the potential of achieving better performance than the baseline systems on different drum instruments.
+We discussed the data challenge in ADT and investigated two approaches to address this challenge by considering both labeled and unlabeled data. First, we compared system performance on multiple existing labeled datasets in an unified setting. The results indicate a potential bias of relying on one dataset and highlight the necessity of including more datasets in the future ADT evaluation. Furthermore, we evaluated the usefulness of unlabeled data for two major types of ADT systems via two different learning paradigms, feature learning and the student-teacher learning approach. For both paradigms, we got encouraging (and statistically significant) results demonstrating the potential of achieving better performance than the baseline systems on different drum instruments.
 
 These results, while suggesting the need for additional labeled data in the field of ADT, also encourage the exploration of incorporating unlabeled data in the training. 
 Possible future directions include
